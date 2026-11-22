@@ -42,8 +42,8 @@ def page(chemin, titre, description, contenu, actif=''):
         cur = ' aria-current="page"' if nom == actif else ''
         return f'<a href="{r}{url}"{cur}>{nom}</a>'
     menu = (f'<li>{lien("Accueil", "")}</li><li>{lien("À propos", "a-propos/")}</li>'
-            f'<li>{lien("Prestations", "prestations/").replace("</a>", " <span aria-hidden=\"true\">⌄</span></a>")}<ul class="sous-menu">{sous}</ul></li>'
-            f'<li>{lien("Portfolio", "portfolio/")}</li><li>{lien("Tarifs", "tarifs/")}</li><li>{lien("Contact", "contact/")}</li>')
+            f'<li class="a-sous-menu">{lien("Prestations", "prestations/")}<button type="button" class="ouvrir-sous" aria-expanded="false" aria-label="Afficher les prestations">⌄</button><ul class="sous-menu">{sous}</ul></li>'
+            f'<li>{lien("Portfolio", "portfolio/")}</li><li>{lien("Tarifs", "tarifs/")}</li><li>{lien("Réservation", "reservation/")}</li><li>{lien("Contact", "contact/")}</li>')
     url_page = SITE + '/' + ('' if chemin == 'index.html' else chemin.replace('index.html', ''))
     html = f'''<!DOCTYPE html>
 <html lang="fr-CA">
@@ -321,7 +321,7 @@ def reservation():
 <img class="vase" src="{{r}}images/vase.png" alt="">
 </div>
 </div></section>'''
-    page('reservation/index.html', 'Réserver une séance · Norélias Photography', "Réservez votre séance photo en ligne : grossesse, nouveau-né, famille, mini-séance de Noël. Acompte par carte ou virement Interac.", contenu, '')
+    page('reservation/index.html', 'Réserver une séance · Norélias Photography', "Réservez votre séance photo en ligne : grossesse, nouveau-né, famille, mini-séance de Noël. Acompte par carte ou virement Interac.", contenu, 'Réservation')
 
 # ---------------- Contact ----------------
 def contact():

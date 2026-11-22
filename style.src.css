@@ -49,6 +49,8 @@ main{background:var(--creme)}
 .sous-menu a{display:block;padding:4u 12u;border:0;font-size:10.5u}
 .sous-menu a:hover{background:#f1e2da}
 .menu li:hover>.sous-menu,.menu li:focus-within>.sous-menu{display:block}
+.a-sous-menu{display:flex;align-items:center}
+.ouvrir-sous{background:none;border:0;padding:0 2u 4u 0;margin-left:-1u;font:inherit;font-size:11u;color:var(--brun);cursor:pointer;line-height:1}
 .reseaux{display:flex;gap:9u;align-items:center}
 .reseaux a{color:#1e1411;display:inline-flex}
 .reseaux svg{width:19u;height:19u}
@@ -289,7 +291,11 @@ main{background:var(--creme)}
   .nav.ouvert{display:block}
   .menu{flex-direction:column;align-items:flex-start;gap:4px}
   .menu a,.sous-menu a{font-size:16px}
-  .sous-menu{position:static;display:block;box-shadow:none;background:transparent;padding:0 0 0 14px}
+  .a-sous-menu{flex-wrap:wrap}
+  .ouvrir-sous{font-size:22px;padding:0 12px 8px;transition:transform .2s}
+  .a-sous-menu.ouvert .ouvrir-sous{transform:rotate(180deg);padding:8px 12px 0}
+  .sous-menu,.menu li:hover>.sous-menu,.menu li:focus-within>.sous-menu{position:static;display:none;box-shadow:none;background:transparent;padding:0 0 0 14px;width:100%}
+  .a-sous-menu.ouvert>.sous-menu{display:block}
 }
 
 /* ----- Tablette ----- */

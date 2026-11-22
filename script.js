@@ -13,6 +13,14 @@
     });
   }
 
+  /* ---------- Sous-menu Prestations (s'ouvre avec la flèche) ---------- */
+  document.querySelectorAll('.ouvrir-sous').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var li = b.parentNode, ouvert = li.classList.toggle('ouvert');
+      b.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
+    });
+  });
+
   /* ---------- Année du pied de page ---------- */
   document.querySelectorAll('.annee').forEach(function (el) { el.textContent = new Date().getFullYear(); });
 

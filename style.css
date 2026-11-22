@@ -51,6 +51,8 @@ main{background:var(--creme)}
 .sous-menu a{display:block;padding:calc(4 * var(--u)) calc(12 * var(--u));border:0;font-size:calc(10.5 * var(--u))}
 .sous-menu a:hover{background:#f1e2da}
 .menu li:hover>.sous-menu,.menu li:focus-within>.sous-menu{display:block}
+.a-sous-menu{display:flex;align-items:center}
+.ouvrir-sous{background:none;border:0;padding:0 calc(2 * var(--u)) calc(4 * var(--u)) 0;margin-left:calc(-1 * var(--u));font:inherit;font-size:calc(11 * var(--u));color:var(--brun);cursor:pointer;line-height:1}
 .reseaux{display:flex;gap:calc(9 * var(--u));align-items:center}
 .reseaux a{color:#1e1411;display:inline-flex}
 .reseaux svg{width:calc(19 * var(--u));height:calc(19 * var(--u))}
@@ -291,7 +293,11 @@ main{background:var(--creme)}
   .nav.ouvert{display:block}
   .menu{flex-direction:column;align-items:flex-start;gap:4px}
   .menu a,.sous-menu a{font-size:16px}
-  .sous-menu{position:static;display:block;box-shadow:none;background:transparent;padding:0 0 0 14px}
+  .a-sous-menu{flex-wrap:wrap}
+  .ouvrir-sous{font-size:22px;padding:0 12px 8px;transition:transform .2s}
+  .a-sous-menu.ouvert .ouvrir-sous{transform:rotate(180deg);padding:8px 12px 0}
+  .sous-menu,.menu li:hover>.sous-menu,.menu li:focus-within>.sous-menu{position:static;display:none;box-shadow:none;background:transparent;padding:0 0 0 14px;width:100%}
+  .a-sous-menu.ouvert>.sous-menu{display:block}
 }
 
 /* ----- Tablette ----- */
