@@ -194,7 +194,7 @@ def apropos():
     contenu = f'''<section class="page"><div class="interieur">
 {titre_page('À propos de moi')}
 <div class="apropos">
-  <img src="{{r}}images/sabrina.jpg" alt="Sabrina, photographe, avec son appareil photo">
+  <img src="{{r}}images/sabrina.jpg" alt="Sabrina, photographe de Norélias">
   <div>
     <p>Je suis Sabrina, photographe passionnée par les histoires vraies, les émotions sincères et les moments uniques de la vie.</p>
     <p>Mon approche est douce, respectueuse et humaine, afin de créer des souvenirs authentiques, remplis de chaleur et d'émotion.</p>

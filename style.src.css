@@ -140,7 +140,7 @@ p{margin:0 0 8u}
 
 /* À propos */
 .apropos{display:grid;grid-template-columns:256u 1fr;gap:30u;align-items:center}
-.apropos img{border-radius:16u;width:100%;height:322u;object-fit:cover}
+.apropos img{border-radius:16u;width:100%;height:322u;object-fit:cover;object-position:center 20%}
 .apropos p{font-size:17.5u;color:#1e1411;line-height:1.4;font-weight:600}
 .apropos .bouton{font-size:17u;height:42u;margin-top:14u;padding:0 30u}
 
