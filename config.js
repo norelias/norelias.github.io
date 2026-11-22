@@ -6,7 +6,7 @@ window.NORELIAS = {
   courriel: 'bonjour@norelias.ca',
 
   // Système de réservations et de courriels automatiques (Supabase). Ne pas modifier.
-  serveur: 'https://cbehmsoisqfimcafuyau.supabase.co/functions/v1/norelias-reservation',
+  serveur: 'https://xpfwplyiztkjeukwulqu.supabase.co/functions/v1/norelias-reservation',
   telephone: '506-787-0667',
 
   // Courriel qui reçoit les virements Interac

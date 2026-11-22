@@ -14,6 +14,9 @@ FLECHE = '<span class="fleche" aria-hidden="true">→</span>'
 FEUILLE_SVG = '''<svg class="feuille" viewBox="0 0 160 200" fill="none" stroke="#3a2a24" stroke-width="1.3" aria-hidden="true"><path d="M60 196 C70 150 72 110 110 60 C125 42 140 30 155 24"/><path d="M78 140c-18-6-30-20-32-38 16 4 28 18 32 38z"/><path d="M84 124c4-18 18-30 36-32-4 16-18 28-36 32z"/><path d="M92 104c-16-8-24-22-24-38 14 6 22 20 24 38z"/><path d="M104 82c6-16 20-24 36-24-6 14-20 22-36 24z"/><path d="M70 160c-16-2-28-12-34-26 16 0 28 10 34 26z"/><path d="M100 50c4 0 8 4 8 8"/><path d="M118 40c-6-14-2-28 8-36 4 14 0 28-8 36z"/></svg>'''
 DIVISEUR = '<svg class="separateur" viewBox="100 172 234 34" aria-hidden="true"><path d="M103 192.7C125 193.9 160 193.6 184.2 191.6C160 192.6 125 192.9 103 192.7Z" fill="currentColor" stroke="currentColor" stroke-width=".55" stroke-linejoin="round"/><path d="M224.6 192.1C245 190.6 265 190 280 190.6C300 191.2 318 192.2 331.2 193.1C318 192.7 300 191.9 280 191.5C265 191.1 245 191.4 224.6 192.1Z" fill="currentColor" stroke="currentColor" stroke-width=".55" stroke-linejoin="round"/><path d="M203.6 186.2C201.2 179 196 174.6 193.4 177.6C190.6 181.4 194.5 189.5 202 203.8C206.5 195.5 216.6 186.8 216.8 179C216.9 174.4 209.6 173.6 203.6 186.2" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
+import time as _t
+VERSION = str(int(_t.time()))
+
 SEANCES = [  # nom, code, image carte, description
     ('Grossesse', 'grossesse', 'grossesse-champ.jpg', "Entre 30 et 36 semaines, en nature à l'heure dorée ou à la maison."),
     ('Accouchement', 'accouchement', 'accouchement.jpg', 'Les premières minutes de votre rencontre, avec douceur et discrétion.'),
@@ -62,7 +65,7 @@ def page(chemin, titre, description, contenu, actif=''):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Sacramento&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{r}style.css">
+<link rel="stylesheet" href="{r}style.css?v={VERSION}">
 </head>
 <body>
 <a href="#contenu" class="sr-only">Aller au contenu</a>
@@ -84,8 +87,8 @@ def page(chemin, titre, description, contenu, actif=''):
     <div class="coord"><a href="tel:+15067870667">506-787-0667</a> · <a href="mailto:bonjour@norelias.ca">bonjour@norelias.ca</a></div>
   </div>
 </footer>
-<script src="{r}config.js"></script>
-<script src="{r}script.js"></script>
+<script src="{r}config.js?v={VERSION}"></script>
+<script src="{r}script.js?v={VERSION}"></script>
 </body>
 </html>
 '''

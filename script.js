@@ -374,7 +374,7 @@
       var ds = donneesServeur(); ds.action = 'soumettre'; ds.mode = mode;
       envoi = appelServeur(ds).then(function () { try { sessionStorage.removeItem('norelias-brouillon'); } catch (e) {} });
     } else {
-      envoi = envoyer(C.emailjs && C.emailjs.modeleReservation, d, 'Réservation — ' + d.seance + ' — ' + d.nom, corps);
+      envoi = Promise.reject(new Error('serveur indisponible'));
     }
     envoi.then(function () {
       document.getElementById('fin-carte').hidden = mode !== 'carte';
