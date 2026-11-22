@@ -69,8 +69,9 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
 .heros-texte{position:absolute;left:calc(50 * var(--u));top:calc(26 * var(--u));width:calc(380 * var(--u));text-align:center}
 .heros-texte .feuille{position:absolute;left:calc(12 * var(--u));top:calc(58 * var(--u));width:calc(80 * var(--u));height:auto}
 .heros h1{font-weight:400;line-height:1}
-.heros h1 .nom{display:block;font-family:'Sacramento',cursive;font-size:calc(138 * var(--u));line-height:.95;color:#1e1411;margin-left:calc(58 * var(--u));letter-spacing:calc(-2 * var(--u));transform:scaleX(.8);transform-origin:left center;white-space:nowrap}
-.heros h1 .metier{display:block;font-family:'Nunito',sans-serif;font-weight:400;font-size:calc(15 * var(--u));letter-spacing:.32em;margin:calc(-10 * var(--u)) 0 0 calc(120 * var(--u));color:#1e1411}
+.heros h1 .nom{display:block;width:calc(375 * var(--u));height:auto;margin:calc(-14 * var(--u)) 0 0 calc(-5 * var(--u))}
+.heros-texte .feuille-titre{position:absolute;left:calc(-5 * var(--u));top:calc(38 * var(--u));width:calc(130 * var(--u));height:auto}
+.heros h1 .metier{display:block;font-family:'Nunito',sans-serif;font-weight:400;font-size:calc(15 * var(--u));letter-spacing:.32em;margin:calc(-6 * var(--u)) 0 0 calc(120 * var(--u));color:#1e1411}
 .separateur{display:flex;align-items:center;justify-content:center;gap:calc(6 * var(--u));margin:calc(8 * var(--u)) 0 calc(20 * var(--u)) calc(120 * var(--u));color:#1e1411}
 .separateur::before,.separateur::after{content:"";height:1px;width:calc(90 * var(--u));background:#3f2e28}
 .separateur svg{width:calc(30 * var(--u));height:calc(30 * var(--u))}
@@ -275,23 +276,41 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
   .menu{flex-direction:column;align-items:flex-start;gap:4px}
   .menu a,.sous-menu a{font-size:16px}
   .sous-menu{position:static;display:block;box-shadow:none;background:transparent;padding:0 0 0 14px}
-  .heros{height:auto;min-height:420px;background-position:65% top}
-  .heros::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(250,234,222,.85),rgba(250,234,222,.25))}
-  .heros-texte{position:relative;left:auto;top:auto;width:auto;max-width:330px;padding:24px 10px 50px;margin:0 auto}
-  .heros h1 .nom{font-size:100px;margin:0;transform:scaleX(.8);transform-origin:center}
-  .heros h1 .metier{margin:-4px 0 0;font-size:14px}
-  .separateur{margin:6px 0 14px}
-  .heros .accroche{font-size:21px}
-  .heros-texte .feuille{left:-6px;top:30px;width:58px}
-  .bande-noel .contenu{grid-template-columns:1fr;height:auto}
-  .bande-noel img{height:200px}
-  .bande-noel .texte{flex-direction:column;align-items:flex-start;gap:14px;padding:20px}
-  .souvenirs{height:auto;background-size:auto 240px;background-position:left top;padding-top:230px}
-  .souvenirs .texte{position:static;width:auto;padding:20px 22px 40px}
-  .grille-univers{grid-template-columns:repeat(4,minmax(0,1fr))}
-  .engagements{height:auto;padding:20px 0 50px}
-  .engagements .grille{flex-direction:column;align-items:flex-start;gap:14px;padding:0 30px}
-  .grille-prestations,.galerie{grid-template-columns:repeat(2,minmax(0,1fr))}
+  /* Accueil sur téléphone : même composition que la maquette, agrandie */
+  .heros{--u:calc(100vw / 470);height:calc(358 * var(--u));background-size:auto 100%;background-position:calc(-40 * var(--u)) top}
+  .heros-texte{left:calc(22 * var(--u))}
+  .bande-noel{--u:calc(100vw / 420)}
+  .bande-noel .contenu{grid-template-columns:calc(150 * var(--u)) 1fr;height:auto;min-height:calc(190 * var(--u))}
+  .bande-noel img{height:100%;min-height:calc(190 * var(--u))}
+  .bande-noel .texte{flex-direction:column;align-items:flex-start;justify-content:center;gap:calc(10 * var(--u));padding:calc(14 * var(--u)) calc(14 * var(--u)) calc(14 * var(--u)) calc(16 * var(--u))}
+  .bande-noel .script{font-size:calc(26 * var(--u))}
+  .bande-noel h2{font-size:calc(25 * var(--u))}
+  .bande-noel .details{flex-wrap:wrap;gap:calc(4 * var(--u)) calc(12 * var(--u));font-size:calc(14 * var(--u))}
+  .bande-noel .petit{font-size:calc(12 * var(--u))}
+  .bande-noel .bouton{font-size:calc(14 * var(--u))}
+  .souvenirs{--u:calc(100vw / 420);height:calc(262 * var(--u));background-size:cover;background-position:left center}
+  .souvenirs::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(248,238,230,0) 38%,rgba(248,238,230,.92) 52%)}
+  .souvenirs .texte{left:calc(192 * var(--u));top:calc(14 * var(--u));width:calc(218 * var(--u))}
+  .souvenirs .separateur{margin-left:calc(40 * var(--u))}
+  .souvenirs p{font-size:calc(13 * var(--u))}
+  .souvenirs .bouton{font-size:calc(12.5 * var(--u));padding:0 calc(12 * var(--u));white-space:nowrap}
+  .univers{--u:calc(100vw / 420)}
+  .grille-univers{display:flex;flex-wrap:wrap;justify-content:center;gap:calc(12 * var(--u)) calc(9 * var(--u))}
+  .carte-univers{width:calc(25% - calc(7 * var(--u)))}
+  .carte-univers .photo{height:calc(86 * var(--u))}
+  .carte-univers .nom{font-size:calc(15 * var(--u));margin-top:calc(5 * var(--u))}
+  .engagements{--u:calc(100vw / 420);height:auto;padding:calc(14 * var(--u)) 0 calc(26 * var(--u))}
+  .engagements .grille{gap:calc(10 * var(--u));padding:0 calc(10 * var(--u));align-items:flex-start}
+  .engagement{flex-direction:column;text-align:center;gap:calc(6 * var(--u));font-size:calc(12 * var(--u));flex:1}
+  .engagement svg{width:calc(32 * var(--u));height:calc(32 * var(--u))}
+  .grille-prestations,.galerie{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .carte-presta img{height:92px}
+  .carte-presta .nom{font-size:13.5px;height:32px}
+  .carte-presta .etiquette-promo{font-size:10px;top:5px;left:5px}
+  .galerie figure{height:96px}
+  .titre-page p br{display:none}
+  .filtres{flex-wrap:wrap;gap:4px}
+  .filtre{font-size:13px;height:30px;padding:0 10px}
   .apropos{grid-template-columns:1fr}
   .apropos img{max-width:300px;margin:0 auto}
   .grille-tarifs,.extras{grid-template-columns:1fr}
@@ -306,8 +325,6 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
   .deco{display:none}
 }
 @media (max-width:480px){
-  .grille-univers{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .carte-univers .photo{height:140px}
   .deux-col,.choix-paiement{grid-template-columns:1fr}
   .etapes li{font-size:0}
   .etapes li .num{font-size:13px}

@@ -66,7 +66,7 @@ def page(chemin, titre, description, contenu, actif=''):
 <a href="#contenu" class="sr-only">Aller au contenu</a>
 <header class="entete">
   <div class="barre">
-    <a href="{r}" class="logo"><img src="{r}images/logo.png" alt="Norélias Photography" width="246" height="62"></a>
+    <a href="{r}" class="logo"><img src="{r}images/logo.svg" alt="Norélias Photography" width="246" height="64"></a>
     <nav class="nav" aria-label="Menu principal"><ul class="menu">{menu}</ul></nav>
     {reseaux()}
     <button class="burger" aria-label="Ouvrir le menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
@@ -93,7 +93,7 @@ def page(chemin, titre, description, contenu, actif=''):
         f.write(html)
 
 def titre_page(h1, sous=''):
-    return f'<div class="titre-page"><h1>{h1} {COEUR}</h1>' + (f'<p>{sous}</p>' if sous else '') + '</div>'
+    return f'<div class="titre-page"><h1>{h1} {COEUR}</h1>' + (f'<p>{sous.replace("<br>", " <br>")}</p>' if sous else '') + '</div>'
 
 # ---------------- Accueil ----------------
 def accueil():
@@ -107,8 +107,8 @@ def accueil():
 <section class="heros">
   <div class="interieur">
     <div class="heros-texte">
-      {FEUILLE_SVG}
-      <h1><span class="nom">Norélias</span><span class="metier">PHOTOGRAPHY</span></h1>
+      <img class="feuille-titre" src="{{r}}images/feuille-titre.svg" alt="" width="130" height="132">
+      <h1><img class="nom" src="{{r}}images/titre-norelias.svg" alt="Norélias" width="375" height="146"><span class="metier">PHOTOGRAPHY</span></h1>
       {DIVISEUR}
       <p class="accroche">Immortaliser les moments<br>les plus précieux de votre vie</p>
       <a class="bouton" href="{{r}}reservation/">Réserver ma séance {FLECHE}</a>
@@ -129,7 +129,7 @@ def accueil():
     </div>
   </div>
 </section>
-<section class="souvenirs dechire-bas" style="--fond-dechire:#f6ebe4" role="img" aria-label="Nouveau-né endormi avec un lapin en peluche">
+<section class="souvenirs dechire-bas" style="--fond-dechire:#f6ebe4" role="img" aria-label="Nouveau-né endormi dans un panier avec un bonnet">
   <div class="interieur">
     <div class="texte">
       <h2><span class="script">Des souvenirs<br>authentiques</span><span class="et">&amp; remplis d'émotions</span></h2>
