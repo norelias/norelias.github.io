@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Envoyer une confirmation · Norélias (privé)</title>
+<link rel="icon" href="../favicon.svg">
+<style>
+  body{margin:0;background:#ead9cf;font-family:Nunito,Arial,sans-serif;color:#2b1d18}
+  .boite{max-width:1100px;margin:0 auto;padding:20px;display:grid;grid-template-columns:360px 1fr;gap:20px}
+  h1{font-family:Georgia,serif;font-weight:500;font-size:26px;margin:0 0 4px}
+  .aide{font-size:13px;color:#6f5a52;margin:0 0 14px}
+  form{background:#f7ece6;border-radius:12px;padding:18px}
+  label{display:block;font-size:13px;font-weight:700;margin:10px 0 4px}
+  input,select,textarea{width:100%;box-sizing:border-box;font:inherit;font-size:15px;padding:9px 10px;border:1px solid #dcc9be;border-radius:6px;background:#fff}
+  textarea{height:60px}
+  .deux{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  button{font:inherit;font-weight:700;font-size:15px;border:0;border-radius:6px;padding:11px 14px;cursor:pointer;width:100%;margin-top:10px}
+  .principal{background:linear-gradient(180deg,#e1b2a4,#cb9483);color:#2b1d18}
+  .second{background:#fff;border:1.5px solid #cb9483;color:#5c2f2b}
+  .msg{font-size:14px;font-weight:700;margin-top:10px;min-height:20px}
+  iframe{width:100%;height:1150px;border:0;border-radius:12px;background:#ead9cf}
+  @media (max-width:820px){.boite{grid-template-columns:1fr}iframe{height:1250px}}
+</style>
+</head>
+<body>
+<div class="boite">
+  <form id="f" autocomplete="off">
+    <h1>Envoyer une confirmation</h1>
+    <p class="aide">Page privée (aucun lien sur le site). Remplissez, vérifiez l'aperçu, puis envoyez.</p>
+    <label for="prenom">Prénom de la cliente</label><input id="prenom" required>
+    <label for="courriel">Courriel de la cliente</label><input id="courriel" type="email" required>
+    <label for="seance">Séance</label>
+    <select id="seance"><option>Mini-séance de Noël</option><option>Grossesse</option><option>Accouchement</option><option>Nouveau-né</option><option>Famille</option><option>Couple</option><option>Fêtes</option><option>Garderie / École</option><option>Finissants</option><option>Bal de promos</option><option>Forfait personnalisé</option></select>
+    <div class="deux"><div><label for="date">Date</label><input id="date" type="date" required></div><div><label for="heure">Heure</label><input id="heure" placeholder="10 h 30" required></div></div>
+    <label for="adresse">Adresse de la séance</label><textarea id="adresse" list="adresses" required placeholder="Ex. : 12, rue Water, Campbellton"></textarea>
+    <div class="deux"><div><label for="paye">Paiement reçu</label><input id="paye" placeholder="150 $"></div><div><label for="solde">Solde le jour même</label><input id="solde" placeholder="150 $"></div></div>
+    <button type="button" class="principal" id="envoyer">Envoyer le courriel</button>
+    <button type="button" class="second" id="copier">Copier le courriel (à coller dans Gmail)</button>
+    <p class="msg" id="msg" role="status"></p>
+  </form>
+  <iframe id="apercu" title="Aperçu du courriel"></iframe>
+</div>
+<script src="../config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+(function () {
+  var C = window.NORELIAS || {}, E = C.emailjs || {}, modele = '';
+  var MOIS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  var JOURS = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function dateLongue(v) {
+    if (!v) return '';
+    var p = v.split('-'), d = new Date(+p[0], +p[1] - 1, +p[2]);
+    return JOURS[d.getDay()] + ' ' + d.getDate() + ' ' + MOIS[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  function valeurs() {
+    return {
+      prenom: $('prenom').value.trim() || 'Prénom',
+      seance: $('seance').value,
+      date: dateLongue($('date').value) || '—',
+      heure: $('heure').value.trim() || '—',
+      adresse: $('adresse').value.trim() || '—',
+      paye: $('paye').value.trim() || '—',
+      solde: $('solde').value.trim() || 'Aucun'
+    };
+  }
+  function rendu() {
+    var v = valeurs();
+    return modele.replace(/\{\{(\w+)\}\}/g, function (_, k) { return k in v ? esc(v[k]).replace(/\n/g, '<br>') : ''; });
+  }
+  function maj() { if (modele) $('apercu').srcdoc = rendu(); }
+  try { var a = localStorage.getItem('norelias-adresse'); if (a) $('adresse').value = a; } catch (e) {}
+  fetch('../courriel/confirmation.html').then(function (r) { return r.text(); }).then(function (t) { modele = t; maj(); });
+  document.querySelectorAll('input,select,textarea').forEach(function (el) { el.addEventListener('input', maj); });
+  function pret() {
+    var f = $('f');
+    if (!f.reportValidity()) return false;
+    try { localStorage.setItem('norelias-adresse', $('adresse').value.trim()); } catch (e) {}
+    return true;
+  }
+  $('copier').addEventListener('click', function () {
+    if (!pret()) return;
+    var html = rendu();
+    var corps = html.slice(html.indexOf('<body'), html.lastIndexOf('<\/body>'));
+    corps = corps.slice(corps.indexOf('>') + 1);
+    var fini = function () {
+      $('msg').textContent = 'Copié ! Dans Gmail : nouveau message à ' + $('courriel').value + ', objet « Votre séance est confirmée », puis Ctrl+V.';
+      window.open('https://mail.google.com/mail/?view=cm&to=' + encodeURIComponent($('courriel').value) + '&su=' + encodeURIComponent('Votre séance est confirmée · Norélias Photography'), '_blank');
+    };
+    if (navigator.clipboard && window.ClipboardItem) {
+      navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([corps], { type: 'text/html' }), 'text/plain': new Blob([$('apercu').contentDocument.body.innerText], { type: 'text/plain' }) })]).then(fini, function () { $('msg').textContent = 'La copie a été refusée par le navigateur. Essayez avec Chrome ou Edge.'; });
+    } else { $('msg').textContent = 'Votre navigateur ne permet pas la copie. Essayez avec Chrome ou Edge.'; }
+  });
+  $('envoyer').addEventListener('click', function () {
+    if (!pret()) return;
+    if (!(E.service && E.clePublique && E.modeleConfirmation && window.emailjs)) {
+      $('msg').textContent = "L'envoi automatique n'est pas encore configuré (EmailJS). Utilisez « Copier le courriel » en attendant.";
+      return;
+    }
+    var v = valeurs(); v.courriel = $('courriel').value.trim(); v.adresse = v.adresse.replace(/\n/g, ', ');
+    $('envoyer').disabled = true; $('msg').textContent = 'Envoi…';
+    window.emailjs.send(E.service, E.modeleConfirmation, v, { publicKey: E.clePublique }).then(function () {
+      $('msg').textContent = 'Courriel envoyé à ' + v.courriel + ' ✓';
+    }, function (err) {
+      $('msg').textContent = "Erreur d'envoi : " + (err && err.text || 'inconnue') + '. Utilisez « Copier le courriel ».';
+    }).then(function () { $('envoyer').disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>

@@ -48,6 +48,7 @@ window.NORELIAS = {
     service: '',
     modeleReservation: '',
     modeleContact: '',
+    modeleConfirmation: '',   // modèle « Confirmation » : coller le contenu de courriel/confirmation.html
     clePublique: ''
   }
 };
