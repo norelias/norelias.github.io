@@ -1,0 +1,282 @@
+/* Norélias Photography — feuille de style SOURCE.
+   Les mesures en « u » suivent la maquette (1u = 1 pixel de la maquette de 728 px de large).
+   Après modification, lancez : python3 outils/construire.py  (qui génère style.css) */
+:root{
+  --u:clamp(1px, calc(100vw / 728), 2px);
+  --creme:#f7ece6; --creme-2:#fbf4ef; --blanc:#fffaf7;
+  --brun:#2b1d18; --brun-2:#4a3630; --gris:#6f5a52;
+  --rose-fonce:#8a4f48; --noel:#5c2f2b; --noel-rouge:#8c1c26; --or:#ecc478; --signature:#8c6450;
+  --ombre:0 3u 10u rgba(58,42,36,.16);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--creme);color:var(--brun);font-family:'Nunito',system-ui,sans-serif;font-weight:600;font-size:12.5u;line-height:1.5;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:var(--rose-fonce)}
+h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;color:var(--brun);margin:0;line-height:1.1}
+p{margin:0 0 8u}
+.script{font-family:'Great Vibes',cursive;font-weight:400}
+.sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.centre{text-align:center}
+.coeur{display:inline-block;width:.62em;height:.62em;margin-left:.25em;vertical-align:.05em}
+.coeur svg{width:100%;height:100%}
+.page-largeur{max-width:728u;margin:0 auto}
+
+/* Bouton rosé de la maquette */
+.bouton{display:inline-flex;align-items:center;justify-content:center;gap:12u;background:linear-gradient(180deg,#e1b2a4 0%,#cb9483 100%);color:#2b1d18;font-family:'Nunito',sans-serif;font-weight:600;font-size:14.5u;text-decoration:none;padding:0 22u;height:32u;border-radius:5u;border:0;box-shadow:0 2u 6u rgba(150,90,75,.3);cursor:pointer;transition:filter .2s}
+.bouton:hover{filter:brightness(1.06)}
+.bouton .fleche{font-size:1.25em;line-height:1;margin-top:-2u}
+.bouton.blanc{background:#fff;color:var(--noel);border-radius:999px;box-shadow:none;height:37u;padding:0 16u;font-size:12.5u;font-weight:600}
+.bouton.contour{background:transparent;border:1.5px solid #cb9483;box-shadow:none}
+.bouton[disabled]{opacity:.45;cursor:not-allowed}
+
+/* En-tête */
+.entete{position:sticky;top:0;z-index:50;background:#f9f1ec}
+.entete .barre{max-width:728u;margin:0 auto;height:66u;display:flex;align-items:center;padding:0 20u;gap:10u}
+.logo img{height:56u;width:auto}
+.nav{margin-left:auto;margin-right:auto}
+.menu{display:flex;align-items:center;gap:15u;white-space:nowrap;list-style:none;margin:0;padding:0}
+.menu>li{position:relative}
+.menu a{color:var(--brun);text-decoration:none;font-size:9.8u;font-weight:600;padding:4u 3u;display:inline-flex;align-items:center;gap:3u;border-bottom:1.5u solid transparent}
+.menu a[aria-current="page"]{border-bottom-color:var(--rose-fonce)}
+.menu a:hover{border-bottom-color:#c9a196}
+.sous-menu{display:none;position:absolute;top:100%;left:-10u;background:var(--blanc);border-radius:8u;box-shadow:var(--ombre);list-style:none;margin:0;padding:6u 0;min-width:120u;z-index:60}
+.sous-menu a{display:block;padding:4u 12u;border:0;font-size:10.5u}
+.sous-menu a:hover{background:#f1e2da}
+.menu li:hover>.sous-menu,.menu li:focus-within>.sous-menu{display:block}
+.reseaux{display:flex;gap:9u;align-items:center}
+.reseaux a{color:#1e1411;display:inline-flex}
+.reseaux svg{width:19u;height:19u}
+.burger{display:none;background:none;border:0;padding:8px;cursor:pointer;color:var(--brun)}
+.burger svg{width:28px;height:28px}
+
+/* Papier déchiré */
+.dechire-haut,.dechire-bas{position:relative}
+.dechire-haut::before,.dechire-bas::after{content:"";position:absolute;left:0;right:0;height:9u;z-index:3;background:var(--fond-dechire,var(--creme));-webkit-mask:var(--masque) center/100% 100% no-repeat;mask:var(--masque) center/100% 100% no-repeat}
+.dechire-haut::before{top:-8u;filter:drop-shadow(0 -1.2u 0 #fffaf5) drop-shadow(0 -.5u 1u rgba(58,42,36,.25))}
+.dechire-bas::after{bottom:-8u;transform:scale(-1,-1);filter:drop-shadow(0 -1.2u 0 #fffaf5) drop-shadow(0 -.5u 1u rgba(58,42,36,.25))}
+
+/* Héros */
+.heros{position:relative;height:358u;background:#e7cdb8 url('images/accueil-fond.jpg') center top/cover no-repeat}
+.heros .interieur{max-width:728u;height:100%;margin:0 auto;position:relative}
+.heros-texte{position:absolute;left:50u;top:26u;width:380u;text-align:center}
+.heros-texte .feuille{position:absolute;left:12u;top:58u;width:80u;height:auto}
+.heros h1{font-weight:400;line-height:1}
+.heros h1 .nom{display:block;font-family:'Sacramento',cursive;font-size:138u;line-height:.95;color:#1e1411;margin-left:58u;letter-spacing:-2u;transform:scaleX(.8);transform-origin:left center;white-space:nowrap}
+.heros h1 .metier{display:block;font-family:'Nunito',sans-serif;font-weight:400;font-size:15u;letter-spacing:.32em;margin:-10u 0 0 120u;color:#1e1411}
+.separateur{display:flex;align-items:center;justify-content:center;gap:6u;margin:8u 0 20u 120u;color:#1e1411}
+.separateur::before,.separateur::after{content:"";height:1px;width:90u;background:#3f2e28}
+.separateur svg{width:30u;height:30u}
+.heros .accroche{font-family:'Cormorant Garamond',serif;font-size:21u;font-weight:500;line-height:1.15;margin:0 0 22u 0;color:#1e1411;padding-left:0}
+.heros .bouton{margin-left:0;font-size:15.5u;height:33u}
+
+/* Bande Noël */
+.bande-noel{background:var(--noel);color:#fbeee8}
+.bande-noel .contenu{max-width:728u;margin:0 auto;display:grid;grid-template-columns:230u 1fr;height:168u}
+.bande-noel img{width:100%;height:168u;object-fit:cover}
+.bande-noel .texte{display:flex;align-items:center;justify-content:space-between;padding:0 34u 0 26u}
+.bande-noel .script{font-size:25u;color:#f0c9bd;line-height:1}
+.bande-noel h2{color:#fff;font-size:24u;margin-top:2u}
+.bande-noel .details{display:flex;gap:12u;font-weight:600;font-size:12.5u;margin-top:8u}
+.bande-noel .petit{font-size:10.5u;font-weight:400;color:#e7cfc6;margin:6u 0 0}
+
+/* Souvenirs */
+.souvenirs{position:relative;height:240u;background:#f6ebe4 url('images/souvenirs-fond.jpg') center/100% 100% no-repeat}
+.souvenirs .interieur{max-width:728u;height:100%;margin:0 auto;position:relative}
+.souvenirs .texte{position:absolute;left:380u;top:22u;width:290u}
+.souvenirs h2{font-size:22u;line-height:1}
+.souvenirs h2 .script{display:block;font-size:33u;line-height:.9;margin-left:-8u}
+.souvenirs h2 .et{display:block;margin:2u 0 0 18u}
+.souvenirs .separateur{justify-content:flex-start;margin:4u 0 8u 70u}
+.souvenirs .separateur::before,.souvenirs .separateur::after{width:60u}
+.souvenirs .separateur svg{width:16u;height:16u}
+.souvenirs p{font-size:12.2u;color:#1e1411;margin:0 0 12u;line-height:1.35}
+.souvenirs .bouton{margin-left:28u;font-size:13u;height:28u}
+
+/* Univers */
+.univers{padding:12u 0 0}
+.univers .interieur{max-width:728u;margin:0 auto;padding:0 32u}
+.titre-section{font-size:24u;text-align:center;margin-bottom:22u;font-weight:400}
+.titre-section em{font-style:italic}
+.grille-univers{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9.5u}
+.carte-univers{text-decoration:none;color:var(--brun);text-align:center}
+.carte-univers .photo{position:relative;display:block;border-radius:6u;overflow:hidden;box-shadow:var(--ombre);height:90u}
+.carte-univers img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.carte-univers:hover img{transform:scale(1.05)}
+.carte-univers .nom{display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:13.5u;margin-top:9u}
+.etiquette-promo{position:absolute;top:4u;left:4u;z-index:1;background:var(--noel-rouge);color:#fff;border:1px solid var(--or);border-radius:3u;font-size:7.5u;font-weight:800;padding:0 4u;white-space:nowrap;line-height:1.5}
+
+.engagements{background:url('images/engagements-fond.jpg') center bottom/cover no-repeat;height:95u;margin-top:14u}
+.engagements .grille{max-width:728u;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:center;gap:40u;padding-bottom:8u}
+.engagement{display:flex;align-items:center;gap:12u;color:#1e1411;font-weight:600;font-size:11u;line-height:1.3}
+.engagement svg{width:38u;height:38u;color:#7d5446;flex:none}
+
+/* Pages intérieures (mesures de la maquette × 1,86) */
+.page{position:relative;overflow:hidden;padding:12u 0 40u;min-height:560u}
+.page .interieur{max-width:728u;margin:0 auto;padding:0 20u;position:relative;z-index:1}
+.titre-page{text-align:center;margin-bottom:18u}
+.titre-page h1{font-size:42u;font-weight:400}
+.titre-page h1 .script{font-size:1.1em}
+.titre-page p{margin:6u auto 0;max-width:600u;font-size:17u;color:#1e1411;line-height:1.35}
+.deco{position:absolute;pointer-events:none;z-index:0}
+
+/* Prestations */
+.grille-prestations{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13u}
+.carte-presta{background:#f7e9e1;border-radius:9u;overflow:hidden;box-shadow:var(--ombre);text-decoration:none;color:var(--brun);display:flex;flex-direction:column}
+.carte-presta .photo{position:relative}
+.carte-presta img{width:100%;height:140u;object-fit:cover}
+.carte-presta .nom{font-family:'Nunito',sans-serif;font-weight:600;font-size:18u;text-align:center;height:42u;display:flex;align-items:center;justify-content:center}
+.carte-presta .etiquette-promo{font-size:13u;top:8u;left:8u;padding:1u 8u;border-radius:5u}
+.prestations-grille-zone{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13u}
+
+/* Portfolio */
+.filtres{display:flex;flex-wrap:nowrap;justify-content:center;gap:2u;margin-bottom:16u}
+.filtre{background:transparent;border:0;border-radius:999px;padding:0 10u;height:28u;font:inherit;font-size:11.5u;font-weight:600;color:#1e1411;cursor:pointer}
+.filtre[aria-pressed="true"]{background:#b37a6f;color:#fff}
+.galerie{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11u}
+.galerie figure{margin:0;border-radius:8u;overflow:hidden;box-shadow:var(--ombre);height:162u}
+.galerie img{width:100%;height:100%;object-fit:cover}
+.galerie figure[hidden]{display:none}
+
+/* À propos */
+.apropos{display:grid;grid-template-columns:256u 1fr;gap:30u;align-items:center}
+.apropos img{border-radius:16u;width:100%;height:322u;object-fit:cover}
+.apropos p{font-size:17.5u;color:#1e1411;line-height:1.4;font-weight:600}
+.apropos .bouton{font-size:17u;height:42u;margin-top:14u;padding:0 30u}
+
+/* Tarifs */
+.grille-tarifs{display:grid;grid-template-columns:repeat(3,1fr);gap:15u}
+.tarif{background:#fdf8f5;border-radius:16u;box-shadow:var(--ombre);text-align:center;overflow:hidden;display:flex;flex-direction:column}
+.tarif .tete{padding:14u 10u 8u}
+.tarif .montant{font-family:'Cormorant Garamond',serif;font-size:27u;color:var(--rose-fonce);line-height:1}
+.tarif h3{font-family:'Cormorant Garamond',serif;font-size:25u;font-weight:500}
+.tarif ul{text-align:left;padding:4u 8u 12u 30u;margin:0;font-size:13.5u;flex:1}
+.tarif li{margin-bottom:4u}
+.tarif.vedette .tete{background:var(--signature)}
+.tarif.vedette .tete h3,.tarif.vedette .tete .montant{color:#fff}
+.tarif .choisir{display:none}
+.extras{display:grid;grid-template-columns:1fr 1fr;gap:15u;margin-top:10u}
+.extra{border-radius:10u;padding:6u 14u;display:flex;align-items:center;justify-content:space-between;gap:10u;text-decoration:none;min-height:54u}
+.extra h3{font-size:24u;line-height:1}
+.extra p{margin:2u 0 0;font-size:12u}
+.extra.noel{background:var(--noel-rouge);color:#fbe6dc;border:1.5px solid var(--or)}
+.extra.noel h3{color:#fff}
+.extra.noel .montant{font-family:'Cormorant Garamond',serif;font-size:28u;color:var(--or);line-height:1}
+.extra.perso{background:#fffaf7;border:1.5px solid #dcb7aa;color:var(--brun)}
+.extra.perso p{color:#6f5a52}
+.note-acompte{text-align:center;color:#6f5a52;margin-top:10u;font-size:13u;font-weight:600}
+
+/* Formulaires */
+.champ{display:flex;flex-direction:column;gap:4u;margin-bottom:14u}
+.champ label{font-weight:600;font-size:14u}
+.champ input,.champ select,.champ textarea{font:inherit;font-size:16u;font-weight:600;padding:0 14u;height:45u;border:1px solid #dcc9be;border-radius:6u;background:#fff;color:var(--brun);width:100%;box-shadow:0 1u 3u rgba(58,42,36,.08)}
+.champ textarea{height:auto;padding:10u 14u}
+.deux-col{display:grid;grid-template-columns:1fr 1fr;gap:12u}
+.case{display:flex;align-items:flex-start;gap:8u;margin:10u 0;font-size:14u}
+.case input{width:16u;height:16u;margin-top:3u;accent-color:var(--rose-fonce);flex:none}
+.aide{font-size:13u;color:var(--gris)}
+
+/* Réservation */
+.etapes{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0;list-style:none;padding:0;margin:0 0 18u}
+.etapes li{display:flex;align-items:center;gap:6u;font-size:14.5u;font-weight:600}
+.etapes li:not(:last-child)::after{content:"";width:16u;height:1px;background:#a8928a;margin:0 6u}
+.etapes .num{width:22u;height:22u;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:1px solid #8f7a72;background:#fff;font-size:12u}
+.etapes li.active .num,.etapes li.faite .num{background:#a8685e;border-color:#a8685e;color:#fff}
+.zone-resa{display:grid;grid-template-columns:418u 1fr;gap:20u;align-items:end;padding-left:44u}
+.zone-resa .vase{width:150u;margin-bottom:-20u}
+.etape[hidden]{display:none}
+.navigation-etapes{display:flex;justify-content:center;gap:10u;margin-top:6u}
+.navigation-etapes .bouton{height:41u;font-size:17u;padding:0 30u}
+.choix-paiement{display:grid;grid-template-columns:1fr 1fr;gap:10u;margin:6u 0 10u}
+.choix-paiement label{border:1px solid #dcc9be;border-radius:8u;padding:10u;cursor:pointer;display:flex;gap:8u;align-items:flex-start;background:#fff;font-size:14u}
+.choix-paiement input{accent-color:var(--rose-fonce);margin-top:3u}
+.choix-paiement label:has(input:checked){border-color:#a8685e;background:#fbefea}
+.recap{background:#fbf4ef;border-radius:10u;padding:12u 14u;margin-bottom:10u;font-size:14u}
+.recap dl{display:grid;grid-template-columns:auto 1fr;gap:3u 14u;margin:0}
+.recap dt{color:var(--gris)}
+.recap dd{margin:0;font-weight:800}
+.boite-interac{background:#fff7ec;border:1px dashed #d9b98a;border-radius:8u;padding:10u 12u;margin-top:4u;font-size:14u}
+.note-resa{text-align:center;font-size:12.5u;color:#7a4a40;margin:12u 0 0}
+.form-resa .case{justify-content:center;font-size:12.5u}
+
+/* Contact */
+.contact{display:grid;grid-template-columns:1fr 366u;gap:30u;align-items:start;padding:0 20u}
+.coordonnees{list-style:none;padding:0;margin:0 0 20u}
+.coordonnees li{display:flex;gap:16u;align-items:flex-start;margin-bottom:18u;font-size:20u;font-weight:600;line-height:1.25}
+.coordonnees svg{width:26u;height:26u;color:#3a2720;flex:none}
+.contact .reseaux{gap:16u;padding-left:16u}
+.contact .reseaux svg{width:36u;height:36u}
+.contact .champ{margin-bottom:8u}
+.contact .champ input,.contact .champ textarea{height:36u;font-size:15u}
+.contact .champ textarea{height:120u}
+.contact .bouton{width:100%;height:42u;font-size:17u;margin-top:6u}
+.merci{display:none;text-align:center;padding:20u}
+
+/* Politique */
+.grille-politique{display:grid;grid-template-columns:repeat(4,1fr);gap:12u}
+.bloc-politique{background:#fffaf7;border:1px solid #ecdcd2;border-radius:12u;padding:16u 14u}
+.bloc-politique h3{font-size:18u;text-align:center}
+.bloc-politique h3::after{content:"";display:block;width:30u;height:1px;background:#d6b4a8;margin:8u auto 2u}
+.bloc-politique ul{margin:8u 0 0;padding-left:14u;color:#3a2a24;font-size:11.5u;font-weight:400}
+.bloc-politique li{margin-bottom:8u}
+.bloc-politique li::marker{color:#a8685e}
+.texte-legal{max-width:600u;margin:0 auto;font-weight:400;font-size:12u}
+.texte-legal h2{font-size:20u;margin:20u 0 6u}
+
+/* Pied de page */
+.pied{background:#3d2622;color:#f1dcd4}
+.pied .barre{max-width:1456u;margin:0 auto;height:34u;display:flex;align-items:center;justify-content:space-between;gap:12u;padding:0 20u}
+.pied .marque{font-family:'Great Vibes',cursive;font-size:20u;color:#fbeee8;text-decoration:none}
+.pied nav{display:flex;flex-wrap:wrap;gap:4u 8u;align-items:center}
+.pied nav a,.pied .coord a{color:#f1dcd4;text-decoration:none;font-size:8u;font-weight:400}
+.pied nav span{color:#b99b90;font-size:8u}
+.pied .coord{font-size:8u;font-weight:400}
+.pied a:hover{text-decoration:underline}
+
+/* ----- Téléphone et petite tablette ----- */
+@media (max-width:760px){
+  :root{--u:1.12px}
+  .burger{display:inline-flex;margin-left:auto}
+  .entete .reseaux{display:none}
+  .nav{position:fixed;left:0;right:0;top:66u;background:var(--blanc);padding:14px 22px 20px;display:none;box-shadow:0 14px 30px rgba(0,0,0,.12);margin:0}
+  .nav.ouvert{display:block}
+  .menu{flex-direction:column;align-items:flex-start;gap:4px}
+  .menu a,.sous-menu a{font-size:16px}
+  .sous-menu{position:static;display:block;box-shadow:none;background:transparent;padding:0 0 0 14px}
+  .heros{height:auto;min-height:420px;background-position:65% top}
+  .heros::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(250,234,222,.85),rgba(250,234,222,.25))}
+  .heros-texte{position:relative;left:auto;top:auto;width:auto;max-width:330px;padding:24px 10px 50px;margin:0 auto}
+  .heros h1 .nom{font-size:100px;margin:0;transform:scaleX(.8);transform-origin:center}
+  .heros h1 .metier{margin:-4px 0 0;font-size:14px}
+  .separateur{margin:6px 0 14px}
+  .heros .accroche{font-size:21px}
+  .heros-texte .feuille{left:-6px;top:30px;width:58px}
+  .bande-noel .contenu{grid-template-columns:1fr;height:auto}
+  .bande-noel img{height:200px}
+  .bande-noel .texte{flex-direction:column;align-items:flex-start;gap:14px;padding:20px}
+  .souvenirs{height:auto;background-size:auto 240px;background-position:left top;padding-top:230px}
+  .souvenirs .texte{position:static;width:auto;padding:20px 22px 40px}
+  .grille-univers{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .engagements{height:auto;padding:20px 0 50px}
+  .engagements .grille{flex-direction:column;align-items:flex-start;gap:14px;padding:0 30px}
+  .grille-prestations,.galerie{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .apropos{grid-template-columns:1fr}
+  .apropos img{max-width:300px;margin:0 auto}
+  .grille-tarifs,.extras{grid-template-columns:1fr}
+  .zone-resa{grid-template-columns:1fr;padding-left:0}
+  .zone-resa .vase{display:none}
+  .contact{grid-template-columns:1fr;padding:0}
+  .grille-politique{grid-template-columns:1fr}
+  .bloc-politique ul,.texte-legal{font-size:15px}
+  .pied .barre{height:auto;flex-direction:column;padding:20px;text-align:center}
+  .pied nav a,.pied .coord,.pied .coord a,.pied nav span{font-size:14px}
+  .pied .marque{font-size:34px}
+  .deco{display:none}
+}
+@media (max-width:480px){
+  .grille-univers{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .carte-univers .photo{height:140px}
+  .deux-col,.choix-paiement{grid-template-columns:1fr}
+  .etapes li{font-size:0}
+  .etapes li .num{font-size:13px}
+}

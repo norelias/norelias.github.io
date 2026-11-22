@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Réserver une séance · Norélias Photography</title>
+<meta name="description" content="Réservez votre séance photo en ligne : grossesse, nouveau-né, famille, mini-séance de Noël. Acompte par carte ou virement Interac.">
+<link rel="canonical" href="https://norelias.ca/reservation/">
+<meta property="og:title" content="Réserver une séance · Norélias Photography">
+<meta property="og:description" content="Réservez votre séance photo en ligne : grossesse, nouveau-né, famille, mini-séance de Noël. Acompte par carte ou virement Interac.">
+<meta property="og:image" content="https://norelias.ca/images/accueil-fond.jpg">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#3d2622">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Sacramento&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a href="#contenu" class="sr-only">Aller au contenu</a>
+<header class="entete">
+  <div class="barre">
+    <a href="../" class="logo"><img src="../images/logo.png" alt="Norélias Photography" width="246" height="62"></a>
+    <nav class="nav" aria-label="Menu principal"><ul class="menu"><li><a href="../">Accueil</a></li><li><a href="../a-propos/">À propos</a></li><li><a href="../prestations/">Prestations <span aria-hidden="true">⌄</span></a><ul class="sous-menu"><li><a href="../prestations/#grossesse">Grossesse</a></li><li><a href="../prestations/#accouchement">Accouchement</a></li><li><a href="../prestations/#nouveau-ne">Nouveau-né</a></li><li><a href="../prestations/#famille">Famille</a></li><li><a href="../prestations/#couple">Couple</a></li><li><a href="../prestations/#fetes">Fêtes</a></li><li><a href="../prestations/#saisons">Saisons</a></li><li><a href="../prestations/#noel">Noël</a></li></ul></li><li><a href="../portfolio/">Portfolio</a></li><li><a href="../tarifs/">Tarifs</a></li><li><a href="../contact/">Contact</a></li></ul></nav>
+    <div class="reseaux"><a href="https://www.facebook.com/" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-1.6 19.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 12 2z"/></svg></a><a href="https://www.instagram.com/" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></a><a href="https://www.tiktok.com/" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 5.8A4.3 4.3 0 0 1 15.5 3h-3.1v12.4a2.6 2.6 0 1 1-1.8-2.5V9.7a5.7 5.7 0 1 0 4.9 5.7V9a7.3 7.3 0 0 0 4.3 1.4V7.3a4.3 4.3 0 0 1-3.2-1.5z"/></svg></a></div>
+    <button class="burger" aria-label="Ouvrir le menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  </div>
+</header>
+<main id="contenu">
+<section class="page"><div class="interieur">
+<div class="titre-page"><h1>Réservation d'une séance <span class="coeur"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 20.5S3.5 14.8 3.5 8.9A4.4 4.4 0 0 1 12 6.8a4.4 4.4 0 0 1 8.5 2.1c0 5.9-8.5 11.6-8.5 11.6z"/></svg></span></h1><p>Choisissez votre type de séance, la date et réservez<br>en quelques clics.</p></div>
+<ol class="etapes"><li class="active"><span class="num">1</span>Prestation</li><li><span class="num">2</span>Date</li><li><span class="num">3</span>Informations</li><li><span class="num">4</span>Paiement</li><li><span class="num">5</span>Confirmation</li></ol>
+<div class="zone-resa">
+<form id="form-reservation" class="form-resa" novalidate>
+  <fieldset class="etape" style="border:0;padding:0;margin:0"><legend class="sr-only">Étape 1 : prestation et date</legend>
+    <div class="champ"><label class="sr-only" for="seance">Prestation</label><select id="seance" name="seance" required><option value="">Choisir une prestation</option><option data-code="grossesse">Grossesse</option><option data-code="accouchement">Accouchement</option><option data-code="nouveau-ne">Nouveau-né</option><option data-code="famille">Famille</option><option data-code="couple">Couple</option><option data-code="fetes">Fêtes</option><option data-code="saisons">Saisons</option><option data-code="noel">Mini-séance de Noël</option></select></div>
+    <div class="champ"><label class="sr-only" for="date">Date souhaitée</label><input type="text" id="date" name="date" placeholder="Date souhaitée" onfocus="this.type='date'" required></div>
+    <div class="champ"><label class="sr-only" for="heure">Heure souhaitée</label><select id="heure" name="heure" required><option value="">Heure souhaitée</option><option>9 h</option><option>10 h</option><option>11 h</option><option>12 h</option><option>13 h</option><option>14 h</option><option>15 h</option><option>16 h</option><option>17 h</option></select></div>
+    <div class="navigation-etapes"><button type="button" class="bouton" data-suivant>Suivant <span class="fleche" aria-hidden="true">→</span></button></div>
+  </fieldset>
+  <fieldset class="etape" hidden style="border:0;padding:0;margin:0"><legend class="sr-only">Étape 2 : informations</legend>
+    <div class="deux-col">
+      <div class="champ"><label class="sr-only" for="nom">Nom complet</label><input id="nom" name="nom" placeholder="Nom complet *" autocomplete="name" required></div>
+      <div class="champ"><label class="sr-only" for="courriel">Courriel</label><input type="email" id="courriel" name="courriel" placeholder="Courriel *" autocomplete="email" required></div>
+      <div class="champ"><label class="sr-only" for="telephone">Téléphone</label><input type="tel" id="telephone" name="telephone" placeholder="Téléphone *" autocomplete="tel" required></div>
+      <div class="champ"><label class="sr-only" for="personnes">Nombre de personnes</label><input type="number" id="personnes" name="personnes" min="1" max="15" placeholder="Nombre de personnes" required></div>
+    </div>
+    <div class="champ"><label class="sr-only" for="message">Message</label><textarea id="message" name="message" rows="3" placeholder="Message (facultatif)"></textarea></div>
+    <label class="case"><input type="checkbox" name="portfolio"> <span>J'accepte que certaines photos de ma séance soient utilisées dans le portfolio de Norélias (facultatif).</span></label>
+    <div class="navigation-etapes"><button type="button" class="bouton contour" data-precedent>←</button><button type="button" class="bouton" data-suivant>Suivant <span class="fleche" aria-hidden="true">→</span></button></div>
+  </fieldset>
+  <fieldset class="etape" hidden style="border:0;padding:0;margin:0"><legend class="sr-only">Étape 3 : paiement</legend>
+    <div class="champ"><label class="sr-only" for="forfait">Forfait</label><select id="forfait" name="forfait" required><option value="">Choisir un forfait</option><option value="essentiel">Essentiel · 200 $</option><option value="signature">Signature · 300 $</option><option value="complete">Complète · 450 $</option><option value="noel">Mini-séance de Noël · 95 $</option><option value="personnalise">Forfait personnalisé · sur demande</option></select></div>
+    <div class="recap"><dl><dt>Séance</dt><dd id="recap-seance"></dd><dt>Date</dt><dd id="recap-date"></dd></dl><dl class="recap-prix" hidden><dt>Forfait</dt><dd id="recap-forfait"></dd><dt>Total</dt><dd id="recap-total"></dd><dt>À payer maintenant</dt><dd id="recap-acompte"></dd></dl></div>
+    <div id="zone-paiement" hidden>
+      <div class="choix-paiement">
+        <label><input type="radio" name="mode" value="carte" required> <span><strong>Carte de crédit</strong><br><span class="aide">Paiement sécurisé par Stripe</span></span></label>
+        <label><input type="radio" name="mode" value="interac"> <span><strong>Virement Interac</strong><br><span class="aide">À envoyer dans les 48 h</span></span></label>
+      </div>
+      <div id="boite-interac" class="boite-interac" hidden>Envoyez <strong class="montant-interac"></strong> par virement Interac à <strong class="courriel-interac">bonjour@norelias.ca</strong> dans les 48 h, avec votre nom en message.</div>
+    </div>
+    <p id="note-perso" class="aide" hidden>Pour un forfait personnalisé, je vous réponds avec une proposition et le montant de l'acompte.</p>
+    <div class="navigation-etapes"><button type="button" class="bouton contour" data-precedent>←</button><button type="submit" class="bouton" id="bouton-confirmer">Confirmer et payer</button></div>
+  </fieldset>
+  <div class="etape centre" hidden>
+    <span class="script" style="font-size:calc(40 * var(--u));color:var(--rose-fonce)">Merci !</span>
+    <h2 style="font-size:calc(26 * var(--u))">Votre demande est envoyée</h2>
+    <div id="fin-carte" hidden><p>Vous allez être redirigée vers la page de paiement sécurisée Stripe. Si rien ne se passe, <a id="lien-stripe" href="#">cliquez ici pour payer</a>.</p></div>
+    <div id="fin-interac" hidden><p>Pour confirmer votre date, envoyez <strong class="montant-interac"></strong> par virement Interac à <strong class="courriel-interac">bonjour@norelias.ca</strong> dans les 48 h.</p></div>
+    <div id="fin-perso" hidden><p>Je vous réponds très bientôt avec une proposition personnalisée.</p></div>
+    <p>Une question ? 506-787-0667</p>
+  </div>
+  <div class="bas-resa">
+    <p class="note-resa">Acompte de 50 % à la réservation · Solde payable le jour de la séance</p>
+    <label class="case"><input type="checkbox" name="politiques"> <span>J'accepte la <a href="../politique-reservation/" target="_blank">politique de réservation</a> et la <a href="../confidentialite/" target="_blank">politique de confidentialité</a></span></label>
+  </div>
+</form>
+<img class="vase" src="../images/vase.png" alt="">
+</div>
+</div></section>
+</main>
+<footer class="pied">
+  <div class="barre">
+    <a class="marque" href="../">Norélias</a>
+    <nav aria-label="Liens du pied de page"><a href="../">Accueil</a><span>·</span><a href="../prestations/">Prestations</a><span>·</span><a href="../tarifs/">Tarifs</a><span>·</span><a href="../contact/">Contact</a><span>·</span><a href="../politique-reservation/">Politique de réservation</a><span>·</span><a href="../confidentialite/">Politique de confidentialité</a></nav>
+    <div class="coord"><a href="tel:+15067870667">506-787-0667</a> · <a href="mailto:bonjour@norelias.ca">bonjour@norelias.ca</a></div>
+  </div>
+</footer>
+<script src="../config.js"></script>
+<script src="../script.js"></script>
+</body>
+</html>
