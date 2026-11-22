@@ -242,24 +242,24 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
 
 /* ----- Téléphone et petite tablette ----- */
 
-/* Mini calendrier de réservation */
-.calendrier{background:#fff;border:1px solid #dcc9be;border-radius:calc(10 * var(--u));padding:calc(10 * var(--u)) calc(12 * var(--u));margin-bottom:calc(12 * var(--u));box-shadow:0 calc(1 * var(--u)) calc(3 * var(--u)) rgba(58,42,36,.08)}
+/* Mini calendrier de réservation (s'ouvre sous « Date souhaitée ») */
+.champ-date{position:relative}
+.faux-champ{font:inherit;font-size:calc(16 * var(--u));font-weight:600;padding:0 calc(14 * var(--u));height:calc(45 * var(--u));border:1px solid #dcc9be;border-radius:calc(6 * var(--u));background:#fff;color:#757575;width:100%;box-shadow:0 calc(1 * var(--u)) calc(3 * var(--u)) rgba(58,42,36,.08);display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left}
+.faux-champ.rempli{color:var(--brun)}
+.faux-champ svg{width:calc(22 * var(--u));height:calc(22 * var(--u));color:var(--brun);flex:none}
+.calendrier{position:absolute;left:0;right:0;top:calc(100% + calc(4 * var(--u)));z-index:20;background:#fff;border:1px solid #dcc9be;border-radius:calc(10 * var(--u));padding:calc(10 * var(--u)) calc(12 * var(--u));box-shadow:0 calc(10 * var(--u)) calc(26 * var(--u)) rgba(58,42,36,.18)}
+.calendrier[hidden]{display:none}
 .cal-tete{display:flex;align-items:center;justify-content:space-between;margin-bottom:calc(6 * var(--u))}
 .cal-mois{font-family:'Cormorant Garamond',serif;font-size:calc(21 * var(--u));font-weight:600;text-transform:capitalize}
 .cal-nav{border:0;background:#f6ebe4;color:var(--brun);width:calc(30 * var(--u));height:calc(30 * var(--u));border-radius:50%;font-size:calc(20 * var(--u));line-height:1;cursor:pointer}
 .cal-nav:disabled{opacity:.3;cursor:default}
 .cal-jours,.cal-grille{display:grid;grid-template-columns:repeat(7,1fr);gap:calc(3 * var(--u));text-align:center}
 .cal-jours span{font-size:calc(12 * var(--u));font-weight:700;color:var(--gris)}
-.cal-grille button,.cal-grille span{height:calc(34 * var(--u));border-radius:calc(8 * var(--u));font:inherit;font-size:calc(14 * var(--u));border:0;background:none;color:#c4b5ad}
+.cal-grille button,.cal-grille span{height:calc(32 * var(--u));border-radius:calc(8 * var(--u));font:inherit;font-size:calc(14 * var(--u));border:0;background:none;color:#c4b5ad;display:flex;align-items:center;justify-content:center}
 .cal-grille button{background:#f6e3dc;color:var(--brun);font-weight:700;cursor:pointer}
 .cal-grille button:hover{background:#ecc9bd}
 .cal-grille button[aria-pressed="true"]{background:var(--rose-fonce);color:#fff}
 .cal-aide{font-size:calc(12 * var(--u));color:var(--gris);margin:calc(6 * var(--u)) 0 0;text-align:center}
-.creneaux{border-top:1px solid #eadbd3;margin-top:calc(8 * var(--u));padding-top:calc(8 * var(--u))}
-.creneaux-titre{font-size:calc(13.5 * var(--u));font-weight:700;margin:0 0 calc(6 * var(--u));text-align:center}
-.creneaux-liste{display:flex;flex-wrap:wrap;gap:calc(6 * var(--u));justify-content:center}
-.creneaux-liste button{font:inherit;font-size:calc(14 * var(--u));font-weight:700;padding:calc(6 * var(--u)) calc(12 * var(--u));border-radius:calc(20 * var(--u));border:1px solid #dcb7aa;background:#fffaf7;color:var(--brun);cursor:pointer}
-.creneaux-liste button[aria-pressed="true"]{background:var(--rose-fonce);border-color:var(--rose-fonce);color:#fff}
 .erreur-cal{color:#a3362b;font-size:calc(13.5 * var(--u));font-weight:700;margin:calc(-4 * var(--u)) 0 calc(10 * var(--u))}
 .choix-portfolio{background:#fbf4ef;border-radius:calc(8 * var(--u));padding:calc(8 * var(--u)) calc(12 * var(--u));margin:calc(4 * var(--u)) 0 calc(8 * var(--u))}
 .choix-portfolio p{margin:0 0 calc(2 * var(--u));font-size:calc(13.5 * var(--u));font-weight:700}

@@ -151,33 +151,42 @@
     cal.querySelector('[data-mois="-1"]').disabled = vue <= new Date(debut.getFullYear(), debut.getMonth(), 1);
     cal.querySelector('[data-mois="1"]').disabled = new Date(vue.getFullYear(), vue.getMonth() + 1, 1) > fin;
   }
-  function choisirDate(d) {
+  var champHeure = form.elements.heure, boutonCal = document.getElementById('ouvrir-cal');
+  function ouvrirCal(ouvert) {
+    if (!cal) return;
+    cal.hidden = !ouvert; boutonCal.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
+  }
+  function remplirHeures(d) {
+    champHeure.innerHTML = '<option value="">Heure souhaitée</option>';
+    if (!d) { champHeure.disabled = true; return; }
+    heuresDu(d).forEach(function (h) { var o = document.createElement('option'); o.textContent = h; champHeure.appendChild(o); });
+    champHeure.disabled = false;
+  }
+  function choisirDate(d, garderOuvert) {
     choisie = d;
     form.elements.date.value = JOURS[d.getDay()] + ' ' + d.getDate() + ' ' + MOIS[d.getMonth()] + ' ' + d.getFullYear();
     form.elements.dateIso.value = iso(d);
-    form.elements.heure.value = '';
+    boutonCal.querySelector('.valeur-date').textContent = form.elements.date.value;
+    boutonCal.classList.add('rempli');
+    document.querySelector('.erreur-cal').hidden = true;
+    remplirHeures(d);
     dessiner();
-    var zone = cal.querySelector('.creneaux'), liste = cal.querySelector('.creneaux-liste');
-    zone.hidden = false;
-    cal.querySelector('.creneaux-titre').textContent = 'Heures disponibles le ' + form.elements.date.value;
-    liste.innerHTML = '';
-    heuresDu(d).forEach(function (h) {
-      var b = document.createElement('button');
-      b.type = 'button'; b.textContent = h; b.setAttribute('aria-pressed', 'false');
-      b.addEventListener('click', function () {
-        form.elements.heure.value = h;
-        liste.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-        document.querySelector('.erreur-cal').hidden = true;
-      });
-      liste.appendChild(b);
-    });
+    if (!garderOuvert) { ouvrirCal(false); champHeure.focus(); }
+  }
+  if (boutonCal) {
+    boutonCal.addEventListener('click', function () { ouvrirCal(cal.hidden); });
+    document.addEventListener('click', function (e) { if (!e.target.closest('.champ-date')) ouvrirCal(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') ouvrirCal(false); });
   }
   window.majCalendrier = function () {
     if (!cal) return;
-    if (choisie && !heuresDu(choisie).length) { choisie = null; form.elements.date.value = ''; form.elements.heure.value = ''; cal.querySelector('.creneaux').hidden = true; }
+    if (choisie && !heuresDu(choisie).length) {
+      choisie = null; form.elements.date.value = ''; form.elements.dateIso.value = ''; remplirHeures(null);
+      boutonCal.querySelector('.valeur-date').textContent = 'Date souhaitée'; boutonCal.classList.remove('rempli');
+    }
     var p = premiereDispo();
     if (!choisie && p) vue = new Date(p.getFullYear(), p.getMonth(), 1);
-    if (choisie) choisirDate(choisie); else dessiner();
+    if (choisie) { var h = champHeure.value; choisirDate(choisie, true); if (heuresDu(choisie).indexOf(h) > -1) champHeure.value = h; } else dessiner();
   };
   if (cal) cal.querySelectorAll('.cal-nav').forEach(function (b) {
     b.addEventListener('click', function () { vue = new Date(vue.getFullYear(), vue.getMonth() + Number(b.dataset.mois), 1); dessiner(); });
@@ -204,8 +213,8 @@
 
   function valider(i) {
     if (i === 0 && !form.elements.seance.checkValidity()) { form.elements.seance.reportValidity(); return false; }
-    if (i === 0 && form.elements.seance.value && (!form.elements.date.value || !form.elements.heure.value)) {
-      document.querySelector('.erreur-cal').hidden = false; return false;
+    if (i === 0 && !form.elements.date.value) {
+      document.querySelector('.erreur-cal').hidden = false; ouvrirCal(true); return false;
     }
     var champs = etapes[i].querySelectorAll('input,select,textarea');
     for (var k = 0; k < champs.length; k++) {

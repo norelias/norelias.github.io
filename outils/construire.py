@@ -239,15 +239,18 @@ def reservation():
 <form id="form-reservation" class="form-resa" novalidate>
   <fieldset class="etape" style="border:0;padding:0;margin:0"><legend class="sr-only">Étape 1 : prestation et date</legend>
     <div class="champ"><label class="sr-only" for="seance">Prestation</label><select id="seance" name="seance" required><option value="">Choisir une prestation</option>{opts}<option data-code="noel">Mini-séance de Noël</option></select></div>
-    <div class="calendrier" id="calendrier" aria-label="Choisir une date">
-      <div class="cal-tete"><button type="button" class="cal-nav" data-mois="-1" aria-label="Mois précédent">‹</button><span class="cal-mois"></span><button type="button" class="cal-nav" data-mois="1" aria-label="Mois suivant">›</button></div>
-      <div class="cal-jours"><span>D</span><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span></div>
-      <div class="cal-grille"></div>
-      <p class="cal-aide">Les dates en rose sont disponibles.</p>
-      <div class="creneaux" hidden><p class="creneaux-titre"></p><div class="creneaux-liste"></div></div>
+    <div class="champ champ-date">
+      <button type="button" id="ouvrir-cal" class="faux-champ" aria-expanded="false" aria-controls="calendrier"><span class="valeur-date">Date souhaitée</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><rect x="10" y="13" width="4" height="3.5" rx=".6"/></svg></button>
+      <div class="calendrier" id="calendrier" hidden>
+        <div class="cal-tete"><button type="button" class="cal-nav" data-mois="-1" aria-label="Mois précédent">‹</button><span class="cal-mois"></span><button type="button" class="cal-nav" data-mois="1" aria-label="Mois suivant">›</button></div>
+        <div class="cal-jours"><span>D</span><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span></div>
+        <div class="cal-grille"></div>
+        <p class="cal-aide">Les dates en rose sont disponibles.</p>
+      </div>
     </div>
-    <input type="hidden" name="date"><input type="hidden" name="dateIso"><input type="hidden" name="heure">
-    <p class="erreur-cal" role="alert" hidden>Choisissez une date et une heure dans le calendrier.</p>
+    <div class="champ"><label class="sr-only" for="heure">Heure souhaitée</label><select id="heure" name="heure" required disabled><option value="">Heure souhaitée</option></select></div>
+    <input type="hidden" name="date"><input type="hidden" name="dateIso">
+    <p class="erreur-cal" role="alert" hidden>Choisissez une date dans le calendrier.</p>
     <div class="navigation-etapes"><button type="button" class="bouton" data-suivant>Suivant {FLECHE}</button></div>
   </fieldset>
   <fieldset class="etape" hidden style="border:0;padding:0;margin:0"><legend class="sr-only">Étape 2 : informations</legend>
