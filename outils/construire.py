@@ -21,7 +21,9 @@ SEANCES = [  # nom, code, image carte, description
     ('Famille', 'famille', 'famille-2.jpg', 'Des moments vrais en nature ou à la maison, avec toute la famille.'),
     ('Couple', 'couple', 'couple.jpg', 'Une séance complice pour célébrer votre amour.'),
     ('Fêtes', 'fetes', 'fetes.jpg', 'Anniversaires, gâteau, baptême : les belles occasions à souligner.'),
-    ('Saisons', 'saisons', 'saisons.jpg', "Automne, hiver, printemps : des séances au fil des saisons."),
+    ('Garderie / École', 'garderie-ecole', 'garderie-ecole.jpg', "Photos de groupe et portraits individuels à la garderie ou à l'école."),
+    ('Finissants', 'finissants', 'finissants.jpg', "Toge, mortier et diplôme : un portrait pour souligner la fin d'une étape."),
+    ('Bal de promos', 'bal', 'bal.jpg', "Les plus belles photos de votre soirée de bal, seul ou entre amis."),
     ('Noël', 'noel', 'noel.jpg', 'Mini-séances de 20 minutes dans un décor de Noël, en décembre.'),
 ]
 UNIVERS = ['grossesse', 'accouchement', 'nouveau-ne', 'famille', 'couple', 'noel', 'fetes']
@@ -140,7 +142,7 @@ def accueil():
     <div class="texte">
       <h2><img class="titre-script" src="{{r}}images/titre-souvenirs.svg" alt="Des souvenirs authentiques" width="176" height="66"><span class="et">&amp; remplis d'émotions</span></h2>
       {DIVISEUR}
-      <p>Grossesse, accouchement, nouveau-né, famille, couple, fêtes ou saisons… Je capture vos histoires avec douceur, naturel et authenticité.</p>
+      <p>Grossesse, accouchement, nouveau-né, famille, couple, fêtes, école ou finissants… Je capture vos histoires avec douceur, naturel et authenticité.</p>
       <a class="bouton" href="{{r}}prestations/">Découvrir mes prestations {FLECHE}</a>
     </div>
   </div>
@@ -174,7 +176,7 @@ def prestations():
 {titre_page('Mes prestations', 'Des séances photo pour toutes les étapes<br>importantes de votre vie.')}
 <div class="grille-prestations">{cartes}</div>
 </div><img class="deco" src="{{r}}images/feuille-1.png" alt="" style="right:calc(50% - 360 * var(--u));bottom:calc(30 * var(--u));width:calc(170 * var(--u))"></section>'''
-    page('prestations/index.html', 'Prestations · Norélias Photography', "Séances grossesse, accouchement, nouveau-né, famille, couple, fêtes, saisons et mini-séances de Noël à Campbellton, N.-B.", contenu, 'Prestations')
+    page('prestations/index.html', 'Prestations · Norélias Photography', "Séances grossesse, accouchement, nouveau-né, famille, couple, fêtes, garderie et école, finissants, bal de promos et mini-séances de Noël à Campbellton, N.-B.", contenu, 'Prestations')
 
 # ---------------- Portfolio ----------------
 def portfolio():
@@ -191,15 +193,15 @@ def portfolio():
               ('portfolio-noel-famille-2.jpg', 'noel', 'Famille qui rit aux éclats dans un décor de Noël'),
               ('portfolio-gateau.jpg', 'fetes', 'Bébé qui rit pendant sa séance gâteau'),
               ('portfolio-famille.jpg', 'famille', 'Famille de quatre qui rit dans le parc'),
-              ('portfolio-automne.jpg', 'saisons', "Famille de six en séance d'automne"),
+              ('portfolio-automne.jpg', 'famille', "Famille de six en séance d'automne"),
               ('portfolio-couple-2.jpg', 'couple', 'Couple complice front contre front'),
               ('portfolio-gateau-2.jpg', 'fetes', "Bébé et son gâteau d'un an"),
               ('naissance-nb.jpg', 'accouchement', 'Naissance en noir et blanc'),
               ('portfolio-anniversaire.jpg', 'fetes', "Fête d'anniversaire de 4 ans en famille"),
               ('portfolio-fete.jpg', 'fetes', "Fête d'anniversaire entre amis"),
               ('portfolio-fete-2.jpg', 'fetes', 'Anniversaire avec ballons dorés'),
-              ('portfolio-scolaire-classe.jpg', 'scolaire', 'Photo de classe souriante'),
-              ('portfolio-finissants-bal.jpg', 'finissants', 'Groupe de finissants au bal'),
+              ('portfolio-scolaire-classe.jpg', 'garderie-ecole', 'Photo de classe souriante'),
+              ('portfolio-finissants-bal.jpg', 'bal', 'Groupe de finissants au bal'),
               ('portfolio-finissant-toge.jpg', 'finissants', 'Finissant en toge avec son diplôme'),
               ('portfolio-finissante-diplome.jpg', 'finissants', 'Finissante en robe de bal avec son diplôme'),
               ('portfolio-portrait-bureau.jpg', 'portraits', 'Portrait professionnel au bureau'),
@@ -208,7 +210,7 @@ def portfolio():
               ('portfolio-noel-couple-2.jpg', 'noel', 'Couple élégant devant le sapin de Noël'),
               ('portfolio-noel-famille-3.jpg', 'noel', 'Famille de cinq en chandails de Noël')]
     figs = ''.join(f'<figure data-cat="{c}"><img src="{{r}}images/{f}" alt="{a}" loading="lazy"></figure>' for f, c, a in photos)
-    cats = [('tous', 'Tous'), ('grossesse', 'Grossesse'), ('accouchement', 'Accouchement'), ('nouveau-ne', 'Nouveau-né'), ('famille', 'Famille'), ('couple', 'Couple'), ('fetes', 'Fêtes'), ('saisons', 'Saisons'), ('noel', 'Noël'), ('finissants', 'Finissants'), ('scolaire', 'Scolaire'), ('portraits', 'Portraits pro')]
+    cats = [('tous', 'Tous'), ('grossesse', 'Grossesse'), ('accouchement', 'Accouchement'), ('nouveau-ne', 'Nouveau-né'), ('famille', 'Famille'), ('couple', 'Couple'), ('fetes', 'Fêtes'), ('noel', 'Noël'), ('garderie-ecole', 'Garderie / École'), ('finissants', 'Finissants'), ('bal', 'Bal de promos'), ('portraits', 'Portraits pro')]
     boutons = ''.join(f'<button class="filtre" type="button" data-cat="{c}" aria-pressed="{"true" if c == "tous" else "false"}">{n}</button>' for c, n in cats)
     contenu = f'''<section class="page"><div class="interieur">
 {titre_page('<span class="script">Portfolio</span>', 'Découvrez une sélection de mes plus belles histoires.')}
