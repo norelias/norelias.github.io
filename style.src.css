@@ -64,17 +64,14 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
 /* Héros */
 .heros{position:relative;height:358u;background:#e7cdb8 url('images/accueil-fond.jpg') center top/cover no-repeat}
 .heros .interieur{max-width:728u;height:100%;margin:0 auto;position:relative}
-.heros-texte{position:absolute;left:50u;top:26u;width:380u;text-align:center}
-.heros-texte .feuille{position:absolute;left:12u;top:58u;width:80u;height:auto}
-.heros h1{font-weight:400;line-height:1}
-.heros h1 .nom{display:block;width:375u;height:auto;margin:-14u 0 0 -5u}
-.heros-texte .feuille-titre{position:absolute;left:-5u;top:38u;width:130u;height:auto}
-.heros h1 .metier{display:block;font-family:'Nunito',sans-serif;font-weight:400;font-size:15u;letter-spacing:.32em;margin:-6u 0 0 120u;color:#1e1411}
-.separateur{display:flex;align-items:center;justify-content:center;gap:6u;margin:8u 0 20u 120u;color:#1e1411}
-.separateur::before,.separateur::after{content:"";height:1px;width:90u;background:#3f2e28}
-.separateur svg{width:30u;height:30u}
-.heros .accroche{font-family:'Cormorant Garamond',serif;font-size:21u;font-weight:500;line-height:1.15;margin:0 0 22u 0;color:#1e1411;padding-left:0}
-.heros .bouton{margin-left:0;font-size:15.5u;height:33u}
+.heros-texte{position:absolute;left:40u;top:4u;width:390u;padding-top:215u;text-align:center}
+.heros-texte .feuille-titre{position:absolute;left:5u;top:60u;width:130u;height:auto}
+.heros h1{margin:0}
+.heros h1 .nom{position:absolute;left:5u;top:8u;width:375u;height:auto}
+.heros-texte .decor-titre{position:absolute;left:0;top:0;width:390u;height:212u;overflow:visible}
+.separateur{display:block;width:180u;height:26u;color:#8a6656;margin:4u 0 8u}
+.heros .accroche{font-family:'Cormorant Garamond',serif;font-size:21.5u;font-weight:600;line-height:1.12;margin:0 0 17u 0;color:#1e1411;padding-left:0}
+.heros .bouton{margin-left:0;font-size:15u;height:32u;padding:0 18u}
 
 /* Bande Noël */
 .bande-noel{background:var(--noel);color:#fbeee8}
@@ -92,10 +89,9 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
 .souvenirs .texte{position:absolute;left:380u;top:22u;width:290u}
 .souvenirs h2{font-size:22u;line-height:1}
 .souvenirs h2 .script{display:block;font-size:33u;line-height:.9;margin-left:-8u}
-.souvenirs h2 .et{display:block;margin:2u 0 0 18u}
-.souvenirs .separateur{justify-content:flex-start;margin:4u 0 8u 70u}
-.souvenirs .separateur::before,.souvenirs .separateur::after{width:60u}
-.souvenirs .separateur svg{width:16u;height:16u}
+.souvenirs h2 .et{display:block;margin:0 0 0 12u;font-size:26u;font-weight:500;white-space:nowrap}
+.souvenirs .separateur{margin:2u 0 6u 40u}
+.souvenirs h2 .titre-script{display:block;width:176u;height:auto;margin:0 0 -8u -8u}
 .souvenirs p{font-size:12.2u;color:#1e1411;margin:0 0 12u;line-height:1.35}
 .souvenirs .bouton{margin-left:28u;font-size:13u;height:28u}
 
@@ -276,7 +272,7 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
   .sous-menu{position:static;display:block;box-shadow:none;background:transparent;padding:0 0 0 14px}
   /* Accueil sur téléphone : même composition que la maquette, agrandie */
   .heros{--u:calc(100vw / 470);height:358u;background-size:auto 100%;background-position:calc(-40 * var(--u)) top}
-  .heros-texte{left:22u}
+  .heros-texte{left:17u}
   .bande-noel{--u:calc(100vw / 420)}
   .bande-noel .contenu{grid-template-columns:150u 1fr;height:auto;min-height:190u}
   .bande-noel img{height:100%;min-height:190u}
@@ -289,7 +285,9 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
   .souvenirs{--u:calc(100vw / 420);height:262u;background-size:cover;background-position:left center}
   .souvenirs::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(248,238,230,0) 38%,rgba(248,238,230,.92) 52%)}
   .souvenirs .texte{left:192u;top:14u;width:218u}
-  .souvenirs .separateur{margin-left:40u}
+  .souvenirs h2 .titre-script{width:160u}
+  .souvenirs h2 .et{font-size:21u;margin-left:6u}
+  .souvenirs .separateur{margin-left:30u}
   .souvenirs p{font-size:13u}
   .souvenirs .bouton{font-size:12.5u;padding:0 12u;white-space:nowrap}
   .univers{--u:calc(100vw / 420)}

@@ -8,11 +8,11 @@ SITE = 'https://norelias.ca'
 FB = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-1.6 19.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 12 2z"/></svg>'
 IG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>'
 TT = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 5.8A4.3 4.3 0 0 1 15.5 3h-3.1v12.4a2.6 2.6 0 1 1-1.8-2.5V9.7a5.7 5.7 0 1 0 4.9 5.7V9a7.3 7.3 0 0 0 4.3 1.4V7.3a4.3 4.3 0 0 1-3.2-1.5z"/></svg>'
-COEUR_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 20.5S3.5 14.8 3.5 8.9A4.4 4.4 0 0 1 12 6.8a4.4 4.4 0 0 1 8.5 2.1c0 5.9-8.5 11.6-8.5 11.6z"/></svg>'
+COEUR_SVG = '<svg viewBox="190 172 30 34" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M203.6 186.2C201.2 179 196 174.6 193.4 177.6C190.6 181.4 194.5 189.5 202 203.8C206.5 195.5 216.6 186.8 216.8 179C216.9 174.4 209.6 173.6 203.6 186.2"/></svg>'
 COEUR = f'<span class="coeur">{COEUR_SVG}</span>'
 FLECHE = '<span class="fleche" aria-hidden="true">→</span>'
 FEUILLE_SVG = '''<svg class="feuille" viewBox="0 0 160 200" fill="none" stroke="#3a2a24" stroke-width="1.3" aria-hidden="true"><path d="M60 196 C70 150 72 110 110 60 C125 42 140 30 155 24"/><path d="M78 140c-18-6-30-20-32-38 16 4 28 18 32 38z"/><path d="M84 124c4-18 18-30 36-32-4 16-18 28-36 32z"/><path d="M92 104c-16-8-24-22-24-38 14 6 22 20 24 38z"/><path d="M104 82c6-16 20-24 36-24-6 14-20 22-36 24z"/><path d="M70 160c-16-2-28-12-34-26 16 0 28 10 34 26z"/><path d="M100 50c4 0 8 4 8 8"/><path d="M118 40c-6-14-2-28 8-36 4 14 0 28-8 36z"/></svg>'''
-DIVISEUR = f'<div class="separateur" aria-hidden="true">{COEUR_SVG}</div>'
+DIVISEUR = '<svg class="separateur" viewBox="100 172 234 34" aria-hidden="true"><path d="M103 192.7C125 193.9 160 193.6 184.2 191.6C160 192.6 125 192.9 103 192.7Z" fill="currentColor" stroke="currentColor" stroke-width=".55" stroke-linejoin="round"/><path d="M224.6 192.1C245 190.6 265 190 280 190.6C300 191.2 318 192.2 331.2 193.1C318 192.7 300 191.9 280 191.5C265 191.1 245 191.4 224.6 192.1Z" fill="currentColor" stroke="currentColor" stroke-width=".55" stroke-linejoin="round"/><path d="M203.6 186.2C201.2 179 196 174.6 193.4 177.6C190.6 181.4 194.5 189.5 202 203.8C206.5 195.5 216.6 186.8 216.8 179C216.9 174.4 209.6 173.6 203.6 186.2" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
 SEANCES = [  # nom, code, image carte, description
     ('Grossesse', 'grossesse', 'grossesse-champ.jpg', "Entre 30 et 36 semaines, en nature à l'heure dorée ou à la maison."),
@@ -108,8 +108,14 @@ def accueil():
   <div class="interieur">
     <div class="heros-texte">
       <img class="feuille-titre" src="{{r}}images/feuille-titre.svg" alt="" width="130" height="132">
-      <h1><img class="nom" src="{{r}}images/titre-norelias.svg" alt="Norélias" width="375" height="146"><span class="metier">PHOTOGRAPHY</span></h1>
-      {DIVISEUR}
+      <h1><img class="nom" src="{{r}}images/titre-norelias.svg" alt="Norélias" width="375" height="146"><span class="sr-only"> Photography</span></h1>
+      <svg class="decor-titre" viewBox="0 0 390 212" aria-hidden="true">
+        <path d="M62 66C60 60.5 53.5 58.5 52.3 63.2C51 68.5 58 74 61.2 82.5C64.5 74 72.3 67.5 71.6 62.3C71 58 64.3 59.2 62 66" fill="none" stroke="#c9a090" stroke-width=".7" stroke-linecap="round" opacity=".85"/>
+        <text x="163.75" y="163.75" textLength="176.25" lengthAdjust="spacing" font-family="Nunito, sans-serif" font-weight="400" font-size="17" fill="#241a16">PHOTOGRAPHY</text>
+        <path d="M103 192.7C125 193.9 160 193.6 184.2 191.6C160 192.6 125 192.9 103 192.7Z" fill="#3a2c26" stroke="#3a2c26" stroke-width=".55" stroke-linejoin="round"/>
+        <path d="M224.6 192.1C245 190.6 265 190 280 190.6C300 191.2 318 192.2 331.2 193.1C318 192.7 300 191.9 280 191.5C265 191.1 245 191.4 224.6 192.1Z" fill="#3a2c26" stroke="#3a2c26" stroke-width=".55" stroke-linejoin="round"/>
+        <path d="M203.6 186.2C201.2 179 196 174.6 193.4 177.6C190.6 181.4 194.5 189.5 202 203.8C206.5 195.5 216.6 186.8 216.8 179C216.9 174.4 209.6 173.6 203.6 186.2" fill="none" stroke="#2a1e1a" stroke-width=".95" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
       <p class="accroche">Immortaliser les moments<br>les plus précieux de votre vie</p>
       <a class="bouton" href="{{r}}reservation/">Réserver ma séance {FLECHE}</a>
     </div>
@@ -132,7 +138,7 @@ def accueil():
 <section class="souvenirs dechire-bas" style="--fond-dechire:#f6ebe4" role="img" aria-label="Nouveau-né endormi dans un panier avec un bonnet">
   <div class="interieur">
     <div class="texte">
-      <h2><span class="script">Des souvenirs<br>authentiques</span><span class="et">&amp; remplis d'émotions</span></h2>
+      <h2><img class="titre-script" src="{{r}}images/titre-souvenirs.svg" alt="Des souvenirs authentiques" width="176" height="66"><span class="et">&amp; remplis d'émotions</span></h2>
       {DIVISEUR}
       <p>Grossesse, accouchement, nouveau-né, famille, couple, fêtes ou saisons… Je capture vos histoires avec douceur, naturel et authenticité.</p>
       <a class="bouton" href="{{r}}prestations/">Découvrir mes prestations {FLECHE}</a>

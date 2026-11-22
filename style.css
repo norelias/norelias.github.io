@@ -66,17 +66,14 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
 /* Héros */
 .heros{position:relative;height:calc(358 * var(--u));background:#e7cdb8 url('images/accueil-fond.jpg') center top/cover no-repeat}
 .heros .interieur{max-width:calc(728 * var(--u));height:100%;margin:0 auto;position:relative}
-.heros-texte{position:absolute;left:calc(50 * var(--u));top:calc(26 * var(--u));width:calc(380 * var(--u));text-align:center}
-.heros-texte .feuille{position:absolute;left:calc(12 * var(--u));top:calc(58 * var(--u));width:calc(80 * var(--u));height:auto}
-.heros h1{font-weight:400;line-height:1}
-.heros h1 .nom{display:block;width:calc(375 * var(--u));height:auto;margin:calc(-14 * var(--u)) 0 0 calc(-5 * var(--u))}
-.heros-texte .feuille-titre{position:absolute;left:calc(-5 * var(--u));top:calc(38 * var(--u));width:calc(130 * var(--u));height:auto}
-.heros h1 .metier{display:block;font-family:'Nunito',sans-serif;font-weight:400;font-size:calc(15 * var(--u));letter-spacing:.32em;margin:calc(-6 * var(--u)) 0 0 calc(120 * var(--u));color:#1e1411}
-.separateur{display:flex;align-items:center;justify-content:center;gap:calc(6 * var(--u));margin:calc(8 * var(--u)) 0 calc(20 * var(--u)) calc(120 * var(--u));color:#1e1411}
-.separateur::before,.separateur::after{content:"";height:1px;width:calc(90 * var(--u));background:#3f2e28}
-.separateur svg{width:calc(30 * var(--u));height:calc(30 * var(--u))}
-.heros .accroche{font-family:'Cormorant Garamond',serif;font-size:calc(21 * var(--u));font-weight:500;line-height:1.15;margin:0 0 calc(22 * var(--u)) 0;color:#1e1411;padding-left:0}
-.heros .bouton{margin-left:0;font-size:calc(15.5 * var(--u));height:calc(33 * var(--u))}
+.heros-texte{position:absolute;left:calc(40 * var(--u));top:calc(4 * var(--u));width:calc(390 * var(--u));padding-top:calc(215 * var(--u));text-align:center}
+.heros-texte .feuille-titre{position:absolute;left:calc(5 * var(--u));top:calc(60 * var(--u));width:calc(130 * var(--u));height:auto}
+.heros h1{margin:0}
+.heros h1 .nom{position:absolute;left:calc(5 * var(--u));top:calc(8 * var(--u));width:calc(375 * var(--u));height:auto}
+.heros-texte .decor-titre{position:absolute;left:0;top:0;width:calc(390 * var(--u));height:calc(212 * var(--u));overflow:visible}
+.separateur{display:block;width:calc(180 * var(--u));height:calc(26 * var(--u));color:#8a6656;margin:calc(4 * var(--u)) 0 calc(8 * var(--u))}
+.heros .accroche{font-family:'Cormorant Garamond',serif;font-size:calc(21.5 * var(--u));font-weight:600;line-height:1.12;margin:0 0 calc(17 * var(--u)) 0;color:#1e1411;padding-left:0}
+.heros .bouton{margin-left:0;font-size:calc(15 * var(--u));height:calc(32 * var(--u));padding:0 calc(18 * var(--u))}
 
 /* Bande Noël */
 .bande-noel{background:var(--noel);color:#fbeee8}
@@ -94,10 +91,9 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
 .souvenirs .texte{position:absolute;left:calc(380 * var(--u));top:calc(22 * var(--u));width:calc(290 * var(--u))}
 .souvenirs h2{font-size:calc(22 * var(--u));line-height:1}
 .souvenirs h2 .script{display:block;font-size:calc(33 * var(--u));line-height:.9;margin-left:calc(-8 * var(--u))}
-.souvenirs h2 .et{display:block;margin:calc(2 * var(--u)) 0 0 calc(18 * var(--u))}
-.souvenirs .separateur{justify-content:flex-start;margin:calc(4 * var(--u)) 0 calc(8 * var(--u)) calc(70 * var(--u))}
-.souvenirs .separateur::before,.souvenirs .separateur::after{width:calc(60 * var(--u))}
-.souvenirs .separateur svg{width:calc(16 * var(--u));height:calc(16 * var(--u))}
+.souvenirs h2 .et{display:block;margin:0 0 0 calc(12 * var(--u));font-size:calc(26 * var(--u));font-weight:500;white-space:nowrap}
+.souvenirs .separateur{margin:calc(2 * var(--u)) 0 calc(6 * var(--u)) calc(40 * var(--u))}
+.souvenirs h2 .titre-script{display:block;width:calc(176 * var(--u));height:auto;margin:0 0 calc(-8 * var(--u)) calc(-8 * var(--u))}
 .souvenirs p{font-size:calc(12.2 * var(--u));color:#1e1411;margin:0 0 calc(12 * var(--u));line-height:1.35}
 .souvenirs .bouton{margin-left:calc(28 * var(--u));font-size:calc(13 * var(--u));height:calc(28 * var(--u))}
 
@@ -278,7 +274,7 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
   .sous-menu{position:static;display:block;box-shadow:none;background:transparent;padding:0 0 0 14px}
   /* Accueil sur téléphone : même composition que la maquette, agrandie */
   .heros{--u:calc(100vw / 470);height:calc(358 * var(--u));background-size:auto 100%;background-position:calc(-40 * var(--u)) top}
-  .heros-texte{left:calc(22 * var(--u))}
+  .heros-texte{left:calc(17 * var(--u))}
   .bande-noel{--u:calc(100vw / 420)}
   .bande-noel .contenu{grid-template-columns:calc(150 * var(--u)) 1fr;height:auto;min-height:calc(190 * var(--u))}
   .bande-noel img{height:100%;min-height:calc(190 * var(--u))}
@@ -291,7 +287,9 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
   .souvenirs{--u:calc(100vw / 420);height:calc(262 * var(--u));background-size:cover;background-position:left center}
   .souvenirs::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(248,238,230,0) 38%,rgba(248,238,230,.92) 52%)}
   .souvenirs .texte{left:calc(192 * var(--u));top:calc(14 * var(--u));width:calc(218 * var(--u))}
-  .souvenirs .separateur{margin-left:calc(40 * var(--u))}
+  .souvenirs h2 .titre-script{width:calc(160 * var(--u))}
+  .souvenirs h2 .et{font-size:calc(21 * var(--u));margin-left:calc(6 * var(--u))}
+  .souvenirs .separateur{margin-left:calc(30 * var(--u))}
   .souvenirs p{font-size:calc(13 * var(--u))}
   .souvenirs .bouton{font-size:calc(12.5 * var(--u));padding:0 calc(12 * var(--u));white-space:nowrap}
   .univers{--u:calc(100vw / 420)}
