@@ -10,7 +10,7 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:#ead9cf;color:var(--brun);font-family:'Nunito',system-ui,sans-serif;font-weight:600;font-size:12.5u;line-height:1.5;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--creme);color:var(--brun);font-family:'Nunito',system-ui,sans-serif;font-weight:600;font-size:12.5u;line-height:1.5;-webkit-font-smoothing:antialiased}
 img{max-width:100%;display:block}
 a{color:var(--rose-fonce)}
 h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;color:var(--brun);margin:0;line-height:1.1}
@@ -22,10 +22,10 @@ p{margin:0 0 8u}
 .coeur svg{width:100%;height:100%}
 .page-largeur{max-width:728u;margin:0 auto}
 
-/* Le site garde la largeur de la maquette, centré */
-.entete,main,.pied{max-width:728u;margin-left:auto;margin-right:auto}
-main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
-.entete{box-shadow:0 0 30px rgba(58,42,36,.08)}
+/* Les bandes de couleur et les photos prennent toute la largeur de l'écran ;
+   le contenu reste centré à la largeur de la maquette */
+main{background:var(--creme)}
+.entete{box-shadow:0 2px 14px rgba(58,42,36,.08)}
 
 /* Bouton rosé de la maquette */
 .bouton{display:inline-flex;align-items:center;justify-content:center;gap:12u;background:linear-gradient(180deg,#e1b2a4 0%,#cb9483 100%);color:#2b1d18;font-family:'Nunito',sans-serif;font-weight:600;font-size:14.5u;text-decoration:none;padding:0 22u;height:32u;border-radius:5u;border:0;box-shadow:0 2u 6u rgba(150,90,75,.3);cursor:pointer;transition:filter .2s}
@@ -62,7 +62,7 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
 .dechire-bas::after{bottom:-8u;transform:scale(-1,-1);filter:drop-shadow(0 -1.2u 0 #fffaf5) drop-shadow(0 -.5u 1u rgba(58,42,36,.25))}
 
 /* Héros */
-.heros{position:relative;height:358u;background:#e7cdb8 url('images/accueil-fond.jpg') center top/cover no-repeat}
+.heros{position:relative;height:358u;background:#e7cdb8 url('images/accueil-fond.jpg') center top/auto 100% no-repeat}
 .heros .interieur{max-width:728u;height:100%;margin:0 auto;position:relative}
 .heros-texte{position:absolute;left:40u;top:4u;width:390u;padding-top:215u;text-align:center}
 .heros-texte .feuille-titre{position:absolute;left:5u;top:60u;width:130u;height:auto}
@@ -84,7 +84,7 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
 .bande-noel .petit{font-size:10.5u;font-weight:400;color:#e7cfc6;margin:6u 0 0}
 
 /* Souvenirs */
-.souvenirs{position:relative;height:240u;background:#f6ebe4 url('images/souvenirs-fond.jpg') center/100% 100% no-repeat}
+.souvenirs{position:relative;height:240u;background:#f6ebe4 url('images/souvenirs-fond.jpg') center/auto 100% no-repeat}
 .souvenirs .interieur{max-width:728u;height:100%;margin:0 auto;position:relative}
 .souvenirs .texte{position:absolute;left:380u;top:22u;width:290u}
 .souvenirs h2{font-size:22u;line-height:1}
@@ -227,7 +227,7 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
 
 /* Pied de page */
 .pied{background:#3d2622;color:#f1dcd4}
-.pied .barre{max-width:1456u;margin:0 auto;height:34u;display:flex;align-items:center;justify-content:space-between;gap:12u;padding:0 20u}
+.pied .barre{max-width:728u;margin:0 auto;height:34u;display:flex;align-items:center;justify-content:space-between;gap:12u;padding:0 20u}
 .pied .marque{font-family:'Great Vibes',cursive;font-size:20u;color:#fbeee8;text-decoration:none}
 .pied nav{display:flex;flex-wrap:wrap;gap:4u 8u;align-items:center}
 .pied nav a,.pied .coord a{color:#f1dcd4;text-decoration:none;font-size:8u;font-weight:400}
@@ -261,8 +261,13 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
 .choix-portfolio .case{margin:4u 0;justify-content:flex-start!important;font-size:13.5u}
 .montant-perso{font-size:12u;text-align:center;line-height:1.1;color:#6f5a52}
 .montant-perso strong{font-family:'Cormorant Garamond',serif;font-size:24u;color:var(--rose-fonce)}
-@media (max-width:760px){
-  :root{--u:1.12px}
+/* =========================================================
+   TROIS VERSIONS : ordinateur (plus de 1024 px), tablette (601 à 1024 px),
+   cellulaire (600 px et moins)
+   ========================================================= */
+
+/* ----- Tablette et cellulaire : menu ☰ ----- */
+@media (max-width:1024px){
   .burger{display:inline-flex;margin-left:auto}
   .entete .reseaux{display:none}
   .nav{position:fixed;left:0;right:0;top:66u;background:var(--blanc);padding:14px 22px 20px;display:none;box-shadow:0 14px 30px rgba(0,0,0,.12);margin:0}
@@ -270,8 +275,47 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
   .menu{flex-direction:column;align-items:flex-start;gap:4px}
   .menu a,.sous-menu a{font-size:16px}
   .sous-menu{position:static;display:block;box-shadow:none;background:transparent;padding:0 0 0 14px}
+}
+
+/* ----- Tablette ----- */
+@media (min-width:601px) and (max-width:1024px){
+  :root{--u:calc(100vw / 728)}
+  .entete .barre{height:74u}
+  .logo img{height:60u}
+  .nav{top:74u}
+  body{font-size:14px}
+  .titre-page p{font-size:18u}
+  .heros .accroche{font-size:23u}
+  .heros .bouton{font-size:16u;height:36u}
+  .bande-noel .details{font-size:14u}
+  .bande-noel .petit{font-size:12u}
+  .souvenirs p{font-size:13.5u}
+  .carte-univers .nom{font-size:15u}
+  .engagement{font-size:12.5u}
+  .grille-prestations{gap:16u}
+  .carte-presta img{height:150u}
+  .filtres{flex-wrap:wrap;gap:6u}
+  .filtre{font-size:14u;height:32u}
+  .galerie figure{height:170u}
+  .tarif ul{font-size:14.5u}
+  .extra p{font-size:13u}
+  .grille-politique{grid-template-columns:1fr 1fr;gap:16u}
+  .bloc-politique ul{font-size:14u}
+  .texte-legal{font-size:15px;max-width:640u}
+  .zone-resa{grid-template-columns:440u 1fr;padding-left:20u}
+  .contact{grid-template-columns:1fr 1.2fr}
+  .coordonnees li{font-size:18u}
+  .pied .barre{height:auto;flex-wrap:wrap;justify-content:center;text-align:center;padding:16px 20px;gap:8px 20px}
+  .pied nav{justify-content:center}
+  .pied nav a,.pied .coord,.pied .coord a,.pied nav span{font-size:13px}
+  .pied .marque{font-size:30px}
+}
+
+/* ----- Cellulaire ----- */
+@media (max-width:600px){
+  :root{--u:1.12px}
   /* Accueil sur téléphone : même composition que la maquette, agrandie */
-  .heros{--u:calc(100vw / 470);height:358u;background-size:auto 100%;background-position:calc(-40 * var(--u)) top}
+  .heros{--u:calc(100vw / 470);height:358u;background-size:auto 100%;background-position:calc(-421 * var(--u)) top}
   .heros-texte{left:17u}
   .bande-noel{--u:calc(100vw / 420)}
   .bande-noel .contenu{grid-template-columns:150u 1fr;height:auto;min-height:190u}
@@ -282,7 +326,7 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
   .bande-noel .details{flex-wrap:wrap;gap:4u 12u;font-size:14u}
   .bande-noel .petit{font-size:12u}
   .bande-noel .bouton{font-size:14u}
-  .souvenirs{--u:calc(100vw / 420);height:262u;background-size:cover;background-position:left center}
+  .souvenirs{--u:calc(100vw / 420);height:262u;background-position:calc(-397 * var(--u)) center}
   .souvenirs::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(248,238,230,0) 38%,rgba(248,238,230,.92) 52%)}
   .souvenirs .texte{left:192u;top:14u;width:218u}
   .souvenirs h2 .titre-script{width:160u}

@@ -12,7 +12,7 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:#ead9cf;color:var(--brun);font-family:'Nunito',system-ui,sans-serif;font-weight:600;font-size:calc(12.5 * var(--u));line-height:1.5;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--creme);color:var(--brun);font-family:'Nunito',system-ui,sans-serif;font-weight:600;font-size:calc(12.5 * var(--u));line-height:1.5;-webkit-font-smoothing:antialiased}
 img{max-width:100%;display:block}
 a{color:var(--rose-fonce)}
 h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;color:var(--brun);margin:0;line-height:1.1}
@@ -24,10 +24,10 @@ p{margin:0 0 calc(8 * var(--u))}
 .coeur svg{width:100%;height:100%}
 .page-largeur{max-width:calc(728 * var(--u));margin:0 auto}
 
-/* Le site garde la largeur de la maquette, centré */
-.entete,main,.pied{max-width:calc(728 * var(--u));margin-left:auto;margin-right:auto}
-main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
-.entete{box-shadow:0 0 30px rgba(58,42,36,.08)}
+/* Les bandes de couleur et les photos prennent toute la largeur de l'écran ;
+   le contenu reste centré à la largeur de la maquette */
+main{background:var(--creme)}
+.entete{box-shadow:0 2px 14px rgba(58,42,36,.08)}
 
 /* Bouton rosé de la maquette */
 .bouton{display:inline-flex;align-items:center;justify-content:center;gap:calc(12 * var(--u));background:linear-gradient(180deg,#e1b2a4 0%,#cb9483 100%);color:#2b1d18;font-family:'Nunito',sans-serif;font-weight:600;font-size:calc(14.5 * var(--u));text-decoration:none;padding:0 calc(22 * var(--u));height:calc(32 * var(--u));border-radius:calc(5 * var(--u));border:0;box-shadow:0 calc(2 * var(--u)) calc(6 * var(--u)) rgba(150,90,75,.3);cursor:pointer;transition:filter .2s}
@@ -64,7 +64,7 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
 .dechire-bas::after{bottom:calc(-8 * var(--u));transform:scale(-1,-1);filter:drop-shadow(0 calc(-1.2 * var(--u)) 0 #fffaf5) drop-shadow(0 -.5u calc(1 * var(--u)) rgba(58,42,36,.25))}
 
 /* Héros */
-.heros{position:relative;height:calc(358 * var(--u));background:#e7cdb8 url('images/accueil-fond.jpg') center top/cover no-repeat}
+.heros{position:relative;height:calc(358 * var(--u));background:#e7cdb8 url('images/accueil-fond.jpg') center top/auto 100% no-repeat}
 .heros .interieur{max-width:calc(728 * var(--u));height:100%;margin:0 auto;position:relative}
 .heros-texte{position:absolute;left:calc(40 * var(--u));top:calc(4 * var(--u));width:calc(390 * var(--u));padding-top:calc(215 * var(--u));text-align:center}
 .heros-texte .feuille-titre{position:absolute;left:calc(5 * var(--u));top:calc(60 * var(--u));width:calc(130 * var(--u));height:auto}
@@ -86,7 +86,7 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
 .bande-noel .petit{font-size:calc(10.5 * var(--u));font-weight:400;color:#e7cfc6;margin:calc(6 * var(--u)) 0 0}
 
 /* Souvenirs */
-.souvenirs{position:relative;height:calc(240 * var(--u));background:#f6ebe4 url('images/souvenirs-fond.jpg') center/100% 100% no-repeat}
+.souvenirs{position:relative;height:calc(240 * var(--u));background:#f6ebe4 url('images/souvenirs-fond.jpg') center/auto 100% no-repeat}
 .souvenirs .interieur{max-width:calc(728 * var(--u));height:100%;margin:0 auto;position:relative}
 .souvenirs .texte{position:absolute;left:calc(380 * var(--u));top:calc(22 * var(--u));width:calc(290 * var(--u))}
 .souvenirs h2{font-size:calc(22 * var(--u));line-height:1}
@@ -229,7 +229,7 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
 
 /* Pied de page */
 .pied{background:#3d2622;color:#f1dcd4}
-.pied .barre{max-width:calc(1456 * var(--u));margin:0 auto;height:calc(34 * var(--u));display:flex;align-items:center;justify-content:space-between;gap:calc(12 * var(--u));padding:0 calc(20 * var(--u))}
+.pied .barre{max-width:calc(728 * var(--u));margin:0 auto;height:calc(34 * var(--u));display:flex;align-items:center;justify-content:space-between;gap:calc(12 * var(--u));padding:0 calc(20 * var(--u))}
 .pied .marque{font-family:'Great Vibes',cursive;font-size:calc(20 * var(--u));color:#fbeee8;text-decoration:none}
 .pied nav{display:flex;flex-wrap:wrap;gap:calc(4 * var(--u)) calc(8 * var(--u));align-items:center}
 .pied nav a,.pied .coord a{color:#f1dcd4;text-decoration:none;font-size:calc(8 * var(--u));font-weight:400}
@@ -263,8 +263,13 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
 .choix-portfolio .case{margin:calc(4 * var(--u)) 0;justify-content:flex-start!important;font-size:calc(13.5 * var(--u))}
 .montant-perso{font-size:calc(12 * var(--u));text-align:center;line-height:1.1;color:#6f5a52}
 .montant-perso strong{font-family:'Cormorant Garamond',serif;font-size:calc(24 * var(--u));color:var(--rose-fonce)}
-@media (max-width:760px){
-  :root{--u:1.12px}
+/* =========================================================
+   TROIS VERSIONS : ordinateur (plus de 1024 px), tablette (601 à 1024 px),
+   cellulaire (600 px et moins)
+   ========================================================= */
+
+/* ----- Tablette et cellulaire : menu ☰ ----- */
+@media (max-width:1024px){
   .burger{display:inline-flex;margin-left:auto}
   .entete .reseaux{display:none}
   .nav{position:fixed;left:0;right:0;top:calc(66 * var(--u));background:var(--blanc);padding:14px 22px 20px;display:none;box-shadow:0 14px 30px rgba(0,0,0,.12);margin:0}
@@ -272,8 +277,47 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
   .menu{flex-direction:column;align-items:flex-start;gap:4px}
   .menu a,.sous-menu a{font-size:16px}
   .sous-menu{position:static;display:block;box-shadow:none;background:transparent;padding:0 0 0 14px}
+}
+
+/* ----- Tablette ----- */
+@media (min-width:601px) and (max-width:1024px){
+  :root{--u:calc(100vw / 728)}
+  .entete .barre{height:calc(74 * var(--u))}
+  .logo img{height:calc(60 * var(--u))}
+  .nav{top:calc(74 * var(--u))}
+  body{font-size:14px}
+  .titre-page p{font-size:calc(18 * var(--u))}
+  .heros .accroche{font-size:calc(23 * var(--u))}
+  .heros .bouton{font-size:calc(16 * var(--u));height:calc(36 * var(--u))}
+  .bande-noel .details{font-size:calc(14 * var(--u))}
+  .bande-noel .petit{font-size:calc(12 * var(--u))}
+  .souvenirs p{font-size:calc(13.5 * var(--u))}
+  .carte-univers .nom{font-size:calc(15 * var(--u))}
+  .engagement{font-size:calc(12.5 * var(--u))}
+  .grille-prestations{gap:calc(16 * var(--u))}
+  .carte-presta img{height:calc(150 * var(--u))}
+  .filtres{flex-wrap:wrap;gap:calc(6 * var(--u))}
+  .filtre{font-size:calc(14 * var(--u));height:calc(32 * var(--u))}
+  .galerie figure{height:calc(170 * var(--u))}
+  .tarif ul{font-size:calc(14.5 * var(--u))}
+  .extra p{font-size:calc(13 * var(--u))}
+  .grille-politique{grid-template-columns:1fr 1fr;gap:calc(16 * var(--u))}
+  .bloc-politique ul{font-size:calc(14 * var(--u))}
+  .texte-legal{font-size:15px;max-width:calc(640 * var(--u))}
+  .zone-resa{grid-template-columns:calc(440 * var(--u)) 1fr;padding-left:calc(20 * var(--u))}
+  .contact{grid-template-columns:1fr 1.2fr}
+  .coordonnees li{font-size:calc(18 * var(--u))}
+  .pied .barre{height:auto;flex-wrap:wrap;justify-content:center;text-align:center;padding:16px 20px;gap:8px 20px}
+  .pied nav{justify-content:center}
+  .pied nav a,.pied .coord,.pied .coord a,.pied nav span{font-size:13px}
+  .pied .marque{font-size:30px}
+}
+
+/* ----- Cellulaire ----- */
+@media (max-width:600px){
+  :root{--u:1.12px}
   /* Accueil sur téléphone : même composition que la maquette, agrandie */
-  .heros{--u:calc(100vw / 470);height:calc(358 * var(--u));background-size:auto 100%;background-position:calc(-40 * var(--u)) top}
+  .heros{--u:calc(100vw / 470);height:calc(358 * var(--u));background-size:auto 100%;background-position:calc(-421 * var(--u)) top}
   .heros-texte{left:calc(17 * var(--u))}
   .bande-noel{--u:calc(100vw / 420)}
   .bande-noel .contenu{grid-template-columns:calc(150 * var(--u)) 1fr;height:auto;min-height:calc(190 * var(--u))}
@@ -284,7 +328,7 @@ main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
   .bande-noel .details{flex-wrap:wrap;gap:calc(4 * var(--u)) calc(12 * var(--u));font-size:calc(14 * var(--u))}
   .bande-noel .petit{font-size:calc(12 * var(--u))}
   .bande-noel .bouton{font-size:calc(14 * var(--u))}
-  .souvenirs{--u:calc(100vw / 420);height:calc(262 * var(--u));background-size:cover;background-position:left center}
+  .souvenirs{--u:calc(100vw / 420);height:calc(262 * var(--u));background-position:calc(-397 * var(--u)) center}
   .souvenirs::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(248,238,230,0) 38%,rgba(248,238,230,.92) 52%)}
   .souvenirs .texte{left:calc(192 * var(--u));top:calc(14 * var(--u));width:calc(218 * var(--u))}
   .souvenirs h2 .titre-script{width:calc(160 * var(--u))}
