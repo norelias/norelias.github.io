@@ -242,6 +242,11 @@ def tarifs():
   <a class="tarif vedette" href="{{r}}reservation/?forfait=signature" style="text-decoration:none;color:inherit"><div class="tete"><div class="montant">300 $</div><h3>Signature</h3></div><ul><li>Séance de 1 heure</li><li>25 photos retouchées</li><li>Galerie privée en ligne</li><li>Impression 8 x 10</li></ul></a>
   <a class="tarif" href="{{r}}reservation/?forfait=complete" style="text-decoration:none;color:inherit"><div class="tete"><div class="montant">450 $</div><h3>Complète</h3></div><ul><li>Séance prolongée</li><li>Toutes les photos retouchées</li><li>Galerie privée en ligne</li><li>Crédit d'impression</li></ul></a>
 </div>
+<div class="speciales">
+  <a class="speciale" href="{{r}}reservation/?seance=garderie-ecole"><h3>Garderie / École</h3><div class="montant">35 $ <small>par enfant</small></div><p>Portrait individuel + photo de groupe<br>3 photos numériques par enfant<br>Groupe de 10 enfants minimum</p></a>
+  <a class="speciale" href="{{r}}reservation/?seance=finissants"><h3>Finissants</h3><div class="montant">175 $</div><p>Séance de 30 minutes<br>En toge et en tenue de ville<br>15 photos numériques</p></a>
+  <a class="speciale" href="{{r}}reservation/?seance=bal"><h3>Bal de promos</h3><div class="montant">150 $</div><p>30 minutes avant le bal, solo ou en couple<br>15 photos numériques<br>Groupe d'amis : +25 $ par personne</p></a>
+</div>
 <div class="extras">
   <a class="extra noel" href="{{r}}reservation/?seance=noel"><div><h3>Mini-séance de Noël</h3><p>20 min · 10 photos numériques</p></div><span class="montant">95 $</span></a>
   <a class="extra perso" href="{{r}}reservation/?forfait=personnalise"><div><h3>Forfait personnalisé</h3><p>Sur demande : <strong style="color:var(--rose-fonce)">bonjour@norelias.ca</strong></p></div><span class="montant-perso">Dépôt<br><strong>100 $</strong></span></a>
@@ -287,7 +292,7 @@ def reservation():
     <div class="navigation-etapes"><button type="button" class="bouton contour" data-precedent>←</button><button type="button" class="bouton" data-suivant>Suivant {FLECHE}</button></div>
   </fieldset>
   <fieldset class="etape" hidden style="border:0;padding:0;margin:0"><legend class="sr-only">Étape 3 : paiement</legend>
-    <div class="champ"><label class="sr-only" for="forfait">Forfait</label><select id="forfait" name="forfait" required><option value="">Choisir un forfait</option><option value="essentiel">Essentiel · 200 $</option><option value="signature">Signature · 300 $</option><option value="complete">Complète · 450 $</option><option value="noel">Mini-séance de Noël · 95 $</option><option value="personnalise">Forfait personnalisé · dépôt de 100 $</option></select></div>
+    <div class="champ"><label class="sr-only" for="forfait">Forfait</label><select id="forfait" name="forfait" required><option value="">Choisir un forfait</option><option value="essentiel">Essentiel · 200 $</option><option value="signature">Signature · 300 $</option><option value="complete">Complète · 450 $</option><option value="noel">Mini-séance de Noël · 95 $</option><option value="ecole">Garderie / École · 35 $ par enfant</option><option value="finissants">Finissants · 175 $</option><option value="bal">Bal de promos · 150 $</option><option value="personnalise">Forfait personnalisé · dépôt de 100 $</option></select></div>
     <div class="recap"><dl><dt>Séance</dt><dd id="recap-seance"></dd><dt>Date</dt><dd id="recap-date"></dd></dl><dl class="recap-prix" hidden><dt>Forfait</dt><dd id="recap-forfait"></dd><dt>Total</dt><dd id="recap-total"></dd><dt>À payer maintenant</dt><dd id="recap-acompte"></dd></dl></div>
     <div id="zone-paiement" hidden>
       <div class="choix-paiement">

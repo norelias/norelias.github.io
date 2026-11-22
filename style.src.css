@@ -157,6 +157,12 @@ main{background:var(--creme)}
 .tarif.vedette .tete{background:var(--signature)}
 .tarif.vedette .tete h3,.tarif.vedette .tete .montant{color:#fff}
 .tarif .choisir{display:none}
+.speciales{display:grid;grid-template-columns:repeat(3,1fr);gap:15u;margin-top:12u}
+.speciale{background:#fffaf7;border:1.5px solid #dcb7aa;border-radius:10u;padding:8u 12u 6u;text-align:center;text-decoration:none;color:var(--brun);box-shadow:var(--ombre)}
+.speciale h3{font-size:21u;line-height:1.05}
+.speciale .montant{font-family:'Cormorant Garamond',serif;font-size:24u;color:var(--rose-fonce);line-height:1.1}
+.speciale .montant small{font-size:13u}
+.speciale p{margin:3u 0 0;font-size:11.5u;color:#5b4740;line-height:1.35}
 .extras{display:grid;grid-template-columns:1fr 1fr;gap:15u;margin-top:10u}
 .extra{border-radius:10u;padding:6u 14u;display:flex;align-items:center;justify-content:space-between;gap:10u;text-decoration:none;min-height:54u}
 .extra h3{font-size:24u;line-height:1}
@@ -362,7 +368,7 @@ main{background:var(--creme)}
   .filtre{font-size:13px;height:30px;padding:0 10px}
   .apropos{grid-template-columns:1fr}
   .apropos img{max-width:300px;margin:0 auto}
-  .grille-tarifs,.extras{grid-template-columns:1fr}
+  .grille-tarifs,.extras,.speciales{grid-template-columns:1fr}
   .zone-resa{grid-template-columns:1fr;padding-left:0}
   .zone-resa .vase{display:none}
   .contact{grid-template-columns:1fr;padding:0}

@@ -73,6 +73,9 @@
     signature: { nom: 'Signature', prix: 300, acompte: 150 },
     complete: { nom: 'Complète', prix: 450, acompte: 225 },
     noel: { nom: 'Mini-séance de Noël', prix: 95, acompte: 95 },
+    ecole: { nom: 'Garderie / École', prix: 35, parEnfant: true, minimum: 10 },
+    finissants: { nom: 'Finissants', prix: 175, acompte: 87.5 },
+    bal: { nom: 'Bal de promos', prix: 150, acompte: 75 },
     personnalise: { nom: 'Forfait personnalisé', prix: null, acompte: 100 }
   };
   var etapes = form.querySelectorAll('.etape');
@@ -90,13 +93,24 @@
   }
   if (params.get('forfait') && FORFAITS[params.get('forfait')]) form.elements.forfait.value = params.get('forfait');
 
+  // Séances qui ont leur propre prix : le forfait est choisi automatiquement
+  var DEDIE = { 'noel': 'noel', 'garderie-ecole': 'ecole', 'finissants': 'finissants', 'bal': 'bal' };
+  var DEDIES = ['noel', 'ecole', 'finissants', 'bal'];
+  function codeSeance() {
+    var o = form.elements.seance.options[form.elements.seance.selectedIndex];
+    return o ? o.dataset.code : '';
+  }
   function synchroniserNoel() {
-    var estNoel = form.elements.seance.value === 'Mini-séance de Noël';
-    if (estNoel) form.elements.forfait.value = 'noel';
+    var dedie = DEDIE[codeSeance()];
+    if (dedie) form.elements.forfait.value = dedie;
     Array.prototype.forEach.call(form.elements.forfait.options, function (o) {
-      o.disabled = estNoel ? o.value !== 'noel' : o.value === 'noel';
+      if (!o.value) return;
+      o.disabled = dedie ? o.value !== dedie : DEDIES.indexOf(o.value) > -1;
     });
-    if (!estNoel && form.elements.forfait.value === 'noel') form.elements.forfait.value = '';
+    if (!dedie && DEDIES.indexOf(form.elements.forfait.value) > -1) form.elements.forfait.value = '';
+    var pers = form.elements.personnes;
+    if (dedie === 'ecole') { pers.placeholder = "Nombre d'enfants (minimum 10) *"; pers.min = 10; pers.max = 200; }
+    else { pers.placeholder = 'Nombre de personnes *'; pers.min = 1; pers.max = 15; }
     if (window.majCalendrier) window.majCalendrier();
   }
   form.elements.seance.addEventListener('change', synchroniserNoel);
@@ -193,7 +207,18 @@
   });
   synchroniserNoel();
 
-  function argent(n) { return n.toLocaleString('fr-CA') + ' $'; }
+  function argent(n) { return n.toLocaleString('fr-CA', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }) + ' $'; }
+  // Total et acompte réels (garderie / école : 35 $ par enfant, minimum 10)
+  function montants(cle) {
+    var f = FORFAITS[cle];
+    if (!f) return null;
+    if (f.parEnfant) {
+      var n = Math.max(f.minimum, parseInt(form.elements.personnes.value, 10) || 0);
+      var total = f.prix * n;
+      return { total: total, acompte: Math.round(total * 50) / 100, detail: n + ' enfants × ' + argent(f.prix) };
+    }
+    return { total: f.prix, acompte: f.acompte };
+  }
 
   function afficher(i) {
     courante = i;
@@ -244,9 +269,10 @@
     document.getElementById('recap-seance').textContent = form.elements.seance.value;
     document.getElementById('recap-forfait').textContent = f.nom;
     document.getElementById('recap-date').textContent = form.elements.date.value + ' · ' + form.elements.heure.value;
-    document.getElementById('recap-total').textContent = estPerso ? 'Sur demande' : argent(f.prix);
+    var m = montants(form.elements.forfait.value);
+    document.getElementById('recap-total').textContent = estPerso ? 'Sur demande' : argent(m.total) + (m.detail ? ' (' + m.detail + ')' : '');
     var acompte = document.getElementById('recap-acompte');
-    acompte.textContent = estPerso ? argent(f.acompte) + ' (dépôt déduit du total)' : (form.elements.forfait.value === 'noel' ? argent(f.acompte) + ' (paiement complet)' : argent(f.acompte) + ' (50 %)');
+    acompte.textContent = estPerso ? argent(m.acompte) + ' (dépôt déduit du total)' : (form.elements.forfait.value === 'noel' ? argent(m.acompte) + ' (paiement complet)' : argent(m.acompte) + ' (50 %)');
     document.getElementById('zone-paiement').hidden = perso;
     document.getElementById('note-perso').hidden = !estPerso;
     form.querySelectorAll('input[name="mode"]').forEach(function (r) { r.required = !perso; });
@@ -259,8 +285,9 @@
     var boite = document.getElementById('boite-interac');
     var choix = form.querySelector('input[name="mode"]:checked');
     boite.hidden = !(choix && choix.value === 'interac');
-    if (f && f.acompte) {
-      document.querySelectorAll('.montant-interac').forEach(function (el) { el.textContent = argent(f.acompte); });
+    if (f) {
+      var m = montants(form.elements.forfait.value);
+      document.querySelectorAll('.montant-interac').forEach(function (el) { el.textContent = argent(m.acompte); });
     }
   }
   form.querySelectorAll('input[name="mode"]').forEach(function (r) { r.addEventListener('change', majInterac); });
@@ -290,7 +317,7 @@
       message: form.elements.message.value.trim(),
       portfolio: (form.querySelector('input[name="portfolio"]:checked') || {}).value || 'Non',
       paiement: mode === 'carte' ? 'Carte (Stripe)' : (mode === 'interac' ? 'Virement Interac' : 'À discuter'),
-      montant: f.acompte ? argent(f.acompte) : 'Sur demande'
+      montant: argent(montants(cle).acompte) + ' (total ' + argent(montants(cle).total) + ')'
     };
     var corps = [
       'Nouvelle demande de réservation — Norélias Photography', '',

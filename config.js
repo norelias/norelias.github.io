@@ -17,7 +17,10 @@ window.NORELIAS = {
     signature: '',   // acompte de 150 $ (50 % de 300 $)
     complete:  '',   // acompte de 225 $ (50 % de 450 $)
     noel:      '',   // mini-séance de Noël, paiement complet de 95 $
-    personnalise: '' // dépôt de 100 $ du forfait personnalisé
+    personnalise: '', // dépôt de 100 $ du forfait personnalisé
+    ecole: '',        // garderie / école : lien de 17,50 $ avec « quantité modifiable » (1 par enfant)
+    finissants: '',   // acompte de 87,50 $ (50 % de 175 $)
+    bal: ''           // acompte de 75 $ (50 % de 150 $)
   },
 
   // DISPONIBILITÉS DU CALENDRIER DE RÉSERVATION
