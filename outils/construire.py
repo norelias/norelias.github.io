@@ -25,7 +25,7 @@ SEANCES = [  # nom, code, image carte, description
     ('Noël', 'noel', 'noel.jpg', 'Mini-séances de 20 minutes dans un décor de Noël, en décembre.'),
 ]
 UNIVERS = ['grossesse', 'accouchement', 'nouveau-ne', 'famille', 'couple', 'noel', 'fetes']
-UNIV_IMG = {'noel': 'noel-2.jpg', 'grossesse': 'grossesse.jpg'}
+UNIV_IMG = {'noel': 'noel-2.jpg', 'grossesse': 'grossesse.jpg', 'nouveau-ne': 'nouveau-ne-ourson.jpg'}
 
 def reseaux():
     return ('<div class="reseaux">'
@@ -179,6 +179,7 @@ def prestations():
 # ---------------- Portfolio ----------------
 def portfolio():
     photos = [('portfolio-grossesse.jpg', 'grossesse', 'Femme enceinte au bord du lac au coucher du soleil'),
+              ('portfolio-nouveau-ne-ourson.jpg', 'nouveau-ne', 'Nouveau-né endormi avec un bonnet et un toutou ourson'),
               ('portfolio-nouveau-ne.jpg', 'nouveau-ne', 'Nouveau-né endormi dans un panier avec un bonnet'),
               ('portfolio-papa-bebe.jpg', 'nouveau-ne', 'Papa qui berce son nouveau-né'),
               ('portfolio-famille-2.jpg', 'famille', "Parents et leur fille qui rit à l'heure dorée"),
