@@ -4,7 +4,7 @@
    Après modification, lancez : python3 outils/construire.py  (qui génère style.css) */
 :root{
   --masque:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 26' preserveAspectRatio='none'%3E%3Cpath d='M0 13 L11 15.3 L22 14.8 L35 12.6 L47 12.5 L60 14.4 L65 13.9 L71 11.3 L85 8.6 L95 11.9 L109 13.5 L123 11.3 L127 13.6 L132 10.8 L139 13.4 L152 10.4 L163 9.5 L176 12.0 L188 10.5 L196 10.7 L210 8.3 L224 7.4 L236 11.1 L241 12.6 L250 14.2 L262 12.8 L267 13.2 L272 12.6 L280 11.9 L284 14.2 L288 12.3 L292 12.2 L302 11.7 L315 12.7 L329 11.3 L334 10.2 L338 13.4 L343 11.1 L348 8.2 L359 10.6 L365 11.9 L372 11.7 L379 14.9 L385 14.2 L395 11.7 L405 14.9 L409 13.3 L422 12.0 L426 10.3 L436 13.7 L449 14.5 L454 11.5 L460 9.8 L468 7.0 L481 6.6 L489 6.5 L494 4.6 L507 6.3 L511 7.6 L520 8.9 L526 12.2 L537 14.4 L543 16.5 L549 17.0 L557 19.2 L570 17.0 L577 14.4 L591 17.0 L598 17.8 L608 19.7 L621 16.4 L625 13.6 L629 13.6 L637 11.9 L647 10.5 L660 10.7 L672 8.9 L677 6.9 L688 7.9 L701 9.1 L709 7.7 L716 9.8 L721 8.7 L732 7.5 L736 6.0 L745 6.9 L751 5.0 L757 8.2 L766 9.7 L778 10.6 L784 11.4 L788 11.4 L797 12.8 L801 9.8 L815 7.4 L820 9.5 L829 7.5 L834 5.4 L846 5.3 L850 8.6 L856 10.9 L865 10.2 L879 10.3 L884 12.9 L894 15.7 L898 17.7 L911 14.2 L925 13.3 L938 10.2 L943 7.9 L957 6.0 L965 9.0 L974 8.7 L987 8.9 L998 11.4 L1003 11.7 L1015 8.9 L1028 6.7 L1032 5.6 L1037 6.3 L1050 8.0 L1061 7.0 L1065 6.8 L1071 8.5 L1078 9.1 L1087 10.5 L1098 10.7 L1105 9.8 L1119 8.6 L1133 8.6 L1140 11.4 L1150 9.8 L1159 8.3 L1165 8.8 L1169 10.5 L1177 12.8 L1182 12.5 L1190 15.2 L1200 12 L1200 26 L0 26 Z'/%3E%3C/svg%3E");
-  --u:clamp(1px, calc(100vw / 728), 2px);
+  --u:clamp(1px, calc(100vw / 728), 1.5px);
   --creme:#f7ece6; --creme-2:#fbf4ef; --blanc:#fffaf7;
   --brun:#2b1d18; --brun-2:#4a3630; --gris:#6f5a52;
   --rose-fonce:#8a4f48; --noel:#5c2f2b; --noel-rouge:#8c1c26; --or:#ecc478; --signature:#8c6450;
@@ -12,7 +12,7 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--creme);color:var(--brun);font-family:'Nunito',system-ui,sans-serif;font-weight:600;font-size:calc(12.5 * var(--u));line-height:1.5;-webkit-font-smoothing:antialiased}
+body{margin:0;background:#ead9cf;color:var(--brun);font-family:'Nunito',system-ui,sans-serif;font-weight:600;font-size:calc(12.5 * var(--u));line-height:1.5;-webkit-font-smoothing:antialiased}
 img{max-width:100%;display:block}
 a{color:var(--rose-fonce)}
 h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;color:var(--brun);margin:0;line-height:1.1}
@@ -23,6 +23,11 @@ p{margin:0 0 calc(8 * var(--u))}
 .coeur{display:inline-block;width:.62em;height:.62em;margin-left:.25em;vertical-align:.05em}
 .coeur svg{width:100%;height:100%}
 .page-largeur{max-width:calc(728 * var(--u));margin:0 auto}
+
+/* Le site garde la largeur de la maquette, centré */
+.entete,main,.pied{max-width:calc(728 * var(--u));margin-left:auto;margin-right:auto}
+main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
+.entete{box-shadow:0 0 30px rgba(58,42,36,.08)}
 
 /* Bouton rosé de la maquette */
 .bouton{display:inline-flex;align-items:center;justify-content:center;gap:calc(12 * var(--u));background:linear-gradient(180deg,#e1b2a4 0%,#cb9483 100%);color:#2b1d18;font-family:'Nunito',sans-serif;font-weight:600;font-size:calc(14.5 * var(--u));text-decoration:none;padding:0 calc(22 * var(--u));height:calc(32 * var(--u));border-radius:calc(5 * var(--u));border:0;box-shadow:0 calc(2 * var(--u)) calc(6 * var(--u)) rgba(150,90,75,.3);cursor:pointer;transition:filter .2s}

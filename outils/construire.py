@@ -159,7 +159,8 @@ def accueil():
 # ---------------- Prestations ----------------
 def prestations():
     cartes = ''
-    for nom, code, img, desc in SEANCES:
+    ordre = [x for x in SEANCES if x[1] == 'noel'] + [x for x in SEANCES if x[1] != 'noel']
+    for nom, code, img, desc in ordre:
         promo = '<span class="etiquette-promo">PROMO 95 $</span>' if code == 'noel' else ''
         lien = '?seance=noel' if code == 'noel' else f'?seance={code}'
         cartes += f'''<a class="carte-presta" id="{code}" href="{{r}}reservation/{lien}" title="{desc}"><div class="photo">{promo}<img src="{{r}}images/{img}" alt="Séance {nom.lower()}" loading="lazy"></div><div class="nom">{nom}</div></a>'''

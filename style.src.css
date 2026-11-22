@@ -2,7 +2,7 @@
    Les mesures en « u » suivent la maquette (1u = 1 pixel de la maquette de 728 px de large).
    Après modification, lancez : python3 outils/construire.py  (qui génère style.css) */
 :root{
-  --u:clamp(1px, calc(100vw / 728), 2px);
+  --u:clamp(1px, calc(100vw / 728), 1.5px);
   --creme:#f7ece6; --creme-2:#fbf4ef; --blanc:#fffaf7;
   --brun:#2b1d18; --brun-2:#4a3630; --gris:#6f5a52;
   --rose-fonce:#8a4f48; --noel:#5c2f2b; --noel-rouge:#8c1c26; --or:#ecc478; --signature:#8c6450;
@@ -10,7 +10,7 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--creme);color:var(--brun);font-family:'Nunito',system-ui,sans-serif;font-weight:600;font-size:12.5u;line-height:1.5;-webkit-font-smoothing:antialiased}
+body{margin:0;background:#ead9cf;color:var(--brun);font-family:'Nunito',system-ui,sans-serif;font-weight:600;font-size:12.5u;line-height:1.5;-webkit-font-smoothing:antialiased}
 img{max-width:100%;display:block}
 a{color:var(--rose-fonce)}
 h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;color:var(--brun);margin:0;line-height:1.1}
@@ -21,6 +21,11 @@ p{margin:0 0 8u}
 .coeur{display:inline-block;width:.62em;height:.62em;margin-left:.25em;vertical-align:.05em}
 .coeur svg{width:100%;height:100%}
 .page-largeur{max-width:728u;margin:0 auto}
+
+/* Le site garde la largeur de la maquette, centré */
+.entete,main,.pied{max-width:728u;margin-left:auto;margin-right:auto}
+main{background:var(--creme);box-shadow:0 0 30px rgba(58,42,36,.12)}
+.entete{box-shadow:0 0 30px rgba(58,42,36,.08)}
 
 /* Bouton rosé de la maquette */
 .bouton{display:inline-flex;align-items:center;justify-content:center;gap:12u;background:linear-gradient(180deg,#e1b2a4 0%,#cb9483 100%);color:#2b1d18;font-family:'Nunito',sans-serif;font-weight:600;font-size:14.5u;text-decoration:none;padding:0 22u;height:32u;border-radius:5u;border:0;box-shadow:0 2u 6u rgba(150,90,75,.3);cursor:pointer;transition:filter .2s}
