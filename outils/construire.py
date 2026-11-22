@@ -123,7 +123,7 @@ def accueil():
 </section>
 <section class="bande-noel dechire-haut" style="--fond-dechire:#5c2f2b" aria-labelledby="titre-noel">
   <div class="contenu">
-    <img src="{{r}}images/noel.jpg" alt="Petite fille avec une tuque de Noël devant des lumières">
+    <img src="{{r}}images/noel.jpg" alt="Petite fille en robe de velours rouge devant le sapin de Noël">
     <div class="texte">
       <div>
         <span class="script">Magie de Noël</span>
@@ -183,7 +183,11 @@ def portfolio():
               ('portfolio-papa-bebe.jpg', 'nouveau-ne', 'Papa qui berce son nouveau-né'),
               ('portfolio-famille-2.jpg', 'famille', "Parents et leur fille qui rit à l'heure dorée"),
               ('portfolio-couple.jpg', 'couple', 'Couple enlacé au coucher du soleil'),
-              ('noel.jpg', 'noel', 'Petite fille avec une tuque de Noël'),
+              ('portfolio-noel-fille.jpg', 'noel', 'Petite fille en robe de velours rouge devant le sapin'),
+              ('portfolio-noel-enfants.jpg', 'noel', 'Enfants qui rient en ouvrant leurs cadeaux de Noël'),
+              ('portfolio-noel-couple.jpg', 'noel', 'Couple complice près du foyer et du sapin'),
+              ('portfolio-noel-famille.jpg', 'noel', 'Famille de cinq souriante devant le sapin'),
+              ('portfolio-noel-famille-2.jpg', 'noel', 'Famille qui rit aux éclats dans un décor de Noël'),
               ('portfolio-gateau.jpg', 'fetes', 'Bébé qui rit pendant sa séance gâteau'),
               ('portfolio-famille.jpg', 'famille', 'Famille de quatre qui rit dans le parc'),
               ('portfolio-automne.jpg', 'saisons', "Famille de six en séance d'automne"),
