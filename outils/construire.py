@@ -42,7 +42,7 @@ def page(chemin, titre, description, contenu, actif=''):
         cur = ' aria-current="page"' if nom == actif else ''
         return f'<a href="{r}{url}"{cur}>{nom}</a>'
     menu = (f'<li>{lien("Accueil", "")}</li><li>{lien("À propos", "a-propos/")}</li>'
-            f'<li class="a-sous-menu">{lien("Prestations", "prestations/")}<button type="button" class="ouvrir-sous" aria-expanded="false" aria-label="Afficher les prestations">⌄</button><ul class="sous-menu">{sous}</ul></li>'
+            f'<li>{lien("Prestations", "prestations/")}</li>'
             f'<li>{lien("Portfolio", "portfolio/")}</li><li>{lien("Tarifs", "tarifs/")}</li><li>{lien("Réservation", "reservation/")}</li><li>{lien("Contact", "contact/")}</li>')
     url_page = SITE + '/' + ('' if chemin == 'index.html' else chemin.replace('index.html', ''))
     html = f'''<!DOCTYPE html>
