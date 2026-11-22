@@ -172,15 +172,21 @@ def prestations():
 
 # ---------------- Portfolio ----------------
 def portfolio():
-    photos = [('grossesse-champ.jpg', 'grossesse', 'Femme enceinte dans un champ au coucher du soleil'),
-              ('nouveau-ne-bonnet.jpg', 'nouveau-ne', 'Nouveau-né endormi avec un bonnet'),
-              ('naissance-nb.jpg', 'accouchement', 'Naissance en noir et blanc'),
-              ('famille.jpg', 'famille', 'Famille qui marche en nature'),
-              ('couple-2.jpg', 'couple', 'Couple au coucher du soleil'),
+    photos = [('portfolio-grossesse.jpg', 'grossesse', 'Femme enceinte au bord du lac au coucher du soleil'),
+              ('portfolio-nouveau-ne.jpg', 'nouveau-ne', 'Nouveau-né endormi dans un panier avec un bonnet'),
+              ('portfolio-papa-bebe.jpg', 'nouveau-ne', 'Papa qui berce son nouveau-né'),
+              ('portfolio-famille-2.jpg', 'famille', "Parents et leur fille qui rit à l'heure dorée"),
+              ('portfolio-couple.jpg', 'couple', 'Couple enlacé au coucher du soleil'),
               ('noel.jpg', 'noel', 'Petite fille avec une tuque de Noël'),
-              ('neige.jpg', 'saisons', 'Forêt enneigée en hiver'),
-              ('petits-pieds.jpg', 'nouveau-ne', 'Petits pieds de nouveau-né'),
-              ('ventre-fleurs.jpg', 'grossesse', 'Ventre de grossesse avec des fleurs')]
+              ('portfolio-gateau.jpg', 'fetes', 'Bébé qui rit pendant sa séance gâteau'),
+              ('portfolio-famille.jpg', 'famille', 'Famille de quatre qui rit dans le parc'),
+              ('portfolio-automne.jpg', 'saisons', "Famille de six en séance d'automne"),
+              ('portfolio-couple-2.jpg', 'couple', 'Couple complice front contre front'),
+              ('portfolio-gateau-2.jpg', 'fetes', "Bébé et son gâteau d'un an"),
+              ('naissance-nb.jpg', 'accouchement', 'Naissance en noir et blanc'),
+              ('portfolio-anniversaire.jpg', 'fetes', "Fête d'anniversaire de 4 ans en famille"),
+              ('portfolio-fete.jpg', 'fetes', "Fête d'anniversaire entre amis"),
+              ('portfolio-fete-2.jpg', 'fetes', 'Anniversaire avec ballons dorés')]
     figs = ''.join(f'<figure data-cat="{c}"><img src="{{r}}images/{f}" alt="{a}" loading="lazy"></figure>' for f, c, a in photos)
     cats = [('tous', 'Tous'), ('grossesse', 'Grossesse'), ('accouchement', 'Accouchement'), ('nouveau-ne', 'Nouveau-né'), ('famille', 'Famille'), ('couple', 'Couple'), ('fetes', 'Fêtes'), ('saisons', 'Saisons'), ('noel', 'Noël')]
     boutons = ''.join(f'<button class="filtre" type="button" data-cat="{c}" aria-pressed="{"true" if c == "tous" else "false"}">{n}</button>' for c, n in cats)
