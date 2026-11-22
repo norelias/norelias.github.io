@@ -30,7 +30,7 @@ SEANCES = [  # nom, code, image carte, description
     ('Noël', 'noel', 'noel.jpg', 'Mini-séances de 20 minutes dans un décor de Noël, en décembre.'),
 ]
 UNIVERS = ['grossesse', 'accouchement', 'nouveau-ne', 'famille', 'couple', 'noel', 'fetes', 'garderie-ecole', 'finissants', 'bal']
-UNIV_IMG = {'noel': 'noel-2.jpg', 'grossesse': 'grossesse.jpg', 'nouveau-ne': 'nouveau-ne-ourson.jpg'}
+UNIV_IMG = {'noel': 'noel-2.jpg', 'grossesse': 'grossesse.jpg', 'nouveau-ne': 'nouveau-ne-ourson.jpg', 'accouchement': 'accouchement-carre.jpg'}
 
 def reseaux():
     return ('<div class="reseaux">'
@@ -199,10 +199,15 @@ def portfolio():
               ('portfolio-automne.jpg', 'famille', "Famille de six en séance d'automne"),
               ('portfolio-couple-2.jpg', 'couple', 'Couple complice front contre front'),
               ('portfolio-gateau-2.jpg', 'fetes', "Bébé et son gâteau d'un an"),
-              ('naissance-nb.jpg', 'accouchement', 'Naissance en noir et blanc'),
+              ('portfolio-accouchement.jpg', 'accouchement', 'Doula qui soutient une maman pendant le travail'),
+              ('portfolio-rencontre-prenatale.jpg', 'grossesse', 'Rencontre prénatale avec un couple qui attend bébé'),
               ('portfolio-anniversaire.jpg', 'fetes', "Fête d'anniversaire de 4 ans en famille"),
               ('portfolio-fete.jpg', 'fetes', "Fête d'anniversaire entre amis"),
               ('portfolio-fete-2.jpg', 'fetes', 'Anniversaire avec ballons dorés'),
+              ('portfolio-classe-2.jpg', 'garderie-ecole', 'Photo de classe souriante devant le tableau'),
+              ('portfolio-ecole-fond-bleu.jpg', 'garderie-ecole', 'Portrait scolaire sur fond bleu'),
+              ('portfolio-ecole-fond-gris.jpg', 'garderie-ecole', 'Portrait scolaire sur fond gris'),
+              ('portfolio-portrait-studio.jpg', 'portraits', 'Portrait professionnel dans un studio chaleureux'),
               ('portfolio-scolaire-classe.jpg', 'garderie-ecole', 'Photo de classe souriante'),
               ('portfolio-finissants-bal.jpg', 'bal', 'Groupe de finissants au bal'),
               ('portfolio-finissant-toge.jpg', 'finissants', 'Finissant en toge avec son diplôme'),

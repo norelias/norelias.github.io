@@ -1,6 +1,6 @@
 // Norélias Photography — réservations du site norelias.ca
 // Actions : brouillon (réservation commencée), soumettre, creneaux (plages prises), lire / confirmer / annuler (Sabrina, avec jeton).
-import { sb, envoyer, courriels, montants, COURRIEL_SABRINA } from "../commun.ts";
+import { sb, envoyer, courriels, montants, sessionPaiement, COURRIEL_SABRINA } from "../commun.ts";
 
 const ORIGINES = ["https://norelias.ca", "https://www.norelias.ca", "http://norelias.ca", "https://norelias.github.io", "http://localhost:8765"];
 const cors = (o: string | null) => ({
@@ -72,8 +72,15 @@ Deno.serve(async (req) => {
         if (error) throw error;
         r = data;
       }
-      const [s1, h1] = mode === "interac" ? courriels.interac(r) : courriels.recue(r);
-      const [s2, h2] = courriels.sabrina(r, mode === "interac" ? "Nouvelle réservation (virement Interac à recevoir)" : "Nouvelle réservation (paiement par carte)");
+      if (mode === "carte") {
+        // Paiement par carte : page de paiement Stripe au bon montant, rattachée à la réservation
+        const session = await sessionPaiement(r);
+        if (session?.url) await sb.from("norelias_reservations").update({ stripe_session: session.id }).eq("id", r.id);
+        // courriels envoyés seulement quand Stripe confirme le paiement (fonction norelias-stripe)
+        return rep({ ok: true, id: r.id, total: m.total, acompte: m.acompte, paiement: session?.url ?? null });
+      }
+      const [s1, h1] = courriels.interac(r);
+      const [s2, h2] = courriels.sabrina(r, "Nouvelle réservation (virement Interac à recevoir)");
       await Promise.all([envoyer(r.courriel, s1, h1), envoyer(COURRIEL_SABRINA, s2, h2)]);
       return rep({ ok: true, id: r.id, total: m.total, acompte: m.acompte });
     }

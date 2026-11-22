@@ -364,7 +364,7 @@
     var modeEl = form.querySelector('input[name="mode"]:checked');
     var mode = perso ? 'aucun' : modeEl.value;
     var lienStripe = (C.stripe && C.stripe[cle]) || '';
-    if (mode === 'carte' && !lienStripe) mode = 'interac'; // lien Stripe pas encore configuré
+    if (mode === 'carte' && !C.paiementCarteActif && !lienStripe) mode = 'interac'; // paiement par carte pas encore activé
 
     var d = {
       seance: form.elements.seance.value,
@@ -394,7 +394,7 @@
     var envoi;
     if (C.serveur && window.fetch) {
       var ds = donneesServeur(); ds.action = 'soumettre'; ds.mode = mode;
-      envoi = appelServeur(ds).then(function () { try { sessionStorage.removeItem('norelias-brouillon'); } catch (e) {} });
+      envoi = appelServeur(ds).then(function (j) { try { sessionStorage.removeItem('norelias-brouillon'); } catch (e) {} if (j && j.paiement) lienStripe = j.paiement; });
     } else {
       envoi = Promise.reject(new Error('serveur indisponible'));
     }
@@ -404,7 +404,7 @@
       document.getElementById('fin-perso').hidden = cle !== 'personnalise';
       afficher(3);
       if (mode === 'carte') {
-        var url = lienStripe + (lienStripe.indexOf('?') > -1 ? '&' : '?') + 'prefilled_email=' + encodeURIComponent(d.courriel);
+        var url = lienStripe.indexOf('checkout.stripe.com') > -1 ? lienStripe : lienStripe + (lienStripe.indexOf('?') > -1 ? '&' : '?') + 'prefilled_email=' + encodeURIComponent(d.courriel);
         document.getElementById('lien-stripe').href = url;
         setTimeout(function () { window.location.href = url; }, 1500);
       }
@@ -420,4 +420,12 @@
   });
 
   document.querySelectorAll('.courriel-interac').forEach(function (el) { el.textContent = C.interac; });
+
+  // Retour de la page de paiement Stripe
+  var qp = new URLSearchParams(location.search);
+  if (qp.get('paye') === '1') {
+    document.getElementById('fin-carte').hidden = false;
+    document.getElementById('fin-carte').innerHTML = '<p><strong>Paiement reçu, merci !</strong> Vous recevrez un courriel de confirmation avec tous les détails.</p>';
+    afficher(3);
+  }
 })();

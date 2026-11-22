@@ -6,7 +6,9 @@ window.NORELIAS = {
   courriel: 'bonjour@norelias.ca',
 
   // Système de réservations et de courriels automatiques (Supabase). Ne pas modifier.
-  serveur: 'https://xpfwplyiztkjeukwulqu.supabase.co/functions/v1/norelias-reservation',
+  // Mettre true quand la clé Stripe est installée dans Supabase (paiement par carte au montant exact)
+  paiementCarteActif: false,
+  serveur: 'https://evoivwqcxohfwaxlumvj.supabase.co/functions/v1/norelias-reservation',
   telephone: '506-787-0667',
 
   // Courriel qui reçoit les virements Interac

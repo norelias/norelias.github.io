@@ -20,13 +20,14 @@ Deno.serve(async (req) => {
   }
 
   // 2) Virements Interac non reçus après 24 h : annulation automatique
-  const { data: expirees } = await sb.from("norelias_reservations").select("*").eq("statut", "en_attente").eq("mode", "interac")
+  // (Interac non reçu, ou carte jamais payée)
+  const { data: expirees } = await sb.from("norelias_reservations").select("*").eq("statut", "en_attente").is("payee_le", null)
     .lt("soumise_le", iso(maintenant - 24 * 3600e3));
   for (const r of expirees ?? []) {
     const { data: r2 } = await sb.from("norelias_reservations").update({ statut: "annulee", annulee_le: iso(maintenant) }).eq("id", r.id).eq("statut", "en_attente").select("*").maybeSingle();
     if (!r2) continue;
     const [sj, h] = courriels.annulation(r2);
-    const [sj2, h2] = courriels.sabrina(r2, "Réservation annulée automatiquement (virement non reçu)");
+    const [sj2, h2] = courriels.sabrina(r2, "Réservation annulée automatiquement (paiement non reçu)");
     await Promise.all([envoyer(r2.courriel, sj, h), envoyer(COURRIEL_SABRINA, sj2, h2)]);
     bilan.annulees++;
   }

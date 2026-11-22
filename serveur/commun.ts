@@ -73,6 +73,40 @@ export function lignesRdv(r: any, avecAdresse = true): [string, string][] {
   return l;
 }
 
+// ---------- Stripe (paiement par carte) ----------
+export async function stripe(chemin: string, params?: Record<string, string>) {
+  const cle = Deno.env.get("STRIPE_SECRET_KEY");
+  if (!cle) return null;
+  const r = await fetch("https://api.stripe.com/v1/" + chemin, {
+    method: params ? "POST" : "GET",
+    headers: { Authorization: `Bearer ${cle}`, "Content-Type": "application/x-www-form-urlencoded" },
+    body: params ? new URLSearchParams(params) : undefined,
+  });
+  const j = await r.json();
+  if (!r.ok) { console.log("Stripe erreur", r.status, JSON.stringify(j).slice(0, 300)); return null; }
+  return j;
+}
+export async function sessionPaiement(r: any) {
+  const montant = Math.round(Number(r.acompte) * 100);
+  return await stripe("checkout/sessions", {
+    mode: "payment",
+    "line_items[0][quantity]": "1",
+    "line_items[0][price_data][currency]": "cad",
+    "line_items[0][price_data][unit_amount]": String(montant),
+    "line_items[0][price_data][product_data][name]": `${r.seance} · ${r.forfait === "noel" ? "paiement complet" : "acompte"}`,
+    "line_items[0][price_data][product_data][description]": `${r.date_txt} à ${r.heure}`,
+    customer_email: r.courriel,
+    client_reference_id: r.id,
+    "metadata[reservation]": r.id,
+    "payment_intent_data[metadata][reservation]": r.id,
+    "payment_intent_data[description]": `Norélias Photography · ${r.seance} · ${r.nom}`,
+    locale: "fr-CA",
+    expires_at: String(Math.floor(Date.now() / 1000) + 23.5 * 3600),
+    success_url: `${SITE}/reservation/?paye=1`,
+    cancel_url: `${SITE}/reservation/?annule=1`,
+  });
+}
+
 // ---------- Envoi (Resend) ----------
 async function cleResend() {
   const env = Deno.env.get("RESEND_API_KEY");
@@ -102,6 +136,13 @@ export const courriels = {
       titreEncadre: "Comment faire votre virement",
       lignes: [["Montant", argent(Number(r.acompte))], ["Envoyer à", "bonjour@norelias.ca"], ["Message", `Votre nom et « ${esc(r.seance)} »`], ["Avant le", esc(limite)], ["Séance", esc(r.seance)], ["Date", `${esc(r.date_txt)} à ${esc(r.heure)}`]],
       apres: `<p style="margin:0 0 12px;"><strong>Important :</strong> votre courriel de confirmation vous sera envoyé seulement une fois le virement reçu. Si le virement n'est pas fait dans les 24 h, la réservation sera <strong>annulée automatiquement</strong> et la plage horaire sera libérée.</p><p style="margin:0;">Le solde sera payable le jour de la séance. Une question ? Répondez simplement à ce courriel.</p>`,
+    })];
+  },
+  payee(r: any) {
+    return ["Paiement reçu · Norélias Photography", gabarit({
+      petit: `Merci, ${esc(prenom(r.nom))} !`, titre: "Votre paiement est bien reçu",
+      avant: `<p style="margin:0 0 12px;">Bonjour ${esc(prenom(r.nom))},</p><p style="margin:0;">Votre paiement par carte est bien reçu et votre plage horaire est réservée. Je vous envoie très bientôt votre courriel de confirmation avec l'adresse de la séance.</p>`,
+      lignes: [...lignesRdv(r, false), ["Paiement reçu", argent(Number(r.acompte))]],
     })];
   },
   recue(r: any) {
@@ -139,7 +180,7 @@ export const courriels = {
   annulation(r: any) {
     return ["Réservation annulée · Norélias Photography", gabarit({
       petit: `Bonjour ${esc(prenom(r.nom))},`, titre: "Votre réservation a été annulée",
-      avant: `<p style="margin:0;">Je n'ai pas reçu votre virement Interac dans les 24 h suivant votre réservation. Comme prévu, la réservation a donc été annulée automatiquement et la plage horaire a été libérée.</p>`,
+      avant: `<p style="margin:0;">Je n'ai pas reçu votre paiement dans les 24 h suivant votre réservation. Comme prévu, la réservation a donc été annulée automatiquement et la plage horaire a été libérée.</p>`,
       lignes: lignesRdv(r, false), titreEncadre: "Réservation annulée",
       bouton: ["Réserver à nouveau", `${SITE}/reservation/`],
       apres: `<p style="margin:0;">S'il s'agit d'une erreur ou si vous avez fait le virement, répondez à ce courriel et je regarde ça avec vous tout de suite.</p>`,
@@ -150,7 +191,7 @@ export const courriels = {
     return [`${quoi} : ${r.seance} · ${r.nom} · ${r.date_txt}`, gabarit({
       petit: "Bonjour Sabrina !", titre: esc(quoi),
       avant: `<p style="margin:0;">Voici les détails :</p>`, titreEncadre: "Réservation",
-      lignes: [...lignesRdv(r, false), ["Nom", esc(r.nom)], ["Courriel", esc(r.courriel)], ["Téléphone", esc(r.telephone)], ["Personnes", esc(r.personnes)], ["Paiement", r.mode === "interac" ? "Virement Interac" : "Carte (Stripe)"], ["Acompte", argent(Number(r.acompte))], ["Total", r.total == null ? "Sur demande" : argent(Number(r.total))], ["Portfolio", esc(r.portfolio)], ["Message", esc(r.message).replace(/\n/g, "<br>")]],
+      lignes: [...lignesRdv(r, false), ["Nom", esc(r.nom)], ["Courriel", esc(r.courriel)], ["Téléphone", esc(r.telephone)], ["Personnes", esc(r.personnes)], ["Paiement", r.mode === "interac" ? "Virement Interac" : (r.payee_le ? "Carte (Stripe) · PAYÉ ✓" : "Carte (Stripe)")], ["Acompte", argent(Number(r.acompte))], ["Total", r.total == null ? "Sur demande" : argent(Number(r.total))], ["Portfolio", esc(r.portfolio)], ["Message", esc(r.message).replace(/\n/g, "<br>")]],
       apres: r.statut === "en_attente" ? `<p style="margin:0;">Quand le paiement est reçu, cliquez sur le bouton : vous entrez l'adresse de la séance et la cliente reçoit sa confirmation.${r.mode === "interac" ? " Sans virement dans les 24 h, la réservation s'annulera toute seule." : ""}</p>` : "",
       bouton: r.statut === "en_attente" ? ["Paiement reçu : confirmer", lien] : undefined,
     })];
