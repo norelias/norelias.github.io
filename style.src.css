@@ -266,6 +266,15 @@ main{background:var(--creme)}
    cellulaire (600 px et moins)
    ========================================================= */
 
+/* ----- Ordinateur : le site dans une boîte centrée, beige autour ----- */
+@media (min-width:1025px){
+  body{background:#ead9cf}
+  .entete,main,.pied{max-width:728u;margin-left:auto;margin-right:auto}
+  main{box-shadow:0 0 30px rgba(58,42,36,.12)}
+  .entete{box-shadow:0 0 30px rgba(58,42,36,.08)}
+  .souvenirs{background-size:100% 100%}
+}
+
 /* ----- Tablette et cellulaire : menu ☰ ----- */
 @media (max-width:1024px){
   .burger{display:inline-flex;margin-left:auto}
@@ -315,7 +324,7 @@ main{background:var(--creme)}
 @media (max-width:600px){
   :root{--u:1.12px}
   /* Accueil sur téléphone : même composition que la maquette, agrandie */
-  .heros{--u:calc(100vw / 470);height:358u;background-size:auto 100%;background-position:calc(-421 * var(--u)) top}
+  .heros{--u:calc(100vw / 470);height:358u;background-size:auto 100%;background-position:calc(-40 * var(--u)) top}
   .heros-texte{left:17u}
   .bande-noel{--u:calc(100vw / 420)}
   .bande-noel .contenu{grid-template-columns:150u 1fr;height:auto;min-height:190u}
@@ -326,7 +335,7 @@ main{background:var(--creme)}
   .bande-noel .details{flex-wrap:wrap;gap:4u 12u;font-size:14u}
   .bande-noel .petit{font-size:12u}
   .bande-noel .bouton{font-size:14u}
-  .souvenirs{--u:calc(100vw / 420);height:262u;background-position:calc(-397 * var(--u)) center}
+  .souvenirs{--u:calc(100vw / 420);height:262u;background-size:cover;background-position:left center}
   .souvenirs::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(248,238,230,0) 38%,rgba(248,238,230,.92) 52%)}
   .souvenirs .texte{left:192u;top:14u;width:218u}
   .souvenirs h2 .titre-script{width:160u}
