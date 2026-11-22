@@ -299,9 +299,9 @@ def reservation():
     <div id="zone-paiement" hidden>
       <div class="choix-paiement">
         <label><input type="radio" name="mode" value="carte" required> <span><strong>Carte de crédit</strong><br><span class="aide">Paiement sécurisé par Stripe</span></span></label>
-        <label><input type="radio" name="mode" value="interac"> <span><strong>Virement Interac</strong><br><span class="aide">À envoyer dans les 48 h</span></span></label>
+        <label><input type="radio" name="mode" value="interac"> <span><strong>Virement Interac</strong><br><span class="aide">À envoyer dans les 24 h</span></span></label>
       </div>
-      <div id="boite-interac" class="boite-interac" hidden>Envoyez <strong class="montant-interac"></strong> par virement Interac à <strong class="courriel-interac">bonjour@norelias.ca</strong> dans les 48 h, avec votre nom en message.</div>
+      <div id="boite-interac" class="boite-interac" hidden>Envoyez <strong class="montant-interac"></strong> par virement Interac à <strong class="courriel-interac">bonjour@norelias.ca</strong>, avec votre nom en message.<br><strong>Important :</strong> vous recevrez votre courriel de confirmation seulement une fois le virement reçu. Sans virement dans les 24 h, la réservation est annulée automatiquement et la plage horaire est libérée.</div>
     </div>
     <p id="note-perso" class="aide" hidden>Forfait personnalisé : le dépôt de 100 $ est déduit du total. Je vous envoie ensuite votre proposition sur mesure.</p>
     <label class="case case-politiques"><input type="checkbox" name="politiques" required> <span>J'accepte la <a href="{{r}}politique-reservation/" target="_blank">politique de réservation</a> et la <a href="{{r}}confidentialite/" target="_blank">politique de confidentialité</a></span></label>
@@ -311,7 +311,7 @@ def reservation():
     <span class="script" style="font-size:calc(40 * var(--u));color:var(--rose-fonce)">Merci !</span>
     <h2 style="font-size:calc(26 * var(--u))">Votre demande est envoyée</h2>
     <div id="fin-carte" hidden><p>Vous allez être redirigée vers la page de paiement sécurisée Stripe. Si rien ne se passe, <a id="lien-stripe" href="#">cliquez ici pour payer</a>.</p></div>
-    <div id="fin-interac" hidden><p>Pour confirmer votre date, envoyez <strong class="montant-interac"></strong> par virement Interac à <strong class="courriel-interac">bonjour@norelias.ca</strong> dans les 48 h.</p></div>
+    <div id="fin-interac" hidden><p>Pour confirmer votre date, envoyez <strong class="montant-interac"></strong> par virement Interac à <strong class="courriel-interac">bonjour@norelias.ca</strong> dans les 24 h, avec votre nom en message.</p><p><strong>Votre courriel de confirmation vous sera envoyé dès que le virement sera reçu.</strong> Si le virement n'est pas fait dans les 24 h, la réservation sera annulée automatiquement.</p></div>
     <div id="fin-perso" hidden><p>Je vous envoie très bientôt votre proposition personnalisée.</p></div>
     <p>Vos photos vous seront livrées dans un délai de 3 semaines après la séance.</p>
     <p>Une question ? 506-787-0667</p>
@@ -356,7 +356,7 @@ def contact():
 # ---------------- Politiques ----------------
 def politique():
     blocs = [
-        ('Réservation et paiement', ["Un acompte de 50 % réserve votre date. Il est non remboursable et déduit du total.", "Le solde est payable le jour de la séance (carte, Interac ou comptant).", "Mini-séances de Noël : paiement complet à la réservation.", "Forfait personnalisé : dépôt de 100 $ non remboursable à la réservation, déduit du total."]),
+        ('Réservation et paiement', ["Un acompte de 50 % réserve votre date. Il est non remboursable et déduit du total.", "Le solde est payable le jour de la séance (carte, Interac ou comptant).", "Virement Interac : la réservation est confirmée par courriel seulement à la réception du virement. Sans virement dans les 24 h, elle est annulée automatiquement.", "Mini-séances de Noël : paiement complet à la réservation.", "Forfait personnalisé : dépôt de 100 $ non remboursable à la réservation, déduit du total."]),
         ('Report et annulation', ["Un report gratuit si vous m'avisez au moins 48 h à l'avance. L'acompte est transféré.", "En cas d'annulation, l'acompte n'est pas remboursé.", "Moins de 48 h ou absence : l'acompte est perdu. Un nouvel acompte est requis pour une autre date."]),
         ('Bébé, santé et météo', ["Nouveau-né : date provisoire selon votre date prévue, ajustée à la naissance. Avisez-moi dans les 48 h.", "Bébé ou un proche malade : report sans frais. La santé passe avant tout.", "Météo défavorable pour une séance extérieure : report sans frais."]),
         ('Livraison et droits', ["Vos photos en fichiers numériques haute résolution, à télécharger dans une galerie privée, dans un délai de 3 semaines après la séance.", "Seules les photos retouchées sont livrées, dans le style de mon portfolio.", "Je garde les droits d'auteur. Vos photos vont dans mon portfolio seulement avec votre accord."]),
