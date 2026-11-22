@@ -325,7 +325,7 @@
       message: form.elements.message.value.trim(),
       portfolio: (form.querySelector('input[name="portfolio"]:checked') || {}).value || 'Non',
       paiement: mode === 'carte' ? 'Carte (Stripe)' : (mode === 'interac' ? 'Virement Interac' : 'À discuter'),
-      montant: argent(montants(cle).acompte) + ' (total ' + argent(montants(cle).total) + ')'
+      montant: argent(montants(cle).acompte) + (montants(cle).total ? ' (total ' + argent(montants(cle).total) + ')' : ' (dépôt, total sur demande)')
     };
     var corps = [
       'Nouvelle demande de réservation — Norélias Photography', '',

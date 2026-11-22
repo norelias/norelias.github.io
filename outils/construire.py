@@ -304,6 +304,7 @@ def reservation():
       <div id="boite-interac" class="boite-interac" hidden>Envoyez <strong class="montant-interac"></strong> par virement Interac à <strong class="courriel-interac">bonjour@norelias.ca</strong> dans les 48 h, avec votre nom en message.</div>
     </div>
     <p id="note-perso" class="aide" hidden>Forfait personnalisé : le dépôt de 100 $ est déduit du total. Je vous envoie ensuite votre proposition sur mesure.</p>
+    <label class="case case-politiques"><input type="checkbox" name="politiques" required> <span>J'accepte la <a href="{{r}}politique-reservation/" target="_blank">politique de réservation</a> et la <a href="{{r}}confidentialite/" target="_blank">politique de confidentialité</a></span></label>
     <div class="navigation-etapes"><button type="button" class="bouton contour" data-precedent>←</button><button type="submit" class="bouton" id="bouton-confirmer">Confirmer et payer</button></div>
   </fieldset>
   <div class="etape centre" hidden>
@@ -317,7 +318,6 @@ def reservation():
   </div>
   <div class="bas-resa">
     <p class="note-resa">Acompte de 50 % à la réservation · Solde le jour de la séance · Photos livrées en 3 semaines</p>
-    <label class="case"><input type="checkbox" name="politiques" required> <span>J'accepte la <a href="{{r}}politique-reservation/" target="_blank">politique de réservation</a> et la <a href="{{r}}confidentialite/" target="_blank">politique de confidentialité</a></span></label>
   </div>
 </form>
 <img class="vase" src="{{r}}images/vase.png" alt="">
