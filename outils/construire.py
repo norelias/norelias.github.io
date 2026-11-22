@@ -311,7 +311,7 @@ def reservation():
     <span class="script" style="font-size:calc(40 * var(--u));color:var(--rose-fonce)">Merci !</span>
     <h2 style="font-size:calc(26 * var(--u))">Votre demande est envoyée</h2>
     <div id="fin-carte" hidden><p>Vous allez être redirigée vers la page de paiement sécurisée Stripe. Si rien ne se passe, <a id="lien-stripe" href="#">cliquez ici pour payer</a>.</p></div>
-    <div id="fin-interac" hidden><p>Pour confirmer votre date, envoyez <strong class="montant-interac"></strong> par virement Interac à <strong class="courriel-interac">bonjour@norelias.ca</strong> dans les 24 h, avec votre nom en message.</p><p><strong>Votre courriel de confirmation vous sera envoyé dès que le virement sera reçu.</strong> Si le virement n'est pas fait dans les 24 h, la réservation sera annulée automatiquement.</p></div>
+    <div id="fin-interac" hidden><p>Pour confirmer votre date, envoyez <strong class="montant-interac"></strong> par virement Interac à <strong class="courriel-interac">bonjour@norelias.ca</strong> dans les 24 h, avec votre nom en message.</p><p>Les instructions détaillées viennent de vous être envoyées par courriel (vérifiez vos courriels indésirables).</p><p><strong>Votre courriel de confirmation vous sera envoyé dès que le virement sera reçu.</strong> Si le virement n'est pas fait dans les 24 h, la réservation sera annulée automatiquement.</p></div>
     <div id="fin-perso" hidden><p>Je vous envoie très bientôt votre proposition personnalisée.</p></div>
     <p>Vos photos vous seront livrées dans un délai de 3 semaines après la séance.</p>
     <p>Une question ? 506-787-0667</p>

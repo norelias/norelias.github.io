@@ -28,7 +28,7 @@
 <div class="boite">
   <form id="f" autocomplete="off">
     <h1>Envoyer une confirmation</h1>
-    <p class="aide">Page privée (aucun lien sur le site). Remplissez, vérifiez l'aperçu, puis envoyez.</p>
+    <p class="aide" id="etat">Page privée (aucun lien sur le site). Remplissez, vérifiez l'aperçu, puis envoyez.</p>
     <label for="prenom">Prénom de la cliente</label><input id="prenom" required>
     <label for="courriel">Courriel de la cliente</label><input id="courriel" type="email" required>
     <label for="seance">Séance</label>
@@ -37,6 +37,7 @@
     <label for="adresse">Adresse de la séance</label><textarea id="adresse" list="adresses" required placeholder="Ex. : 12, rue Water, Campbellton"></textarea>
     <div class="deux"><div><label for="paye">Paiement reçu</label><input id="paye" placeholder="150 $"></div><div><label for="solde">Solde le jour même</label><input id="solde" placeholder="150 $"></div></div>
     <button type="button" class="principal" id="envoyer">Envoyer le courriel</button>
+    <button type="button" class="second" id="annuler" hidden>Annuler cette réservation</button>
     <button type="button" class="second" id="copier">Copier le courriel (à coller dans Gmail)</button>
     <p class="msg" id="msg" role="status"></p>
   </form>
@@ -94,8 +95,47 @@
       navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([corps], { type: 'text/html' }), 'text/plain': new Blob([$('apercu').contentDocument.body.innerText], { type: 'text/plain' }) })]).then(fini, function () { $('msg').textContent = 'La copie a été refusée par le navigateur. Essayez avec Chrome ou Edge.'; });
     } else { $('msg').textContent = 'Votre navigateur ne permet pas la copie. Essayez avec Chrome ou Edge.'; }
   });
+  // Ouverte depuis le courriel « Nouvelle réservation » : on charge la réservation
+  var q = new URLSearchParams(location.search), rid = q.get('id'), rj = q.get('j');
+  function argent(n) { n = Number(n); return n.toLocaleString('fr-CA', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }) + ' $'; }
+  function appel(action, extra) {
+    var corps = Object.assign({ action: action, id: rid, j: rj }, extra || {});
+    return fetch(C.serveur, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corps) }).then(function (r) { return r.json(); });
+  }
+  var ETATS = { brouillon: 'pas terminée', en_attente: 'en attente du paiement', confirmee: 'confirmée ✓', annulee: 'annulée' };
+  function afficherEtat(r) {
+    $('etat').innerHTML = '<strong>' + esc(r.nom) + '</strong> · ' + esc(r.seance) + '<br>Statut : <strong>' + (ETATS[r.statut] || r.statut) + '</strong> · ' + (r.mode === 'interac' ? 'Virement Interac' : 'Carte') + ' · ' + argent(r.acompte);
+    $('envoyer').textContent = r.statut === 'confirmee' ? 'Renvoyer la confirmation' : 'Paiement reçu : confirmer et envoyer';
+    $('annuler').hidden = r.statut === 'annulee';
+  }
+  if (rid && rj && C.serveur) {
+    appel('lire').then(function (j) {
+      if (!j.ok) { $('etat').textContent = j.erreur || 'Réservation introuvable.'; return; }
+      var r = j.r;
+      $('prenom').value = (r.nom || '').split(' ')[0]; $('courriel').value = r.courriel || '';
+      $('seance').value = r.seance; $('date').value = r.date_iso || ''; $('heure').value = r.heure || '';
+      if (r.adresse) $('adresse').value = r.adresse;
+      $('paye').value = argent(r.acompte);
+      $('solde').value = r.forfait === 'noel' ? 'Aucun (payé au complet)' : (r.total == null ? 'Selon votre proposition' : argent(r.total - r.acompte));
+      afficherEtat(r); maj();
+    });
+    $('annuler').addEventListener('click', function () {
+      if (!confirm('Annuler cette réservation ? La plage horaire sera libérée.')) return;
+      appel('annuler').then(function (j) { if (j.ok) { afficherEtat(j.r); $('msg').textContent = 'Réservation annulée.'; } });
+    });
+  }
+
   $('envoyer').addEventListener('click', function () {
     if (!pret()) return;
+    if (rid && rj && C.serveur) {
+      $('envoyer').disabled = true; $('msg').textContent = 'Envoi…';
+      appel('confirmer', { adresse: $('adresse').value.trim() }).then(function (j) {
+        if (!j.ok) { $('msg').textContent = j.erreur || 'Erreur.'; return; }
+        afficherEtat(j.r);
+        $('msg').textContent = j.envoye ? 'Réservation confirmée et courriel envoyé à ' + j.r.courriel + ' ✓ Le rappel de la veille partira tout seul.' : "Réservation confirmée, mais le courriel n'est pas parti (envoi pas encore activé). Utilisez « Copier le courriel ».";
+      }).catch(function () { $('msg').textContent = 'Erreur de connexion.'; }).then(function () { $('envoyer').disabled = false; });
+      return;
+    }
     if (!(E.service && E.clePublique && E.modeleConfirmation && window.emailjs)) {
       $('msg').textContent = "L'envoi automatique n'est pas encore configuré (EmailJS). Utilisez « Copier le courriel » en attendant.";
       return;

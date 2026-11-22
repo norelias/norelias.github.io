@@ -215,6 +215,37 @@
   });
   synchroniserNoel();
 
+  /* ---------- Serveur de réservations ---------- */
+  var idBrouillon = null;
+  try { idBrouillon = sessionStorage.getItem('norelias-brouillon'); } catch (e) {}
+  function codeSeanceChoisie() { var o = form.elements.seance.options[form.elements.seance.selectedIndex]; return o ? o.dataset.code || '' : ''; }
+  function donneesServeur() {
+    var portfolio = form.querySelector('input[name="portfolio"]:checked');
+    return {
+      id: idBrouillon, seance: form.elements.seance.value, seance_code: codeSeanceChoisie(), forfait: form.elements.forfait.value,
+      date_iso: form.elements.dateIso.value, date_txt: form.elements.date.value, heure: form.elements.heure.value,
+      nom: form.elements.nom.value.trim(), courriel: form.elements.courriel.value.trim(), telephone: form.elements.telephone.value.trim(),
+      personnes: form.elements.personnes.value, message: form.elements.message.value.trim(), portfolio: portfolio ? portfolio.value : ''
+    };
+  }
+  function appelServeur(corps) {
+    return fetch(C.serveur, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corps) })
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok || j.ok === false) { var e = new Error(j.erreur || 'erreur'); e.message = j.erreur || ''; e.statut = r.status; throw e; } return j; }); });
+  }
+  function sauverBrouillon() {
+    if (!C.serveur || !window.fetch) return;
+    var d = donneesServeur(); d.action = 'brouillon';
+    appelServeur(d).then(function (j) { if (j.id) { idBrouillon = j.id; try { sessionStorage.setItem('norelias-brouillon', j.id); } catch (e) {} } }).catch(function () {});
+  }
+  // Plages déjà réservées par d'autres clientes : on les retire du calendrier
+  if (C.serveur && window.fetch) {
+    fetch(C.serveur).then(function (r) { return r.json(); }).then(function (j) {
+      var p = j.prises || {}; D.dejaReserve = D.dejaReserve || {};
+      Object.keys(p).forEach(function (k) { D.dejaReserve[k] = (D.dejaReserve[k] || []).concat(p[k]); });
+      if (window.majCalendrier) window.majCalendrier();
+    }).catch(function () {});
+  }
+
   function argent(n) { return n.toLocaleString('fr-CA', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }) + ' $'; }
   // Total et acompte réels (garderie / école : 35 $ par enfant, minimum 10)
   function montants(cle) {
@@ -259,7 +290,7 @@
   form.querySelectorAll('[data-suivant]').forEach(function (b) {
     b.addEventListener('click', function () {
       if (!valider(courante)) return;
-      // Forfait personnalisé : pas de paiement en ligne, on passe à l'envoi de la demande
+      if (courante === 1) sauverBrouillon(); // réservation commencée : rappel si elle n'est pas terminée
       afficher(courante + 1);
     });
   });
@@ -338,7 +369,14 @@
 
     var bouton = document.getElementById('bouton-confirmer');
     bouton.disabled = true;
-    envoyer(C.emailjs && C.emailjs.modeleReservation, d, 'Réservation — ' + d.seance + ' — ' + d.nom, corps).then(function () {
+    var envoi;
+    if (C.serveur && window.fetch) {
+      var ds = donneesServeur(); ds.action = 'soumettre'; ds.mode = mode;
+      envoi = appelServeur(ds).then(function () { try { sessionStorage.removeItem('norelias-brouillon'); } catch (e) {} });
+    } else {
+      envoi = envoyer(C.emailjs && C.emailjs.modeleReservation, d, 'Réservation — ' + d.seance + ' — ' + d.nom, corps);
+    }
+    envoi.then(function () {
       document.getElementById('fin-carte').hidden = mode !== 'carte';
       document.getElementById('fin-interac').hidden = mode !== 'interac';
       document.getElementById('fin-perso').hidden = cle !== 'personnalise';
@@ -348,8 +386,13 @@
         document.getElementById('lien-stripe').href = url;
         setTimeout(function () { window.location.href = url; }, 1500);
       }
-    }).catch(function () {
-      alert("Oups, la demande n'a pas pu partir. Écrivez-moi à " + C.courriel + ' ou appelez-moi au ' + C.telephone + '.');
+    }).catch(function (e) {
+      if (e && e.statut === 409) {
+        alert(e.message);
+        afficher(0); window.majCalendrier && window.majCalendrier();
+      } else {
+        alert("Oups, la demande n'a pas pu partir. Écrivez-moi à " + C.courriel + ' ou appelez-moi au ' + C.telephone + '.');
+      }
       bouton.disabled = false;
     });
   });
