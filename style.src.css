@@ -132,7 +132,7 @@ main{background:var(--creme)}
 .prestations-grille-zone{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13u}
 
 /* Portfolio */
-.filtres{display:flex;flex-wrap:nowrap;justify-content:center;gap:2u;margin-bottom:16u}
+.filtres{display:flex;flex-wrap:wrap;justify-content:center;gap:4u 2u;margin-bottom:16u;max-width:620u;margin-left:auto;margin-right:auto}
 .filtre{background:transparent;border:0;border-radius:999px;padding:0 10u;height:28u;font:inherit;font-size:11.5u;font-weight:600;color:#1e1411;cursor:pointer}
 .filtre[aria-pressed="true"]{background:#b37a6f;color:#fff}
 .galerie{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11u}

@@ -134,7 +134,7 @@ main{background:var(--creme)}
 .prestations-grille-zone{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:calc(13 * var(--u))}
 
 /* Portfolio */
-.filtres{display:flex;flex-wrap:nowrap;justify-content:center;gap:calc(2 * var(--u));margin-bottom:calc(16 * var(--u))}
+.filtres{display:flex;flex-wrap:wrap;justify-content:center;gap:calc(4 * var(--u)) calc(2 * var(--u));margin-bottom:calc(16 * var(--u));max-width:calc(620 * var(--u));margin-left:auto;margin-right:auto}
 .filtre{background:transparent;border:0;border-radius:999px;padding:0 calc(10 * var(--u));height:calc(28 * var(--u));font:inherit;font-size:calc(11.5 * var(--u));font-weight:600;color:#1e1411;cursor:pointer}
 .filtre[aria-pressed="true"]{background:#b37a6f;color:#fff}
 .galerie{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:calc(11 * var(--u))}

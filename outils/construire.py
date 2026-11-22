@@ -197,9 +197,18 @@ def portfolio():
               ('naissance-nb.jpg', 'accouchement', 'Naissance en noir et blanc'),
               ('portfolio-anniversaire.jpg', 'fetes', "Fête d'anniversaire de 4 ans en famille"),
               ('portfolio-fete.jpg', 'fetes', "Fête d'anniversaire entre amis"),
-              ('portfolio-fete-2.jpg', 'fetes', 'Anniversaire avec ballons dorés')]
+              ('portfolio-fete-2.jpg', 'fetes', 'Anniversaire avec ballons dorés'),
+              ('portfolio-scolaire-classe.jpg', 'scolaire', 'Photo de classe souriante'),
+              ('portfolio-finissants-bal.jpg', 'finissants', 'Groupe de finissants au bal'),
+              ('portfolio-finissant-toge.jpg', 'finissants', 'Finissant en toge avec son diplôme'),
+              ('portfolio-finissante-diplome.jpg', 'finissants', 'Finissante en robe de bal avec son diplôme'),
+              ('portfolio-portrait-bureau.jpg', 'portraits', 'Portrait professionnel au bureau'),
+              ('portfolio-portrait-educatrice.jpg', 'portraits', 'Portrait professionnel d’une éducatrice avec des enfants'),
+              ('portfolio-portrait-fauteuil.jpg', 'portraits', 'Portrait professionnel dans un fauteuil en osier'),
+              ('portfolio-noel-couple-2.jpg', 'noel', 'Couple élégant devant le sapin de Noël'),
+              ('portfolio-noel-famille-3.jpg', 'noel', 'Famille de cinq en chandails de Noël')]
     figs = ''.join(f'<figure data-cat="{c}"><img src="{{r}}images/{f}" alt="{a}" loading="lazy"></figure>' for f, c, a in photos)
-    cats = [('tous', 'Tous'), ('grossesse', 'Grossesse'), ('accouchement', 'Accouchement'), ('nouveau-ne', 'Nouveau-né'), ('famille', 'Famille'), ('couple', 'Couple'), ('fetes', 'Fêtes'), ('saisons', 'Saisons'), ('noel', 'Noël')]
+    cats = [('tous', 'Tous'), ('grossesse', 'Grossesse'), ('accouchement', 'Accouchement'), ('nouveau-ne', 'Nouveau-né'), ('famille', 'Famille'), ('couple', 'Couple'), ('fetes', 'Fêtes'), ('saisons', 'Saisons'), ('noel', 'Noël'), ('finissants', 'Finissants'), ('scolaire', 'Scolaire'), ('portraits', 'Portraits pro')]
     boutons = ''.join(f'<button class="filtre" type="button" data-cat="{c}" aria-pressed="{"true" if c == "tous" else "false"}">{n}</button>' for c, n in cats)
     contenu = f'''<section class="page"><div class="interieur">
 {titre_page('<span class="script">Portfolio</span>', 'Découvrez une sélection de mes plus belles histoires.')}
