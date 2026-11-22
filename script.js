@@ -73,7 +73,7 @@
     signature: { nom: 'Signature', prix: 300, acompte: 150 },
     complete: { nom: 'Complète', prix: 450, acompte: 225 },
     noel: { nom: 'Mini-séance de Noël', prix: 95, acompte: 95 },
-    personnalise: { nom: 'Forfait personnalisé', prix: null, acompte: null }
+    personnalise: { nom: 'Forfait personnalisé', prix: null, acompte: 100 }
   };
   var etapes = form.querySelectorAll('.etape');
   var puces = document.querySelectorAll('.etapes li');
@@ -97,10 +97,91 @@
       o.disabled = estNoel ? o.value !== 'noel' : o.value === 'noel';
     });
     if (!estNoel && form.elements.forfait.value === 'noel') form.elements.forfait.value = '';
-    var dateChamp = form.elements.date;
-    dateChamp.setAttribute('aria-label', form.elements.seance.value === 'Nouveau-né' ? "Date prévue de l'accouchement" : 'Date souhaitée');
+    if (window.majCalendrier) window.majCalendrier();
   }
   form.elements.seance.addEventListener('change', synchroniserNoel);
+
+
+  /* ---------- Mini calendrier des disponibilités ---------- */
+  var D = C.disponibilites || {};
+  var cal = document.getElementById('calendrier');
+  var MOIS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  var JOURS = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+  function iso(d) { return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  function estNoel() { return form.elements.seance.value === 'Mini-séance de Noël'; }
+  function heuresDu(d) {
+    var cle = iso(d);
+    if ((D.joursFermes || []).indexOf(cle) > -1) return [];
+    if (estNoel() && d.getMonth() !== 11) return [];
+    var prises = (D.dejaReserve || {})[cle] || [];
+    if (prises.indexOf('tout') > -1) return [];
+    var liste = (estNoel() ? D.heuresNoel : D.heures) || ['9 h', '10 h 30', '13 h', '14 h 30', '16 h'];
+    return liste.filter(function (h) { return prises.indexOf(h) === -1; });
+  }
+  var debut = new Date(); debut.setHours(0, 0, 0, 0); debut.setDate(debut.getDate() + (D.delaiMinimum == null ? 2 : D.delaiMinimum));
+  var fin = new Date(debut); fin.setDate(fin.getDate() + (D.joursAffiches || 120));
+  var vue = new Date(debut.getFullYear(), debut.getMonth(), 1);
+  var choisie = null;
+
+  function premiereDispo() {
+    for (var d = new Date(debut); d <= fin; d.setDate(d.getDate() + 1)) if (heuresDu(d).length) return new Date(d);
+    return null;
+  }
+  function dessiner() {
+    if (!cal) return;
+    cal.querySelector('.cal-mois').textContent = MOIS[vue.getMonth()] + ' ' + vue.getFullYear();
+    var grille = cal.querySelector('.cal-grille'); grille.innerHTML = '';
+    var decal = new Date(vue.getFullYear(), vue.getMonth(), 1).getDay();
+    for (var k = 0; k < decal; k++) grille.appendChild(document.createElement('span'));
+    var nb = new Date(vue.getFullYear(), vue.getMonth() + 1, 0).getDate();
+    for (var j = 1; j <= nb; j++) {
+      var d = new Date(vue.getFullYear(), vue.getMonth(), j);
+      var dispo = d >= debut && d <= fin && heuresDu(d).length > 0;
+      var el = document.createElement(dispo ? 'button' : 'span');
+      el.textContent = j;
+      if (dispo) {
+        el.type = 'button';
+        el.dataset.iso = iso(d);
+        el.setAttribute('aria-label', JOURS[d.getDay()] + ' ' + j + ' ' + MOIS[d.getMonth()] + ', disponible');
+        el.setAttribute('aria-pressed', choisie && iso(choisie) === iso(d) ? 'true' : 'false');
+        el.addEventListener('click', (function (dd) { return function () { choisirDate(dd); }; })(d));
+      }
+      grille.appendChild(el);
+    }
+    cal.querySelector('[data-mois="-1"]').disabled = vue <= new Date(debut.getFullYear(), debut.getMonth(), 1);
+    cal.querySelector('[data-mois="1"]').disabled = new Date(vue.getFullYear(), vue.getMonth() + 1, 1) > fin;
+  }
+  function choisirDate(d) {
+    choisie = d;
+    form.elements.date.value = JOURS[d.getDay()] + ' ' + d.getDate() + ' ' + MOIS[d.getMonth()] + ' ' + d.getFullYear();
+    form.elements.dateIso.value = iso(d);
+    form.elements.heure.value = '';
+    dessiner();
+    var zone = cal.querySelector('.creneaux'), liste = cal.querySelector('.creneaux-liste');
+    zone.hidden = false;
+    cal.querySelector('.creneaux-titre').textContent = 'Heures disponibles le ' + form.elements.date.value;
+    liste.innerHTML = '';
+    heuresDu(d).forEach(function (h) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.textContent = h; b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', function () {
+        form.elements.heure.value = h;
+        liste.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        document.querySelector('.erreur-cal').hidden = true;
+      });
+      liste.appendChild(b);
+    });
+  }
+  window.majCalendrier = function () {
+    if (!cal) return;
+    if (choisie && !heuresDu(choisie).length) { choisie = null; form.elements.date.value = ''; form.elements.heure.value = ''; cal.querySelector('.creneaux').hidden = true; }
+    var p = premiereDispo();
+    if (!choisie && p) vue = new Date(p.getFullYear(), p.getMonth(), 1);
+    if (choisie) choisirDate(choisie); else dessiner();
+  };
+  if (cal) cal.querySelectorAll('.cal-nav').forEach(function (b) {
+    b.addEventListener('click', function () { vue = new Date(vue.getFullYear(), vue.getMonth() + Number(b.dataset.mois), 1); dessiner(); });
+  });
   synchroniserNoel();
 
   function argent(n) { return n.toLocaleString('fr-CA') + ' $'; }
@@ -122,6 +203,10 @@
   }
 
   function valider(i) {
+    if (i === 0 && !form.elements.seance.checkValidity()) { form.elements.seance.reportValidity(); return false; }
+    if (i === 0 && form.elements.seance.value && (!form.elements.date.value || !form.elements.heure.value)) {
+      document.querySelector('.erreur-cal').hidden = false; return false;
+    }
     var champs = etapes[i].querySelectorAll('input,select,textarea');
     for (var k = 0; k < champs.length; k++) {
       if (!champs[k].checkValidity()) { champs[k].reportValidity(); return false; }
@@ -146,15 +231,15 @@
     document.getElementById('recap-date').textContent = form.elements.date.value + ' · ' + form.elements.heure.value;
     document.querySelector('.recap-prix').hidden = !f;
     if (!f) { document.getElementById('zone-paiement').hidden = true; return; }
-    var perso = form.elements.forfait.value === 'personnalise';
+    var perso = false, estPerso = form.elements.forfait.value === 'personnalise';
     document.getElementById('recap-seance').textContent = form.elements.seance.value;
     document.getElementById('recap-forfait').textContent = f.nom;
     document.getElementById('recap-date').textContent = form.elements.date.value + ' · ' + form.elements.heure.value;
-    document.getElementById('recap-total').textContent = perso ? 'Sur demande' : argent(f.prix);
+    document.getElementById('recap-total').textContent = estPerso ? 'Sur demande' : argent(f.prix);
     var acompte = document.getElementById('recap-acompte');
-    acompte.textContent = perso ? 'Aucun pour le moment' : (form.elements.forfait.value === 'noel' ? argent(f.acompte) + ' (paiement complet)' : argent(f.acompte) + ' (50 %)');
+    acompte.textContent = estPerso ? argent(f.acompte) + ' (dépôt déduit du total)' : (form.elements.forfait.value === 'noel' ? argent(f.acompte) + ' (paiement complet)' : argent(f.acompte) + ' (50 %)');
     document.getElementById('zone-paiement').hidden = perso;
-    document.getElementById('note-perso').hidden = !perso;
+    document.getElementById('note-perso').hidden = !estPerso;
     form.querySelectorAll('input[name="mode"]').forEach(function (r) { r.required = !perso; });
     document.getElementById('bouton-confirmer').textContent = perso ? 'Envoyer ma demande' : 'Confirmer et payer';
     majInterac();
@@ -178,7 +263,7 @@
     if (!form.elements.politiques.checked) { form.elements.politiques.reportValidity(); return; }
     var cle = form.elements.forfait.value;
     var f = FORFAITS[cle];
-    var perso = cle === 'personnalise';
+    var perso = false;
     var modeEl = form.querySelector('input[name="mode"]:checked');
     var mode = perso ? 'aucun' : modeEl.value;
     var lienStripe = (C.stripe && C.stripe[cle]) || '';
@@ -194,7 +279,7 @@
       telephone: form.elements.telephone.value.trim(),
       personnes: form.elements.personnes.value,
       message: form.elements.message.value.trim(),
-      portfolio: form.elements.portfolio.checked ? 'Oui' : 'Non',
+      portfolio: (form.querySelector('input[name="portfolio"]:checked') || {}).value || 'Non',
       paiement: mode === 'carte' ? 'Carte (Stripe)' : (mode === 'interac' ? 'Virement Interac' : 'À discuter'),
       montant: f.acompte ? argent(f.acompte) : 'Sur demande'
     };
@@ -212,7 +297,7 @@
     envoyer(C.emailjs && C.emailjs.modeleReservation, d, 'Réservation — ' + d.seance + ' — ' + d.nom, corps).then(function () {
       document.getElementById('fin-carte').hidden = mode !== 'carte';
       document.getElementById('fin-interac').hidden = mode !== 'interac';
-      document.getElementById('fin-perso').hidden = mode !== 'aucun';
+      document.getElementById('fin-perso').hidden = cle !== 'personnalise';
       afficher(3);
       if (mode === 'carte') {
         var url = lienStripe + (lienStripe.indexOf('?') > -1 ? '&' : '?') + 'prefilled_email=' + encodeURIComponent(d.courriel);
@@ -225,8 +310,5 @@
     });
   });
 
-  // Date minimale : demain
-  var demain = new Date(Date.now() + 864e5);
-  form.elements.date.min = demain.toISOString().slice(0, 10);
   document.querySelectorAll('.courriel-interac').forEach(function (el) { el.textContent = C.interac; });
 })();

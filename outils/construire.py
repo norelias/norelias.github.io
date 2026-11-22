@@ -222,9 +222,9 @@ def tarifs():
 </div>
 <div class="extras">
   <a class="extra noel" href="{{r}}reservation/?seance=noel"><div><h3>Mini-séance de Noël</h3><p>20 min · 10 photos numériques</p></div><span class="montant">95 $</span></a>
-  <a class="extra perso" href="mailto:bonjour@norelias.ca?subject=Forfait%20personnalis%C3%A9"><div><h3>Forfait personnalisé</h3><p>Sur demande : <strong style="color:var(--rose-fonce)">bonjour@norelias.ca</strong></p></div></a>
+  <a class="extra perso" href="{{r}}reservation/?forfait=personnalise"><div><h3>Forfait personnalisé</h3><p>Sur demande : <strong style="color:var(--rose-fonce)">bonjour@norelias.ca</strong></p></div><span class="montant-perso">Dépôt<br><strong>100 $</strong></span></a>
 </div>
-<p class="note-acompte">Acompte de 50 % à la réservation · <a href="{{r}}politique-reservation/">Voir la politique de réservation</a></p>
+<p class="note-acompte">Acompte de 50 % à la réservation · Photos livrées en 3 semaines · <a href="{{r}}politique-reservation/">Voir la politique de réservation</a></p>
 </div><img class="deco" src="{{r}}images/fleurs.png" alt="" style="right:calc(50% - 364 * var(--u));bottom:calc(10 * var(--u));width:calc(100 * var(--u))"></section>'''
     page('tarifs/index.html', 'Tarifs · Norélias Photography', "Forfaits Essentiel 200 $, Signature 300 $, Complète 450 $, mini-séance de Noël 95 $ et forfait personnalisé. Campbellton, N.-B.", contenu, 'Tarifs')
 
@@ -239,8 +239,15 @@ def reservation():
 <form id="form-reservation" class="form-resa" novalidate>
   <fieldset class="etape" style="border:0;padding:0;margin:0"><legend class="sr-only">Étape 1 : prestation et date</legend>
     <div class="champ"><label class="sr-only" for="seance">Prestation</label><select id="seance" name="seance" required><option value="">Choisir une prestation</option>{opts}<option data-code="noel">Mini-séance de Noël</option></select></div>
-    <div class="champ"><label class="sr-only" for="date">Date souhaitée</label><input type="text" id="date" name="date" placeholder="Date souhaitée" onfocus="this.type='date'" required></div>
-    <div class="champ"><label class="sr-only" for="heure">Heure souhaitée</label><select id="heure" name="heure" required><option value="">Heure souhaitée</option>{heures}</select></div>
+    <div class="calendrier" id="calendrier" aria-label="Choisir une date">
+      <div class="cal-tete"><button type="button" class="cal-nav" data-mois="-1" aria-label="Mois précédent">‹</button><span class="cal-mois"></span><button type="button" class="cal-nav" data-mois="1" aria-label="Mois suivant">›</button></div>
+      <div class="cal-jours"><span>D</span><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span></div>
+      <div class="cal-grille"></div>
+      <p class="cal-aide">Les dates en rose sont disponibles.</p>
+      <div class="creneaux" hidden><p class="creneaux-titre"></p><div class="creneaux-liste"></div></div>
+    </div>
+    <input type="hidden" name="date"><input type="hidden" name="dateIso"><input type="hidden" name="heure">
+    <p class="erreur-cal" role="alert" hidden>Choisissez une date et une heure dans le calendrier.</p>
     <div class="navigation-etapes"><button type="button" class="bouton" data-suivant>Suivant {FLECHE}</button></div>
   </fieldset>
   <fieldset class="etape" hidden style="border:0;padding:0;margin:0"><legend class="sr-only">Étape 2 : informations</legend>
@@ -248,14 +255,14 @@ def reservation():
       <div class="champ"><label class="sr-only" for="nom">Nom complet</label><input id="nom" name="nom" placeholder="Nom complet *" autocomplete="name" required></div>
       <div class="champ"><label class="sr-only" for="courriel">Courriel</label><input type="email" id="courriel" name="courriel" placeholder="Courriel *" autocomplete="email" required></div>
       <div class="champ"><label class="sr-only" for="telephone">Téléphone</label><input type="tel" id="telephone" name="telephone" placeholder="Téléphone *" autocomplete="tel" required></div>
-      <div class="champ"><label class="sr-only" for="personnes">Nombre de personnes</label><input type="number" id="personnes" name="personnes" min="1" max="15" placeholder="Nombre de personnes" required></div>
+      <div class="champ"><label class="sr-only" for="personnes">Nombre de personnes</label><input type="number" id="personnes" name="personnes" min="1" max="15" placeholder="Nombre de personnes *" required></div>
     </div>
-    <div class="champ"><label class="sr-only" for="message">Message</label><textarea id="message" name="message" rows="3" placeholder="Message (facultatif)"></textarea></div>
-    <label class="case"><input type="checkbox" name="portfolio"> <span>J'accepte que certaines photos de ma séance soient utilisées dans le portfolio de Norélias (facultatif).</span></label>
+    <div class="champ"><label class="sr-only" for="message">Message</label><textarea id="message" name="message" rows="3" placeholder="Parlez-moi de votre projet (âge de bébé, lieu, idées…) *" required></textarea></div>
+    <div class="choix-portfolio"><p>Certaines photos de ma séance peuvent-elles paraître dans le portfolio de Norélias ? *</p><label class="case"><input type="radio" name="portfolio" value="Oui" required> <span>Oui, j'accepte</span></label><label class="case"><input type="radio" name="portfolio" value="Non"> <span>Non, merci</span></label></div>
     <div class="navigation-etapes"><button type="button" class="bouton contour" data-precedent>←</button><button type="button" class="bouton" data-suivant>Suivant {FLECHE}</button></div>
   </fieldset>
   <fieldset class="etape" hidden style="border:0;padding:0;margin:0"><legend class="sr-only">Étape 3 : paiement</legend>
-    <div class="champ"><label class="sr-only" for="forfait">Forfait</label><select id="forfait" name="forfait" required><option value="">Choisir un forfait</option><option value="essentiel">Essentiel · 200 $</option><option value="signature">Signature · 300 $</option><option value="complete">Complète · 450 $</option><option value="noel">Mini-séance de Noël · 95 $</option><option value="personnalise">Forfait personnalisé · sur demande</option></select></div>
+    <div class="champ"><label class="sr-only" for="forfait">Forfait</label><select id="forfait" name="forfait" required><option value="">Choisir un forfait</option><option value="essentiel">Essentiel · 200 $</option><option value="signature">Signature · 300 $</option><option value="complete">Complète · 450 $</option><option value="noel">Mini-séance de Noël · 95 $</option><option value="personnalise">Forfait personnalisé · dépôt de 100 $</option></select></div>
     <div class="recap"><dl><dt>Séance</dt><dd id="recap-seance"></dd><dt>Date</dt><dd id="recap-date"></dd></dl><dl class="recap-prix" hidden><dt>Forfait</dt><dd id="recap-forfait"></dd><dt>Total</dt><dd id="recap-total"></dd><dt>À payer maintenant</dt><dd id="recap-acompte"></dd></dl></div>
     <div id="zone-paiement" hidden>
       <div class="choix-paiement">
@@ -264,7 +271,7 @@ def reservation():
       </div>
       <div id="boite-interac" class="boite-interac" hidden>Envoyez <strong class="montant-interac"></strong> par virement Interac à <strong class="courriel-interac">bonjour@norelias.ca</strong> dans les 48 h, avec votre nom en message.</div>
     </div>
-    <p id="note-perso" class="aide" hidden>Pour un forfait personnalisé, je vous réponds avec une proposition et le montant de l'acompte.</p>
+    <p id="note-perso" class="aide" hidden>Forfait personnalisé : le dépôt de 100 $ est déduit du total. Je vous envoie ensuite votre proposition sur mesure.</p>
     <div class="navigation-etapes"><button type="button" class="bouton contour" data-precedent>←</button><button type="submit" class="bouton" id="bouton-confirmer">Confirmer et payer</button></div>
   </fieldset>
   <div class="etape centre" hidden>
@@ -272,12 +279,13 @@ def reservation():
     <h2 style="font-size:calc(26 * var(--u))">Votre demande est envoyée</h2>
     <div id="fin-carte" hidden><p>Vous allez être redirigée vers la page de paiement sécurisée Stripe. Si rien ne se passe, <a id="lien-stripe" href="#">cliquez ici pour payer</a>.</p></div>
     <div id="fin-interac" hidden><p>Pour confirmer votre date, envoyez <strong class="montant-interac"></strong> par virement Interac à <strong class="courriel-interac">bonjour@norelias.ca</strong> dans les 48 h.</p></div>
-    <div id="fin-perso" hidden><p>Je vous réponds très bientôt avec une proposition personnalisée.</p></div>
+    <div id="fin-perso" hidden><p>Je vous envoie très bientôt votre proposition personnalisée.</p></div>
+    <p>Vos photos vous seront livrées dans un délai de 3 semaines après la séance.</p>
     <p>Une question ? 506-787-0667</p>
   </div>
   <div class="bas-resa">
-    <p class="note-resa">Acompte de 50 % à la réservation · Solde payable le jour de la séance</p>
-    <label class="case"><input type="checkbox" name="politiques"> <span>J'accepte la <a href="{{r}}politique-reservation/" target="_blank">politique de réservation</a> et la <a href="{{r}}confidentialite/" target="_blank">politique de confidentialité</a></span></label>
+    <p class="note-resa">Acompte de 50 % à la réservation · Solde le jour de la séance · Photos livrées en 3 semaines</p>
+    <label class="case"><input type="checkbox" name="politiques" required> <span>J'accepte la <a href="{{r}}politique-reservation/" target="_blank">politique de réservation</a> et la <a href="{{r}}confidentialite/" target="_blank">politique de confidentialité</a></span></label>
   </div>
 </form>
 <img class="vase" src="{{r}}images/vase.png" alt="">
@@ -316,10 +324,10 @@ def contact():
 # ---------------- Politiques ----------------
 def politique():
     blocs = [
-        ('Réservation et paiement', ["Un acompte de 50 % réserve votre date. Il est non remboursable et déduit du total.", "Le solde est payable le jour de la séance (carte, Interac ou comptant).", "Mini-séances de Noël : paiement complet à la réservation."]),
+        ('Réservation et paiement', ["Un acompte de 50 % réserve votre date. Il est non remboursable et déduit du total.", "Le solde est payable le jour de la séance (carte, Interac ou comptant).", "Mini-séances de Noël : paiement complet à la réservation.", "Forfait personnalisé : dépôt de 100 $ non remboursable à la réservation, déduit du total."]),
         ('Report et annulation', ["Un report gratuit si vous m'avisez au moins 48 h à l'avance. L'acompte est transféré.", "En cas d'annulation, l'acompte n'est pas remboursé.", "Moins de 48 h ou absence : l'acompte est perdu. Un nouvel acompte est requis pour une autre date."]),
         ('Bébé, santé et météo', ["Nouveau-né : date provisoire selon votre date prévue, ajustée à la naissance. Avisez-moi dans les 48 h.", "Bébé ou un proche malade : report sans frais. La santé passe avant tout.", "Météo défavorable pour une séance extérieure : report sans frais."]),
-        ('Livraison et droits', ["Vos photos en fichiers numériques haute résolution, à télécharger dans une galerie privée, dans les 3 semaines.", "Seules les photos retouchées sont livrées, dans le style de mon portfolio.", "Je garde les droits d'auteur. Vos photos vont dans mon portfolio seulement avec votre accord."]),
+        ('Livraison et droits', ["Vos photos en fichiers numériques haute résolution, à télécharger dans une galerie privée, dans un délai de 3 semaines après la séance.", "Seules les photos retouchées sont livrées, dans le style de mon portfolio.", "Je garde les droits d'auteur. Vos photos vont dans mon portfolio seulement avec votre accord."]),
     ]
     html = ''.join('<div class="bloc-politique"><h3>' + t + '</h3><ul>' + ''.join(f'<li>{x}</li>' for x in items) + '</ul></div>' for t, items in blocs)
     contenu = f'''<section class="page"><div class="interieur">
