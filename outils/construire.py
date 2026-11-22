@@ -225,8 +225,10 @@ def apropos():
 <div class="apropos">
   <img src="{{r}}images/sabrina.jpg" alt="Sabrina, photographe de Norélias">
   <div>
-    <p>Je suis Sabrina, photographe passionnée par les histoires vraies, les émotions sincères et les moments uniques de la vie.</p>
-    <p>Mon approche est douce, respectueuse et humaine, afin de créer des souvenirs authentiques, remplis de chaleur et d'émotion.</p>
+    <p>Je suis Sabrina, photographe à Campbellton et doula de cœur.</p>
+    <p>Accompagner les familles fait partie de ma vie depuis longtemps. Je sais à quel point les premiers jours avec bébé passent vite, et combien chaque regard, chaque petite main, mérite d'être gardé pour toujours.</p>
+    <p>Pendant votre séance, je prends le temps. Bébé dicte le rythme, vous êtes à l'aise, et moi je capte ce qui est vrai : la tendresse, les rires, l'émotion.</p>
+    <p>De la grossesse aux finissants, je suis là pour raconter votre histoire en images.</p>
     <a class="bouton" href="{{r}}contact/">En savoir plus {FLECHE}</a>
   </div>
 </div>

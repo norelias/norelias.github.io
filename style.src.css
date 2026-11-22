@@ -145,7 +145,8 @@ main{background:var(--creme)}
 /* À propos */
 .apropos{display:grid;grid-template-columns:256u 1fr;gap:30u;align-items:center}
 .apropos img{border-radius:16u;width:100%;height:322u;object-fit:cover;object-position:center 20%}
-.apropos p{font-size:17.5u;color:#1e1411;line-height:1.4;font-weight:600}
+.apropos p{font-size:15u;color:#1e1411;line-height:1.42;font-weight:600;margin-bottom:9u}
+.apropos p:first-child{font-family:'Cormorant Garamond',serif;font-size:22u;font-weight:600;line-height:1.15}
 .apropos .bouton{font-size:17u;height:42u;margin-top:14u;padding:0 30u}
 
 /* Tarifs */
