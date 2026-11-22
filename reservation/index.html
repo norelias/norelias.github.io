@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Sacramento&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=1795380506">
+<link rel="stylesheet" href="../style.css?v=1795389936">
 </head>
 <body>
 <a href="#contenu" class="sr-only">Aller au contenu</a>
@@ -54,7 +54,10 @@
       <div class="champ"><label class="sr-only" for="nom">Nom complet</label><input id="nom" name="nom" placeholder="Nom complet *" autocomplete="name" required></div>
       <div class="champ"><label class="sr-only" for="courriel">Courriel</label><input type="email" id="courriel" name="courriel" placeholder="Courriel *" autocomplete="email" required></div>
       <div class="champ"><label class="sr-only" for="telephone">Téléphone</label><input type="tel" id="telephone" name="telephone" placeholder="Téléphone *" autocomplete="tel" required></div>
+      <div class="champ" id="champ-ecole" hidden><label class="sr-only" for="ecole">Nom de l'école ou de la garderie</label><input id="ecole" name="ecole" placeholder="Nom de l'école ou de la garderie *" autocomplete="organization"></div>
+      <div class="champ" id="champ-groupes" hidden><label class="sr-only" for="groupes">Nombre de groupes</label><input type="number" id="groupes" name="groupes" min="1" max="40" placeholder="Nombre de groupes (classes) *"></div>
       <div class="champ"><label class="sr-only" for="personnes">Nombre de personnes</label><input type="number" id="personnes" name="personnes" min="1" max="15" placeholder="Nombre de personnes *" required></div>
+      <p class="calcul-prix" id="calcul-prix" hidden></p>
     </div>
     <div class="champ"><label class="sr-only" for="message">Message</label><textarea id="message" name="message" rows="3" placeholder="Parlez-moi de votre projet (âge de bébé, lieu, idées…) *" required></textarea></div>
     <div class="choix-portfolio"><p>Certaines photos de ma séance peuvent-elles paraître dans le portfolio de Norélias ? *</p><label class="case"><input type="radio" name="portfolio" value="Oui" required> <span>Oui, j'accepte</span></label><label class="case"><input type="radio" name="portfolio" value="Non"> <span>Non, merci</span></label></div>
@@ -98,7 +101,7 @@
     <div class="coord"><a href="tel:+15067870667">506-787-0667</a> · <a href="mailto:bonjour@norelias.ca">bonjour@norelias.ca</a></div>
   </div>
 </footer>
-<script src="../config.js?v=1795380506"></script>
-<script src="../script.js?v=1795380506"></script>
+<script src="../config.js?v=1795389936"></script>
+<script src="../script.js?v=1795389936"></script>
 </body>
 </html>

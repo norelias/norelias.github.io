@@ -102,9 +102,9 @@ main{background:var(--creme)}
 .univers .interieur{max-width:728u;margin:0 auto;padding:0 32u}
 .titre-section{font-size:24u;text-align:center;margin-bottom:22u;font-weight:400}
 .titre-section em{font-style:italic}
-.grille-univers{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9.5u}
+.grille-univers{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12u 14u;padding:0 30u}
 .carte-univers{text-decoration:none;color:var(--brun);text-align:center}
-.carte-univers .photo{position:relative;display:block;border-radius:6u;overflow:hidden;box-shadow:var(--ombre);height:90u}
+.carte-univers .photo{position:relative;display:block;border-radius:6u;overflow:hidden;box-shadow:var(--ombre);height:84u}
 .carte-univers img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
 .carte-univers:hover img{transform:scale(1.05)}
 .carte-univers .nom{display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:13.5u;margin-top:9u}
@@ -276,6 +276,7 @@ main{background:var(--creme)}
    ========================================================= */
 
 /* ----- Ordinateur : le site dans une boîte centrée, beige autour ----- */
+.calcul-prix{background:#fbf4ef;border:1px solid #e3cbbf;border-radius:8u;padding:8u 12u;margin:0 0 10u;font-size:14u;font-weight:700;color:var(--rose-fonce);text-align:center}
 @media (min-width:1025px){
   body{background:#ead9cf}
   .entete,main,.pied{max-width:728u;margin-left:auto;margin-right:auto}
@@ -358,9 +359,10 @@ main{background:var(--creme)}
   .souvenirs .bouton{font-size:12.5u;padding:0 12u;white-space:nowrap}
   .univers{--u:calc(100vw / 420)}
   .grille-univers{display:flex;flex-wrap:wrap;justify-content:center;gap:12u 9u}
-  .carte-univers{width:calc(25% - 7u)}
-  .carte-univers .photo{height:86u}
-  .carte-univers .nom{font-size:15u;margin-top:5u}
+  .grille-univers{padding:0}
+  .carte-univers{width:calc(20% - 8u)}
+  .carte-univers .photo{height:72u}
+  .carte-univers .nom{font-size:13.5u;margin-top:5u;line-height:1.1}
   .engagements{--u:calc(100vw / 420);height:auto;padding:14u 0 26u}
   .engagements .grille{gap:10u;padding:0 10u;align-items:flex-start}
   .engagement{flex-direction:column;text-align:center;gap:6u;font-size:12u;flex:1}

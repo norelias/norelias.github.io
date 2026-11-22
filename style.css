@@ -104,9 +104,9 @@ main{background:var(--creme)}
 .univers .interieur{max-width:calc(728 * var(--u));margin:0 auto;padding:0 calc(32 * var(--u))}
 .titre-section{font-size:calc(24 * var(--u));text-align:center;margin-bottom:calc(22 * var(--u));font-weight:400}
 .titre-section em{font-style:italic}
-.grille-univers{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:calc(9.5 * var(--u))}
+.grille-univers{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:calc(12 * var(--u)) calc(14 * var(--u));padding:0 calc(30 * var(--u))}
 .carte-univers{text-decoration:none;color:var(--brun);text-align:center}
-.carte-univers .photo{position:relative;display:block;border-radius:calc(6 * var(--u));overflow:hidden;box-shadow:var(--ombre);height:calc(90 * var(--u))}
+.carte-univers .photo{position:relative;display:block;border-radius:calc(6 * var(--u));overflow:hidden;box-shadow:var(--ombre);height:calc(84 * var(--u))}
 .carte-univers img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
 .carte-univers:hover img{transform:scale(1.05)}
 .carte-univers .nom{display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:calc(13.5 * var(--u));margin-top:calc(9 * var(--u))}
@@ -278,6 +278,7 @@ main{background:var(--creme)}
    ========================================================= */
 
 /* ----- Ordinateur : le site dans une boîte centrée, beige autour ----- */
+.calcul-prix{background:#fbf4ef;border:1px solid #e3cbbf;border-radius:calc(8 * var(--u));padding:calc(8 * var(--u)) calc(12 * var(--u));margin:0 0 calc(10 * var(--u));font-size:calc(14 * var(--u));font-weight:700;color:var(--rose-fonce);text-align:center}
 @media (min-width:1025px){
   body{background:#ead9cf}
   .entete,main,.pied{max-width:calc(728 * var(--u));margin-left:auto;margin-right:auto}
@@ -360,9 +361,10 @@ main{background:var(--creme)}
   .souvenirs .bouton{font-size:calc(12.5 * var(--u));padding:0 calc(12 * var(--u));white-space:nowrap}
   .univers{--u:calc(100vw / 420)}
   .grille-univers{display:flex;flex-wrap:wrap;justify-content:center;gap:calc(12 * var(--u)) calc(9 * var(--u))}
-  .carte-univers{width:calc(25% - calc(7 * var(--u)))}
-  .carte-univers .photo{height:calc(86 * var(--u))}
-  .carte-univers .nom{font-size:calc(15 * var(--u));margin-top:calc(5 * var(--u))}
+  .grille-univers{padding:0}
+  .carte-univers{width:calc(20% - calc(8 * var(--u)))}
+  .carte-univers .photo{height:calc(72 * var(--u))}
+  .carte-univers .nom{font-size:calc(13.5 * var(--u));margin-top:calc(5 * var(--u));line-height:1.1}
   .engagements{--u:calc(100vw / 420);height:auto;padding:calc(14 * var(--u)) 0 calc(26 * var(--u))}
   .engagements .grille{gap:calc(10 * var(--u));padding:0 calc(10 * var(--u));align-items:flex-start}
   .engagement{flex-direction:column;text-align:center;gap:calc(6 * var(--u));font-size:calc(12 * var(--u));flex:1}

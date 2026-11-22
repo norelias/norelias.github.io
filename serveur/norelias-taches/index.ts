@@ -14,10 +14,9 @@ Deno.serve(async (req) => {
   for (const r of brouillons ?? []) {
     // pas de rappel si la même personne a terminé une autre réservation depuis
     const { data: autre } = await sb.from("norelias_reservations").select("id").eq("courriel", r.courriel).neq("statut", "brouillon").gte("cree_le", r.cree_le).limit(1);
-    await sb.from("norelias_reservations").update({ rappel_panier_le: iso(maintenant) }).eq("id", r.id);
-    if (autre?.length) continue;
+    if (autre?.length) { await sb.from("norelias_reservations").update({ rappel_panier_le: iso(maintenant) }).eq("id", r.id); continue; }
     const [sj, h] = courriels.panier(r);
-    if (await envoyer(r.courriel, sj, h)) bilan.panier++;
+    if (await envoyer(r.courriel, sj, h)) { await sb.from("norelias_reservations").update({ rappel_panier_le: iso(maintenant) }).eq("id", r.id); bilan.panier++; }
   }
 
   // 2) Virements Interac non reçus après 24 h : annulation automatique
@@ -36,9 +35,8 @@ Deno.serve(async (req) => {
   const { data: demain } = await sb.from("norelias_reservations").select("*").eq("statut", "confirmee").is("rappel_24h_le", null)
     .gt("debut", iso(maintenant + 2 * 3600e3)).lte("debut", iso(maintenant + 24 * 3600e3));
   for (const r of demain ?? []) {
-    await sb.from("norelias_reservations").update({ rappel_24h_le: iso(maintenant) }).eq("id", r.id);
     const [sj, h] = courriels.rappel(r);
-    if (await envoyer(r.courriel, sj, h)) bilan.rappels++;
+    if (await envoyer(r.courriel, sj, h)) { await sb.from("norelias_reservations").update({ rappel_24h_le: iso(maintenant) }).eq("id", r.id); bilan.rappels++; }
   }
   return new Response(JSON.stringify(bilan), { headers: { "content-type": "application/json" } });
 });

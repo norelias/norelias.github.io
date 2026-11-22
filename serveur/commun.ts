@@ -9,14 +9,14 @@ export const argent = (n: number | null | undefined) =>
   n == null ? "—" : n.toLocaleString("fr-CA", { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }) + " $";
 
 // Prix (le serveur recalcule toujours : on ne fait pas confiance au navigateur)
-const FORFAITS: Record<string, { nom: string; prix: number | null; acompte?: number; parEnfant?: boolean; minimum?: number }> = {
+const FORFAITS: Record<string, { nom: string; prix: number | null; acompte?: number; parEnfant?: boolean; minimum?: number; parPersonneEnPlus?: number; inclus?: number }> = {
   essentiel: { nom: "Essentiel", prix: 200, acompte: 100 },
   signature: { nom: "Signature", prix: 300, acompte: 150 },
   complete: { nom: "Complète", prix: 450, acompte: 225 },
   noel: { nom: "Mini-séance de Noël", prix: 95, acompte: 95 },
   ecole: { nom: "Garderie / École", prix: 35, parEnfant: true, minimum: 10 },
   finissants: { nom: "Finissants", prix: 175, acompte: 87.5 },
-  bal: { nom: "Bal de promos", prix: 150, acompte: 75 },
+  bal: { nom: "Bal de promos", prix: 150, parPersonneEnPlus: 25, inclus: 2 },
   personnalise: { nom: "Forfait personnalisé", prix: null, acompte: 100 },
 };
 export function montants(forfait: string, personnes: number) {
@@ -25,6 +25,10 @@ export function montants(forfait: string, personnes: number) {
   if (f.parEnfant) {
     const n = Math.max(f.minimum!, personnes || 0);
     const total = f.prix! * n;
+    return { nom: f.nom, total, acompte: Math.round(total * 50) / 100 };
+  }
+  if (f.parPersonneEnPlus) {
+    const total = f.prix! + Math.max(0, (personnes || 1) - f.inclus!) * f.parPersonneEnPlus;
     return { nom: f.nom, total, acompte: Math.round(total * 50) / 100 };
   }
   return { nom: f.nom, total: f.prix, acompte: f.acompte! };
@@ -60,7 +64,11 @@ ${para('<p style="margin:0;">Au plaisir de créer de beaux souvenirs avec vous,<
 }
 
 export function lignesRdv(r: any, avecAdresse = true): [string, string][] {
-  const l: [string, string][] = [["Séance", esc(r.seance)], ["Date", esc(r.date_txt)], ["Heure", esc(r.heure)]];
+  const l: [string, string][] = [["Séance", esc(r.seance)]];
+  if (r.ecole) l.push([r.seance_code === "bal" ? "École" : "École / garderie", esc(r.ecole)]);
+  if (r.groupes) l.push(["Groupes", esc(r.groupes)]);
+  if (r.seance_code === "garderie-ecole" && r.personnes) l.push(["Enfants", esc(r.personnes)]);
+  l.push(["Date", esc(r.date_txt)], ["Heure", esc(r.heure)]);
   if (avecAdresse && r.adresse) l.push(["Adresse", esc(r.adresse).replace(/\n/g, "<br>")]);
   return l;
 }

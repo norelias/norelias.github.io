@@ -35,6 +35,7 @@ Deno.serve(async (req) => {
         date_iso: /^\d{4}-\d{2}-\d{2}$/.test(b.date_iso ?? "") ? b.date_iso : null, date_txt: txt(b.date_txt, 60), heure: txt(b.heure, 20),
         nom: txt(b.nom, 120), courriel: txt(b.courriel, 160)?.toLowerCase() ?? null, telephone: txt(b.telephone, 40),
         personnes, message: txt(b.message, 3000), portfolio: txt(b.portfolio, 10),
+        ecole: txt(b.ecole, 150), groupes: Math.max(0, Math.min(100, parseInt(b.groupes, 10) || 0)) || null,
       };
     };
 

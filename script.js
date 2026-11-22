@@ -83,7 +83,7 @@
     noel: { nom: 'Mini-séance de Noël', prix: 95, acompte: 95 },
     ecole: { nom: 'Garderie / École', prix: 35, parEnfant: true, minimum: 10 },
     finissants: { nom: 'Finissants', prix: 175, acompte: 87.5 },
-    bal: { nom: 'Bal de promos', prix: 150, acompte: 75 },
+    bal: { nom: 'Bal de promos', prix: 150, parPersonneEnPlus: 25, inclus: 2 },
     personnalise: { nom: 'Forfait personnalisé', prix: null, acompte: 100 }
   };
   var etapes = form.querySelectorAll('.etape');
@@ -116,9 +116,15 @@
       o.disabled = dedie ? o.value !== dedie : DEDIES.indexOf(o.value) > -1;
     });
     if (!dedie && DEDIES.indexOf(form.elements.forfait.value) > -1) form.elements.forfait.value = '';
-    var pers = form.elements.personnes;
-    if (dedie === 'ecole') { pers.placeholder = "Nombre d'enfants (minimum 10) *"; pers.min = 10; pers.max = 200; }
+    var pers = form.elements.personnes, ecole = form.elements.ecole, groupes = form.elements.groupes;
+    var avecEcole = dedie === 'ecole' || dedie === 'bal';
+    document.getElementById('champ-ecole').hidden = !avecEcole; ecole.required = avecEcole;
+    document.getElementById('champ-groupes').hidden = dedie !== 'ecole'; groupes.required = dedie === 'ecole';
+    ecole.placeholder = dedie === 'bal' ? "Nom de l'école *" : "Nom de l'école ou de la garderie *";
+    if (dedie === 'ecole') { pers.placeholder = "Nombre total d'élèves ou d'enfants (minimum 10) *"; pers.min = 10; pers.max = 2000; }
+    else if (dedie === 'bal') { pers.placeholder = 'Nombre de personnes sur les photos *'; pers.min = 1; pers.max = 40; }
     else { pers.placeholder = 'Nombre de personnes *'; pers.min = 1; pers.max = 15; }
+    majCalcul();
     if (window.majCalendrier) window.majCalendrier();
   }
   form.elements.seance.addEventListener('change', synchroniserNoel);
@@ -225,7 +231,8 @@
       id: idBrouillon, seance: form.elements.seance.value, seance_code: codeSeanceChoisie(), forfait: form.elements.forfait.value,
       date_iso: form.elements.dateIso.value, date_txt: form.elements.date.value, heure: form.elements.heure.value,
       nom: form.elements.nom.value.trim(), courriel: form.elements.courriel.value.trim(), telephone: form.elements.telephone.value.trim(),
-      personnes: form.elements.personnes.value, message: form.elements.message.value.trim(), portfolio: portfolio ? portfolio.value : ''
+      personnes: form.elements.personnes.value, message: form.elements.message.value.trim(), portfolio: portfolio ? portfolio.value : '',
+      ecole: form.elements.ecole.value.trim(), groupes: form.elements.groupes.value
     };
   }
   function appelServeur(corps) {
@@ -246,6 +253,16 @@
     }).catch(function () {});
   }
 
+  function majCalcul() {
+    var zone = document.getElementById('calcul-prix'); if (!zone) return;
+    var cle = form.elements.forfait.value;
+    if ((cle !== 'ecole' && cle !== 'bal') || !form.elements.personnes.value) { zone.hidden = true; return; }
+    var m = montants(cle);
+    zone.hidden = false;
+    zone.textContent = 'Total : ' + argent(m.total) + (m.detail ? ' (' + m.detail + ')' : '') + ' · Acompte : ' + argent(m.acompte);
+  }
+  form.elements.personnes.addEventListener('input', majCalcul);
+
   function argent(n) { return n.toLocaleString('fr-CA', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }) + ' $'; }
   // Total et acompte réels (garderie / école : 35 $ par enfant, minimum 10)
   function montants(cle) {
@@ -255,6 +272,11 @@
       var n = Math.max(f.minimum, parseInt(form.elements.personnes.value, 10) || 0);
       var total = f.prix * n;
       return { total: total, acompte: Math.round(total * 50) / 100, detail: n + ' enfants × ' + argent(f.prix) };
+    }
+    if (f.parPersonneEnPlus) {
+      var p = Math.max(1, parseInt(form.elements.personnes.value, 10) || 1), extra = Math.max(0, p - f.inclus);
+      var t = f.prix + extra * f.parPersonneEnPlus;
+      return { total: t, acompte: Math.round(t * 50) / 100, detail: extra ? argent(f.prix) + ' + ' + extra + ' × ' + argent(f.parPersonneEnPlus) : '' };
     }
     return { total: f.prix, acompte: f.acompte };
   }

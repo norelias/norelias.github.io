@@ -29,7 +29,7 @@ SEANCES = [  # nom, code, image carte, description
     ('Bal de promos', 'bal', 'bal.jpg', "Les plus belles photos de votre soirée de bal, seul ou entre amis."),
     ('Noël', 'noel', 'noel.jpg', 'Mini-séances de 20 minutes dans un décor de Noël, en décembre.'),
 ]
-UNIVERS = ['grossesse', 'accouchement', 'nouveau-ne', 'famille', 'couple', 'noel', 'fetes']
+UNIVERS = ['grossesse', 'accouchement', 'nouveau-ne', 'famille', 'couple', 'noel', 'fetes', 'garderie-ecole', 'finissants', 'bal']
 UNIV_IMG = {'noel': 'noel-2.jpg', 'grossesse': 'grossesse.jpg', 'nouveau-ne': 'nouveau-ne-ourson.jpg'}
 
 def reseaux():
@@ -244,19 +244,19 @@ def tarifs():
 {titre_page('Tarifs &amp; Forfaits', 'Des formules simples, flexibles et adaptées à vos besoins.')}
 <div class="grille-tarifs">
   <a class="tarif" href="{{r}}reservation/?forfait=essentiel" style="text-decoration:none;color:inherit"><div class="tete"><div class="montant">200 $</div><h3>Essentiel</h3></div><ul><li>Séance de 30 minutes</li><li>10 photos retouchées</li><li>Galerie privée en ligne</li></ul></a>
-  <a class="tarif vedette" href="{{r}}reservation/?forfait=signature" style="text-decoration:none;color:inherit"><div class="tete"><div class="montant">300 $</div><h3>Signature</h3></div><ul><li>Séance de 1 heure</li><li>25 photos retouchées</li><li>Galerie privée en ligne</li><li>Impression 8 x 10</li></ul></a>
-  <a class="tarif" href="{{r}}reservation/?forfait=complete" style="text-decoration:none;color:inherit"><div class="tete"><div class="montant">450 $</div><h3>Complète</h3></div><ul><li>Séance prolongée</li><li>Toutes les photos retouchées</li><li>Galerie privée en ligne</li><li>Crédit d'impression</li></ul></a>
+  <a class="tarif vedette" href="{{r}}reservation/?forfait=signature" style="text-decoration:none;color:inherit"><div class="tete"><div class="montant">300 $</div><h3>Signature</h3></div><ul><li>Séance de 1 heure</li><li>25 photos retouchées</li><li>Galerie privée en ligne</li><li>Photos numériques haute résolution</li></ul></a>
+  <a class="tarif" href="{{r}}reservation/?forfait=complete" style="text-decoration:none;color:inherit"><div class="tete"><div class="montant">450 $</div><h3>Complète</h3></div><ul><li>Séance prolongée</li><li>Toutes les photos retouchées</li><li>Galerie privée en ligne</li><li>Photos numériques haute résolution</li></ul></a>
 </div>
 <div class="speciales">
-  <a class="speciale" href="{{r}}reservation/?seance=garderie-ecole"><h3>Garderie / École</h3><div class="montant">35 $ <small>par enfant</small></div><p>Portrait individuel + photo de groupe<br>3 photos numériques par enfant<br>Groupe de 10 enfants minimum</p></a>
+  <a class="speciale" href="{{r}}reservation/?seance=garderie-ecole"><h3>Garderie / École</h3><div class="montant">35 $ <small>par enfant</small></div><p>Portrait individuel + photo de groupe<br>Fond choisi par la famille<br>Aperçu des photos avant d'acheter<br>3 photos numériques par enfant · 10 enfants minimum</p></a>
   <a class="speciale" href="{{r}}reservation/?seance=finissants"><h3>Finissants</h3><div class="montant">175 $</div><p>Séance de 30 minutes<br>En toge et en tenue de ville<br>15 photos numériques</p></a>
-  <a class="speciale" href="{{r}}reservation/?seance=bal"><h3>Bal de promos</h3><div class="montant">150 $</div><p>30 minutes avant le bal, solo ou en couple<br>15 photos numériques<br>Groupe d'amis : +25 $ par personne</p></a>
+  <a class="speciale" href="{{r}}reservation/?seance=bal"><h3>Bal de promos</h3><div class="montant">150 $</div><p>30 minutes avant le bal, solo ou en couple<br>15 photos numériques<br>Groupe d'amis : +25 $ par personne de plus</p></a>
 </div>
 <div class="extras">
   <a class="extra noel" href="{{r}}reservation/?seance=noel"><div><h3>Mini-séance de Noël</h3><p>20 min · 10 photos numériques</p></div><span class="montant">95 $</span></a>
   <a class="extra perso" href="{{r}}reservation/?forfait=personnalise"><div><h3>Forfait personnalisé</h3><p>Sur demande : <strong style="color:var(--rose-fonce)">bonjour@norelias.ca</strong></p></div><span class="montant-perso">Dépôt<br><strong>100 $</strong></span></a>
 </div>
-<p class="note-acompte">Acompte de 50 % à la réservation · Photos livrées en 3 semaines · <a href="{{r}}politique-reservation/">Voir la politique de réservation</a></p>
+<p class="note-acompte">Acompte de 50 % à la réservation · Aucune photo imprimée : tout est remis en fichiers numériques, en 3 semaines · <a href="{{r}}politique-reservation/">Voir la politique de réservation</a></p>
 </div><img class="deco" src="{{r}}images/fleurs.png" alt="" style="right:calc(50% - 364 * var(--u));bottom:calc(10 * var(--u));width:calc(100 * var(--u))"></section>'''
     page('tarifs/index.html', 'Tarifs · Norélias Photography', "Forfaits Essentiel 200 $, Signature 300 $, Complète 450 $, mini-séance de Noël 95 $ et forfait personnalisé. Campbellton, N.-B.", contenu, 'Tarifs')
 
@@ -290,7 +290,10 @@ def reservation():
       <div class="champ"><label class="sr-only" for="nom">Nom complet</label><input id="nom" name="nom" placeholder="Nom complet *" autocomplete="name" required></div>
       <div class="champ"><label class="sr-only" for="courriel">Courriel</label><input type="email" id="courriel" name="courriel" placeholder="Courriel *" autocomplete="email" required></div>
       <div class="champ"><label class="sr-only" for="telephone">Téléphone</label><input type="tel" id="telephone" name="telephone" placeholder="Téléphone *" autocomplete="tel" required></div>
+      <div class="champ" id="champ-ecole" hidden><label class="sr-only" for="ecole">Nom de l'école ou de la garderie</label><input id="ecole" name="ecole" placeholder="Nom de l'école ou de la garderie *" autocomplete="organization"></div>
+      <div class="champ" id="champ-groupes" hidden><label class="sr-only" for="groupes">Nombre de groupes</label><input type="number" id="groupes" name="groupes" min="1" max="40" placeholder="Nombre de groupes (classes) *"></div>
       <div class="champ"><label class="sr-only" for="personnes">Nombre de personnes</label><input type="number" id="personnes" name="personnes" min="1" max="15" placeholder="Nombre de personnes *" required></div>
+      <p class="calcul-prix" id="calcul-prix" hidden></p>
     </div>
     <div class="champ"><label class="sr-only" for="message">Message</label><textarea id="message" name="message" rows="3" placeholder="Parlez-moi de votre projet (âge de bébé, lieu, idées…) *" required></textarea></div>
     <div class="choix-portfolio"><p>Certaines photos de ma séance peuvent-elles paraître dans le portfolio de Norélias ? *</p><label class="case"><input type="radio" name="portfolio" value="Oui" required> <span>Oui, j'accepte</span></label><label class="case"><input type="radio" name="portfolio" value="Non"> <span>Non, merci</span></label></div>
@@ -362,7 +365,7 @@ def politique():
         ('Réservation et paiement', ["Un acompte de 50 % réserve votre date. Il est non remboursable et déduit du total.", "Le solde est payable le jour de la séance (carte, Interac ou comptant).", "Virement Interac : la réservation est confirmée par courriel seulement à la réception du virement. Sans virement dans les 24 h, elle est annulée automatiquement.", "Mini-séances de Noël : paiement complet à la réservation.", "Forfait personnalisé : dépôt de 100 $ non remboursable à la réservation, déduit du total."]),
         ('Report et annulation', ["Un report gratuit si vous m'avisez au moins 48 h à l'avance. L'acompte est transféré.", "En cas d'annulation, l'acompte n'est pas remboursé.", "Moins de 48 h ou absence : l'acompte est perdu. Un nouvel acompte est requis pour une autre date."]),
         ('Bébé, santé et météo', ["Nouveau-né : date provisoire selon votre date prévue, ajustée à la naissance. Avisez-moi dans les 48 h.", "Bébé ou un proche malade : report sans frais. La santé passe avant tout.", "Météo défavorable pour une séance extérieure : report sans frais."]),
-        ('Livraison et droits', ["Vos photos en fichiers numériques haute résolution, à télécharger dans une galerie privée, dans un délai de 3 semaines après la séance.", "Seules les photos retouchées sont livrées, dans le style de mon portfolio.", "Je garde les droits d'auteur. Vos photos vont dans mon portfolio seulement avec votre accord."]),
+        ('Livraison et droits', ["Vos photos en fichiers numériques haute résolution, à télécharger dans une galerie privée, dans un délai de 3 semaines après la séance.", "Seules les photos retouchées sont livrées, dans le style de mon portfolio. Aucune photo imprimée n'est remise : tout est en fichiers numériques.", "Garderie / École : chaque famille choisit son fond et voit un aperçu de ses photos avant d'acheter.", "Je garde les droits d'auteur. Vos photos vont dans mon portfolio seulement avec votre accord."]),
     ]
     html = ''.join('<div class="bloc-politique"><h3>' + t + '</h3><ul>' + ''.join(f'<li>{x}</li>' for x in items) + '</ul></div>' for t, items in blocs)
     contenu = f'''<section class="page"><div class="interieur">
