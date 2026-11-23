@@ -564,7 +564,6 @@
       { src: 'images/pp-t11-1.jpg', zone: { x: 354, y: 352, w: 525, h: 533, r: 0, multiplier: 1 } },
       { src: 'images/pp-t11-2.jpg', zone: { x: 335, y: 400, w: 480, h: 515, r: 0, multiplier: 1 } },
       { src: 'images/pp-t11-3.jpg', zone: { x: 340, y: 392, w: 510, h: 508, r: 0, multiplier: 1 } },
-      { src: 'images/pp-t11-4.jpg', zone: { x: 296, y: 380, w: 408, h: 376, r: 0, multiplier: 1 } },
       { src: 'images/pp-t11-5.jpg', dos: 1, zone: { x: 385, y: 262, w: 550, h: 583, r: 0, multiplier: 1 } }
     ], pret: true },
     tasse15: { vues: [
@@ -811,7 +810,7 @@
   }
 
   /* ---- ajouter au panier ---- */
-  var ASPECT = { tasse: [267, 296], isotherme: [234, 394], rond: [1, 1], ornement: [1, 1], coeur: [228, 222], rect: [172, 234], cuir: [140, 180] };
+  var ASPECT = { tasse: [267, 296], isotherme: [234, 394], rond: [1, 1], ornement: [1, 1], coeur: [228, 222], rect: [172, 234], carre: [1, 1], ovale: [210, 322] };
   function exporter() {
     var a = ASPECT[CODE === 'portecles' ? variante() : CODE] || [1, 1], long = 1500, w = a[0] >= a[1] ? long : Math.round(long * a[0] / a[1]), h = a[0] >= a[1] ? Math.round(long * a[1] / a[0]) : long;
     var cv = document.createElement('canvas'); cv.width = w; cv.height = h; var c = cv.getContext('2d'); cover(c, img, 0, 0, w, h); return cv.toDataURL('image/jpeg', .88);
