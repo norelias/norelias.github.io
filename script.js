@@ -481,3 +481,24 @@
     afficher(3);
   }
 })();
+
+  /* ---------- Carrousel des témoignages ---------- */
+  (function () {
+    var piste = document.querySelector('.grille-temoins');
+    if (!piste) return;
+    var prec = document.querySelector('.fleche.prec'), suiv = document.querySelector('.fleche.suiv');
+    var pause = false;
+    function pas() { var c = piste.querySelector('.temoin'); return c ? c.getBoundingClientRect().width + 14 : 300; }
+    function aller(sens) {
+      var fin = piste.scrollLeft + piste.clientWidth >= piste.scrollWidth - 4;
+      if (sens > 0 && fin) { piste.scrollTo({ left: 0 }); return; }
+      if (sens < 0 && piste.scrollLeft <= 2) { piste.scrollTo({ left: piste.scrollWidth }); return; }
+      piste.scrollBy({ left: sens * pas() });
+    }
+    prec.addEventListener('click', function () { aller(-1); });
+    suiv.addEventListener('click', function () { aller(1); });
+    var zone = piste.parentNode;
+    ['mouseenter', 'focusin', 'touchstart'].forEach(function (e) { zone.addEventListener(e, function () { pause = true; }, { passive: true }); });
+    ['mouseleave', 'focusout'].forEach(function (e) { zone.addEventListener(e, function () { pause = false; }); });
+    setInterval(function () { if (!pause && !document.hidden) aller(1); }, 6000);
+  })();
