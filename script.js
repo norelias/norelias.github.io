@@ -539,13 +539,15 @@
   };
   var racine = (document.querySelector('link[href*="style.css"]').getAttribute('href') || '').replace(/style\.css.*$/, '');
   Object.keys(BASES).forEach(function (k) { var b = BASES[k]; b.img = new Image(); b.img.onload = function () { b.pret = true; if (window.__maj) window.__maj(); }; b.img.src = racine + b.src; });
-  function dessiner(cv, code, im) {
+  function dessiner(cv, code, im, ech) {
     var b = BASES[code] || BASES.tasse; if (!b.pret) return;
     var T = 4, bw = b.img.width - 2 * T, bh = b.img.height - 2 * T, k = 1.6;
     cv.width = Math.round(bw * k); cv.height = Math.round(bh * k);
     var c = cv.getContext('2d'); c.imageSmoothingQuality = 'high';
+    ech = ech || 1; var px = cv.width / 2, py = cv.height * .75;
+    c.save(); c.translate(px, py); c.scale(ech, ech); c.translate(-px, -py);
     c.drawImage(b.img, T, T, bw, bh, 0, 0, cv.width, cv.height);
-    if (!im) return;
+    if (!im) { c.restore(); return; }
     c.save(); c.scale(k, k); c.translate(-T, -T);
     if (b.zone) {
       var z = b.zone; c.beginPath(); c.rect(z.x, z.y, z.w, z.h); c.clip(); cover(c, im, z.x - 1, z.y - 1, z.w + 2, z.h + 2);
@@ -568,13 +570,14 @@
       rg.addColorStop(0, 'rgba(255,255,255,.35)'); rg.addColorStop(.35, 'rgba(255,255,255,.05)'); rg.addColorStop(.85, 'rgba(255,255,255,0)'); rg.addColorStop(1, 'rgba(255,255,255,.28)');
       c.fillStyle = rg; c.fillRect(o.x - o.r, o.y - o.r, o.r * 2, o.r * 2);
     }
-    c.restore();
+    c.restore(); c.restore();
   }
 
   var cvA = $('pp-apercu'), selV = $('pp-variante'), qte = $('pp-qte'), fi = $('pp-photo');
   function fmt(n) { return (Math.round(n * 100) / 100).toLocaleString('fr-CA', { minimumFractionDigits: 2 }) + ' $'; }
   function maj() {
-    dessiner(cvA, CODE, img);
+    var ks = Object.keys(P.v), ix = Math.max(0, ks.indexOf(selV.value));
+    dessiner(cvA, CODE, img, (CODE === 'tasse' ? 1 + .08 * ix : CODE === 'isotherme' ? 1 + .09 * ix : 1));
     var v = P.v[selV.value] || P.v[Object.keys(P.v)[0]], q = Math.max(1, Math.min(10, Number(qte.value) || 1));
     $('pp-prix').textContent = fmt(v[1]);
     $('pp-sous').textContent = fmt(v[1] * q); $('pp-total').textContent = fmt(v[1] * q + LIV);
