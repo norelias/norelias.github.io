@@ -327,7 +327,11 @@ main>.page:last-child{flex:1 0 auto}
 @media (min-width:1025px){
   :root{--largeur:min(92vw, 1240px)}
   .entete .barre,.pied .barre,.bande-noel .contenu,.univers .interieur,.engagements .grille,.page .interieur,.page-largeur{max-width:var(--largeur)}
-  .heros{height:min(calc(100vw / 2.13), calc(100vh - 80u));min-height:400u;background:#e7cdb8 url('images/accueil-fond.jpg') 72% top/cover no-repeat}
+  .heros{height:min(calc(100vw / 2.7), 70vh);min-height:390u;background:#efd9c8 url('images/accueil-fond-large.jpg') right top/auto 100% no-repeat}
+  .menu{gap:24u}
+  .menu a{font-size:13.5u;padding:5u 3u}
+  .entete .reseaux svg,.entete .reseaux img{width:20u;height:20u}
+  .titre-page h1{font-size:50u}
   .heros .interieur{max-width:var(--largeur)}
   .heros-texte{top:50%;transform:translateY(-50%)}
   .bande-noel .contenu{grid-template-columns:330u 1fr;height:200u}

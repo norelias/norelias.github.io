@@ -329,7 +329,11 @@ main>.page:last-child{flex:1 0 auto}
 @media (min-width:1025px){
   :root{--largeur:min(92vw, 1240px)}
   .entete .barre,.pied .barre,.bande-noel .contenu,.univers .interieur,.engagements .grille,.page .interieur,.page-largeur{max-width:var(--largeur)}
-  .heros{height:min(calc(100vw / 2.13), calc(100vh - calc(80 * var(--u))));min-height:calc(400 * var(--u));background:#e7cdb8 url('images/accueil-fond.jpg') 72% top/cover no-repeat}
+  .heros{height:min(calc(100vw / 2.7), 70vh);min-height:calc(390 * var(--u));background:#efd9c8 url('images/accueil-fond-large.jpg') right top/auto 100% no-repeat}
+  .menu{gap:calc(24 * var(--u))}
+  .menu a{font-size:calc(13.5 * var(--u));padding:calc(5 * var(--u)) calc(3 * var(--u))}
+  .entete .reseaux svg,.entete .reseaux img{width:calc(20 * var(--u));height:calc(20 * var(--u))}
+  .titre-page h1{font-size:calc(50 * var(--u))}
   .heros .interieur{max-width:var(--largeur)}
   .heros-texte{top:50%;transform:translateY(-50%)}
   .bande-noel .contenu{grid-template-columns:calc(330 * var(--u)) 1fr;height:calc(200 * var(--u))}
