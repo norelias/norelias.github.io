@@ -560,7 +560,7 @@
   /* ---- Aperçu réaliste : la photo de la cliente est posée sur une vraie photo du produit ---- */
   var BASES = {
     tasse: { src: 'images/pp-tasse.jpg', zone: { x: 263, y: 101, w: 267, h: 296, r: 6 }, vues: [{}, { miroir: 1 }, { zoom: [396, 250, 1.75] }] },
-    isotherme: { src: 'images/pp-isotherme.jpg', zone: { x: 333, y: 76, w: 234, h: 394, r: 4, fondu: [350, 440] }, vues: [{}, { miroir: 1 }, { zoom: [448, 240, 1.75] }] },
+    isotherme: { src: 'images/pp-isotherme.jpg', zone: { x: 340, y: 78, w: 220, h: 392, r: 4, fondu: [350, 440] }, vues: [{}, { miroir: 1 }, { zoom: [448, 240, 1.75] }] },
     rond: { src: 'images/pp-rond.jpg', rond: { x: 229, y: 359, r: 120 }, vues: [{}, { zoom: [229, 359, 1.9] }] },
     ornement: { src: 'images/pp-ornement.jpg', rond: { x: 194, y: 107, r: 63 }, vues: [{}, { zoom: [194, 107, 2] }] },
     proc: { vues: [{}, { zoom: [225, 335, 1.8] }], W: 681, H: 551, pret: true }
@@ -569,6 +569,18 @@
   Object.keys(BASES).forEach(function (k) { var b = BASES[k]; if (!b.src) return; b.img = new Image(); b.img.onload = function () { b.pret = true; b.W = b.img.width; b.H = b.img.height; if (window.__maj) window.__maj(); }; b.img.src = racine + b.src; });
   function cleBase(v) { if (CODE === 'portecles') return v === 'rond' ? 'rond' : 'proc'; return CODE; }
 
+  /* Projection cylindrique : la photo est enroulée sur le cylindre (compression naturelle vers les bords, haut et bas courbés comme le rebord) */
+  function plaque(c, im, x, y, w, h, seul, avecTexte) {
+    var R = w / 2, TM = 1.32, tw = 800, th = Math.max(8, Math.round(tw * h / (2 * TM * R))), sc = tw / (2 * TM * R), ry = w * .07;
+    var T = document.createElement('canvas'); T.width = tw; T.height = th; var t = T.getContext('2d'); t.fillStyle = seul ? '#f4f1f2' : '#fff'; t.fillRect(0, 0, tw, th);
+    if (!seul && im) cover(t, im, 0, 0, tw, th);
+    if (avecTexte && txt.t) { t.save(); t.scale(sc, sc); ecrire(t, tw / 2 / sc, seul ? h / 2 : h - 34, w - 28); t.restore(); }
+    for (var i = 0; i < w; i++) {
+      var u = (i + .5 - R) / R, a = Math.asin(Math.max(-.999, Math.min(.999, u))); if (Math.abs(a) > TM) continue;
+      var sx = (a / TM + 1) / 2 * tw, sw = Math.max(2, sc / (Math.sqrt(1 - u * u) + .02) * 1.3);
+      c.drawImage(T, Math.min(tw - sw, Math.max(0, sx - sw / 2)), 0, sw, th, x + i, y - ry * (1 - Math.sqrt(1 - u * u)), 1.6, h);
+    }
+  }
   function heart(c, cx, cy, s) {
     c.beginPath();
     for (var i = 0; i <= 80; i++) {
@@ -638,13 +650,13 @@
       var z = b.zone, zx = v.miroir ? W - z.x - z.w : z.x, m = v.miroir ? -1 : 1;
       c.save(); rr(c, zx, z.y, z.w, z.h, z.r || 0); c.clip();
       var dos = v.miroir && txt.pos === 'derriere' && txt.t && (CODE === 'tasse' || CODE === 'isotherme');
-      if (dos) { c.fillStyle = '#f4f1f2'; c.fillRect(zx, z.y, z.w, z.h); }
+      if (dos) plaque(c, im, zx, z.y, z.w, z.h, true, !z.fondu);
       else if (z.fondu) {
-        cover(c, im, zx - 1, z.y - 1, z.w + 2, z.fondu[1] - z.y + 40);
+        plaque(c, im, zx, z.y, z.w, z.fondu[1] - z.y + 40, false, false);
         var g0 = c.createLinearGradient(0, z.fondu[0], 0, z.fondu[1] + 18); g0.addColorStop(0, 'rgba(243,240,241,0)'); g0.addColorStop(1, 'rgba(243,240,241,1)');
         c.fillStyle = g0; c.fillRect(zx, z.fondu[0], z.w, z.h); c.fillStyle = '#f3f0f1'; c.fillRect(zx, z.fondu[1] + 17, z.w, z.h);
-      } else cover(c, im, zx - 1, z.y - 1, z.w + 2, z.h + 2);
-      if (txt.t && ((!v.miroir && txt.pos === 'devant') || dos)) ecrire(c, zx + z.w / 2, z.y + z.h - (z.fondu ? 62 : 34), z.w - 28);
+      } else plaque(c, im, zx, z.y, z.w, z.h, false, !v.miroir && txt.pos === 'devant');
+      if (z.fondu && txt.t && ((!v.miroir && txt.pos === 'devant') || dos)) ecrire(c, zx + z.w / 2, z.y + z.h - (z.fondu ? 62 : 34), z.w - 28);
       var g = c.createLinearGradient(zx, 0, zx + z.w, 0), s = function (p) { return m > 0 ? p : 1 - p; };
       g.addColorStop(0, 'rgba(40,25,20,.34)'); g.addColorStop(.16, 'rgba(40,25,20,0)'); g.addColorStop(s(.62), 'rgba(255,255,255,.07)'); g.addColorStop(.86, 'rgba(40,25,20,0)'); g.addColorStop(1, 'rgba(40,25,20,.4)');
       c.fillStyle = g; c.fillRect(zx, z.y, z.w, z.h);
