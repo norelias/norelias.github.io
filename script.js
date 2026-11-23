@@ -574,17 +574,17 @@
       { src: 'images/pp-t15-5.jpg', dos: 1, zone: { x: 405, y: 253, w: 485, h: 627, r: 0, multiplier: 1 } }
     ], pret: true },
     iso20: { vues: [
-      { src: 'images/pp-iso-L.jpg', zone: { x: 291, y: 190, w: 247, h: 390, r: 0, multiplier: 1, poly: [[291,190],[538,190],[515,580],[320,580]] } },
+      { src: 'images/pp-iso-h20.jpg', zone: { x: 427, y: 318, w: 403, h: 597, r: 0, multiplier: 1, poly: [[427,318],[830,318],[777,915],[470,915]] } },
       { src: 'images/pp-iso-groupe.jpg', zone: { x: 291, y: 440, w: 247, h: 390, r: 0, multiplier: 1, poly: [[291,440],[538,440],[515,830],[320,830]] } },
       { src: 'images/pp-iso-L.jpg', miroir: 1, dos: 1, zone: { x: 291, y: 190, w: 247, h: 390, r: 0, multiplier: 1, poly: [[291,190],[538,190],[515,580],[320,580]] } }
     ], pret: true },
     iso30: { vues: [
-      { src: 'images/pp-iso-M.jpg', zone: { x: 129, y: 138, w: 301, h: 504, r: 0, multiplier: 1, poly: [[129,138],[430,138],[412,642],[152,642]] } },
+      { src: 'images/pp-iso-h30.jpg', zone: { x: 400, y: 262, w: 455, h: 683, r: 0, multiplier: 1, poly: [[400,262],[855,262],[845,600],[805,662],[780,945],[472,945],[450,662],[415,600]] } },
       { src: 'images/pp-iso-groupe.jpg', zone: { x: 597, y: 318, w: 301, h: 504, r: 0, multiplier: 1, poly: [[597,318],[898,318],[880,822],[620,822]] } },
       { src: 'images/pp-iso-M.jpg', miroir: 1, dos: 1, zone: { x: 129, y: 138, w: 301, h: 504, r: 0, multiplier: 1, poly: [[129,138],[430,138],[412,642],[152,642]] } }
     ], pret: true },
     iso40: { vues: [
-      { src: 'images/pp-iso-R.jpg', zone: { x: 50, y: 98, w: 348, h: 628, r: 0, multiplier: 1, poly: [[50,98],[398,98],[370,726],[80,726]] } },
+      { src: 'images/pp-iso-h40.jpg', zone: { x: 405, y: 262, w: 398, h: 756, r: 0, multiplier: 1, poly: [[405,262],[803,262],[795,700],[770,760],[750,1018],[465,1018],[450,760],[412,700]] } },
       { src: 'images/pp-iso-groupe.jpg', zone: { x: 955, y: 178, w: 348, h: 628, r: 0, multiplier: 1, poly: [[955,178],[1303,178],[1275,806],[985,806]] } },
       { src: 'images/pp-iso-R.jpg', miroir: 1, dos: 1, zone: { x: 50, y: 98, w: 348, h: 628, r: 0, multiplier: 1, poly: [[50,98],[398,98],[370,726],[80,726]] } }
     ], pret: true },
@@ -679,7 +679,7 @@
     if (vb.zone) {
       var z = vb.zone.poly ? { x: vb.zone.x, y: vb.zone.y, w: vb.zone.w, h: vb.zone.h + vb.zone.w * .07, r: 0, multiplier: 1, poly: vb.zone.poly } : vb.zone, zx = v.miroir ? W - z.x - z.w : z.x, m = v.miroir ? -1 : 1;
       c.save();
-      if (z.poly) { var pl = z.poly.map(function (q) { return [v.miroir ? W - q[0] : q[0], q[1]]; }), dd = z.w * .035, mx = (pl[0][0] + pl[1][0]) / 2, mb = (pl[2][0] + pl[3][0]) / 2; c.beginPath(); c.moveTo(pl[0][0], pl[0][1]); c.quadraticCurveTo(mx, pl[0][1] + 2 * dd, pl[1][0], pl[1][1]); c.lineTo(pl[2][0], pl[2][1]); c.quadraticCurveTo(mb, pl[2][1] + 2 * dd, pl[3][0], pl[3][1]); c.closePath(); c.clip(); } else { rr(c, zx, z.y, z.w, z.h, z.r || 0); c.clip(); }
+      if (z.poly) { var pl = z.poly.map(function (q) { return [v.miroir ? W - q[0] : q[0], q[1]]; }), dd = z.w * .035, nb = pl.length === 4 ? 2 : pl.length / 2; c.beginPath(); c.moveTo(pl[0][0], pl[0][1]); c.quadraticCurveTo((pl[0][0] + pl[1][0]) / 2, pl[0][1] + 2 * dd, pl[1][0], pl[1][1]); for (var pi = 2; pi <= nb; pi++) c.lineTo(pl[pi][0], pl[pi][1]); c.quadraticCurveTo((pl[nb][0] + pl[nb + 1][0]) / 2, pl[nb][1] + 2 * dd, pl[nb + 1][0], pl[nb + 1][1]); for (pi = nb + 2; pi < pl.length; pi++) c.lineTo(pl[pi][0], pl[pi][1]); c.closePath(); c.clip(); } else { rr(c, zx, z.y, z.w, z.h, z.r || 0); c.clip(); }
       var dos = v.dos || (v.miroir && CODE === 'isotherme');
       if (dos) plaque(c, im, zx, z.y, z.w, z.h, true, !z.fondu && txt.pos === 'derriere', z.multiplier ? 'transparent' : null);
       else if (z.fondu) {
