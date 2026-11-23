@@ -46,7 +46,7 @@ def page(chemin, titre, description, contenu, actif=''):
         return f'<a href="{r}{url}"{cur}>{nom}</a>'
     menu = (f'<li>{lien("Accueil", "")}</li><li>{lien("À propos", "a-propos/")}</li>'
             f'<li>{lien("Prestations", "prestations/")}</li>'
-            f'<li>{lien("Portfolio", "portfolio/")}</li><li>{lien("Tarifs", "tarifs/")}</li><li>{lien("Réservation", "reservation/")}</li><li>{lien("Contact", "contact/")}</li>')
+            f'<li>{lien("Portfolio", "portfolio/")}</li><li>{lien("Tarifs", "tarifs/")}</li><li>{lien("Réservation", "reservation/")}</li>')
     url_page = SITE + '/' + ('' if chemin == 'index.html' else chemin.replace('index.html', ''))
     html = f'''<!DOCTYPE html>
 <html lang="fr-CA">
@@ -83,7 +83,7 @@ def page(chemin, titre, description, contenu, actif=''):
 <footer class="pied">
   <div class="barre">
     <a class="marque" href="{r}">Norélias</a>
-    <nav aria-label="Liens du pied de page"><a href="{r}">Accueil</a><span>·</span><a href="{r}prestations/">Prestations</a><span>·</span><a href="{r}tarifs/">Tarifs</a><span>·</span><a href="{r}contact/">Contact</a><span>·</span><a href="{r}politique-reservation/">Politique de réservation</a><span>·</span><a href="{r}confidentialite/">Politique de confidentialité</a></nav>
+    <nav aria-label="Liens du pied de page"><a href="{r}">Accueil</a><span>·</span><a href="{r}prestations/">Prestations</a><span>·</span><a href="{r}tarifs/">Tarifs</a><span>·</span><a href="{r}reservation/">Réservation</a><span>·</span><a href="{r}politique-reservation/">Politique de réservation</a><span>·</span><a href="{r}confidentialite/">Politique de confidentialité</a></nav>
     <div class="coord"><a href="tel:+15067870667">506-787-0667</a> · <a href="mailto:bonjour@norelias.ca">bonjour@norelias.ca</a></div>
   </div>
 </footer>
@@ -237,7 +237,7 @@ def apropos():
     <p>Accompagner les familles fait partie de ma vie depuis longtemps. Je sais à quel point les premiers jours avec bébé passent vite, et combien chaque regard, chaque petite main, mérite d'être gardé pour toujours.</p>
     <p>Pendant votre séance, je prends le temps. Bébé dicte le rythme, vous êtes à l'aise, et moi je capte ce qui est vrai : la tendresse, les rires, l'émotion.</p>
     <p>De la grossesse aux finissants, je suis là pour raconter votre histoire en images.</p>
-    <a class="bouton" href="{{r}}contact/">En savoir plus {FLECHE}</a>
+    <a class="bouton" href="{{r}}reservation/">Réserver une séance {FLECHE}</a>
   </div>
 </div>
 </div><img class="deco" src="{{r}}images/feuille-2.png" alt="" style="right:calc(50% - 360 * var(--u));bottom:calc(30 * var(--u));width:calc(150 * var(--u))"></section>'''
@@ -413,8 +413,8 @@ def css():
 
 if __name__ == '__main__':
     css()
-    accueil(); prestations(); portfolio(); apropos(); tarifs(); reservation(); contact(); politique(); confidentialite(); page404()
-    urls = ['', 'a-propos/', 'prestations/', 'portfolio/', 'tarifs/', 'reservation/', 'contact/', 'politique-reservation/', 'confidentialite/']
+    accueil(); prestations(); portfolio(); apropos(); tarifs(); reservation(); politique(); confidentialite(); page404()
+    urls = ['', 'a-propos/', 'prestations/', 'portfolio/', 'tarifs/', 'reservation/', 'politique-reservation/', 'confidentialite/']
     with open(os.path.join(RACINE, 'sitemap.xml'), 'w') as f:
         f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(f'  <url><loc>{SITE}/{u}</loc></url>\n' for u in urls) + '</urlset>\n')
     print('Pages générées.')

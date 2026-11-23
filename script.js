@@ -36,6 +36,58 @@
     });
   });
 
+  /* ---------- Portfolio : photo en grand, glisser ou flèches ---------- */
+  var figs = Array.prototype.slice.call(document.querySelectorAll('.galerie figure'));
+  if (figs.length) {
+    var vis = document.createElement('div');
+    vis.className = 'visionneuse'; vis.hidden = true;
+    vis.setAttribute('role', 'dialog'); vis.setAttribute('aria-modal', 'true'); vis.setAttribute('aria-label', 'Photo en grand');
+    vis.innerHTML = '<button type="button" class="v-fermer" aria-label="Fermer">×</button>' +
+      '<button type="button" class="v-prec" aria-label="Photo précédente">‹</button>' +
+      '<img alt=""><p class="v-legende"></p>' +
+      '<button type="button" class="v-suiv" aria-label="Photo suivante">›</button>';
+    document.body.appendChild(vis);
+    var vImg = vis.querySelector('img'), vLeg = vis.querySelector('.v-legende'), liste = [], pos = 0, retour = null;
+    function montrer(i) {
+      pos = (i + liste.length) % liste.length;
+      var im = liste[pos].querySelector('img');
+      vImg.src = im.currentSrc || im.src; vImg.alt = im.alt;
+      vLeg.textContent = im.alt + '  ·  ' + (pos + 1) + ' / ' + liste.length;
+    }
+    function ouvrir(fig) {
+      liste = figs.filter(function (f) { return !f.hidden; });
+      retour = document.activeElement;
+      vis.hidden = false; document.body.style.overflow = 'hidden';
+      montrer(liste.indexOf(fig));
+      vis.querySelector('.v-fermer').focus();
+    }
+    function fermer() { vis.hidden = true; document.body.style.overflow = ''; if (retour) retour.focus(); }
+    figs.forEach(function (fig) {
+      fig.tabIndex = 0; fig.setAttribute('role', 'button');
+      fig.setAttribute('aria-label', 'Agrandir : ' + (fig.querySelector('img') || {}).alt);
+      fig.addEventListener('click', function () { ouvrir(fig); });
+      fig.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ouvrir(fig); } });
+    });
+    vis.querySelector('.v-prec').addEventListener('click', function (e) { e.stopPropagation(); montrer(pos - 1); });
+    vis.querySelector('.v-suiv').addEventListener('click', function (e) { e.stopPropagation(); montrer(pos + 1); });
+    vis.querySelector('.v-fermer').addEventListener('click', fermer);
+    vis.addEventListener('click', function (e) { if (e.target === vis) fermer(); });
+    document.addEventListener('keydown', function (e) {
+      if (vis.hidden) return;
+      if (e.key === 'Escape') fermer();
+      else if (e.key === 'ArrowLeft') montrer(pos - 1);
+      else if (e.key === 'ArrowRight') montrer(pos + 1);
+    });
+    var x0 = null, y0 = null;
+    vis.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+    vis.addEventListener('touchend', function (e) {
+      if (x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) montrer(pos + (dx < 0 ? 1 : -1));
+      x0 = null;
+    });
+  }
+
   /* ---------- Envoi de courriel (EmailJS ou application courriel) ---------- */
   function emailjsPret(modele) {
     return C.emailjs && C.emailjs.service && C.emailjs.clePublique && modele && typeof window.emailjs !== 'undefined';

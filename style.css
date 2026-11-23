@@ -279,6 +279,18 @@ main{background:var(--creme)}
 
 /* ----- Ordinateur : le site dans une boîte centrée, beige autour ----- */
 .calcul-prix{background:#fbf4ef;border:1px solid #e3cbbf;border-radius:calc(8 * var(--u));padding:calc(8 * var(--u)) calc(12 * var(--u));margin:0 0 calc(10 * var(--u));font-size:calc(14 * var(--u));font-weight:700;color:var(--rose-fonce);text-align:center}
+/* Visionneuse du portfolio */
+.galerie figure{cursor:zoom-in}
+.visionneuse{position:fixed;inset:0;z-index:100;background:rgba(30,20,17,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px 60px 20px;touch-action:pan-y}
+.visionneuse[hidden]{display:none}
+.visionneuse img{max-width:100%;max-height:calc(100vh - 110px);object-fit:contain;border-radius:6px;box-shadow:0 10px 40px rgba(0,0,0,.5);user-select:none}
+.v-legende{color:#f1dcd4;font-size:14px;margin:12px 0 0;text-align:center}
+.visionneuse button{position:absolute;background:rgba(255,255,255,.14);border:0;color:#fff;cursor:pointer;border-radius:50%;width:48px;height:48px;font-size:34px;line-height:1;display:flex;align-items:center;justify-content:center}
+.visionneuse button:hover{background:rgba(255,255,255,.28)}
+.v-fermer{top:12px;right:14px;font-size:30px!important}
+.v-prec{left:10px;top:50%;transform:translateY(-50%)}
+.v-suiv{right:10px;top:50%;transform:translateY(-50%)}
+@media (max-width:600px){.visionneuse{padding:56px 8px 16px}.v-prec,.v-suiv{width:40px!important;height:40px!important;font-size:28px!important;background:rgba(0,0,0,.35)!important}}
 @media (min-width:1025px){
   body{background:#ead9cf}
   .entete,main,.pied{max-width:calc(728 * var(--u));margin-left:auto;margin-right:auto}
