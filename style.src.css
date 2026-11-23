@@ -295,7 +295,14 @@ main{background:var(--creme)}
    cellulaire (600 px et moins)
    ========================================================= */
 
-/* ----- Ordinateur : le site dans une boîte centrée, beige autour ----- */
+/* Toutes les pages remplissent l'écran : le pied de page reste en bas */
+body{display:flex;flex-direction:column;min-height:100vh}
+main{flex:1 0 auto;display:flex;flex-direction:column}
+main>*{flex:none}
+main>.page:last-child{flex:1 0 auto}
+.entete,.pied{flex:none}
+
+/* ----- Ordinateur : pleine largeur ----- */
 .calcul-prix{background:#fbf4ef;border:1px solid #e3cbbf;border-radius:8u;padding:8u 12u;margin:0 0 10u;font-size:14u;font-weight:700;color:var(--rose-fonce);text-align:center}
 /* Visionneuse du portfolio */
 .galerie figure{cursor:zoom-in}
@@ -310,11 +317,27 @@ main{background:var(--creme)}
 .v-suiv{right:10px;top:50%;transform:translateY(-50%)}
 @media (max-width:600px){.visionneuse{padding:56px 8px 16px}.v-prec,.v-suiv{width:40px!important;height:40px!important;font-size:28px!important;background:rgba(0,0,0,.35)!important}}
 @media (min-width:1025px){
-  body{background:#ead9cf}
-  .entete,main,.pied{max-width:728u;margin-left:auto;margin-right:auto}
-  main{box-shadow:0 0 30px rgba(58,42,36,.12)}
-  .entete{box-shadow:0 0 30px rgba(58,42,36,.08)}
-  .souvenirs{background-size:100% 100%}
+  :root{--largeur:min(92vw, 1240px)}
+  .entete .barre,.pied .barre,.bande-noel .contenu,.univers .interieur,.engagements .grille,.page .interieur,.page-largeur{max-width:var(--largeur)}
+  .heros{height:min(calc(100vw / 2.13), calc(100vh - 80u));min-height:400u;background:#e7cdb8 url('images/accueil-fond.jpg') 72% top/cover no-repeat}
+  .heros .interieur{max-width:var(--largeur)}
+  .heros-texte{top:50%;transform:translateY(-50%)}
+  .bande-noel .contenu{grid-template-columns:330u 1fr;height:200u}
+  .bande-noel img{height:200u}
+  .souvenirs{height:min(calc(100vw / 3.03), 620px);background:#f6ebe4 url('images/souvenirs-ourson.jpg') left center/cover no-repeat}
+  .souvenirs .interieur{max-width:none}
+  .souvenirs .texte{left:52%;top:50%;transform:translateY(-50%);width:min(36vw, 420px)}
+  .grille-univers{gap:18u 22u}
+  .carte-univers .photo{height:auto;aspect-ratio:4/3}
+  .carte-presta img{height:auto;aspect-ratio:4/3}
+  .galerie{grid-template-columns:repeat(4,minmax(0,1fr));gap:14u}
+  .galerie figure{height:auto;aspect-ratio:4/3}
+  .photo-tarif{height:150u}
+  .speciale .photo-tarif{height:140u}
+  .apropos{grid-template-columns:380u 1fr;gap:44u}
+  .apropos img{height:440u}
+  .grille-prestations,.prestations-grille-zone{grid-template-columns:repeat(5,minmax(0,1fr));gap:18u}
+  .carte-presta .nom{font-size:16u}
 }
 
 /* ----- Tablette et cellulaire : menu ☰ ----- */
