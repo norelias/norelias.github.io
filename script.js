@@ -519,35 +519,43 @@
     ctx.drawImage(im, (im.width - sw) / 2, (im.height - sh) / 2, sw, sh, x, y, w, h);
   }
   function rr(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
-  function dessiner(cv, code, im, variante) {
-    var c = cv.getContext('2d'), W = cv.width, H = cv.height;
-    c.clearRect(0, 0, W, H); var bg = c.createLinearGradient(0, 0, W, H); bg.addColorStop(0, '#6e4a3a'); bg.addColorStop(.55, '#a77a62'); bg.addColorStop(1, '#e9cdbd'); c.fillStyle = bg; c.fillRect(0, 0, W, H);
-    [[.12, .2, 26], [.3, .1, 16], [.8, .18, 30], [.92, .6, 20], [.06, .75, 22], [.7, .9, 18]].forEach(function (b) { c.fillStyle = 'rgba(255,224,170,.28)'; c.beginPath(); c.arc(W * b[0], H * b[1], b[2] * W / 480, 0, 7); c.fill(); });
-    var ph = function (x, y, w, h) { if (im) cover(c, im, x, y, w, h); else { c.fillStyle = '#e3cbbf'; c.fillRect(x, y, w, h); c.fillStyle = '#fff'; c.font = '600 ' + Math.round(W / 24) + 'px Nunito,sans-serif'; c.textAlign = 'center'; c.fillText('Votre photo ici', x + w / 2, y + h / 2); } };
-    c.save();
-    if (code === 'tasse') {
-      var g = variante === '15oz' ? 1 : .9, w = W * .46 * g, h = H * .72 * g, x = W * .27, y = (H - h) / 2;
-      c.strokeStyle = '#fff'; c.lineWidth = W * .035; c.beginPath(); c.arc(x + w + w * .02, y + h * .5, h * .22, -1.2, 1.2); c.stroke();
-      c.shadowColor = 'rgba(0,0,0,.2)'; c.shadowBlur = 14; c.fillStyle = '#fff'; rr(c, x, y, w, h, 12); c.fill(); c.shadowBlur = 0;
-      rr(c, x + 8, y + 8, w - 16, h - 16, 8); c.clip(); ph(x + 8, y + 8, w - 16, h - 16);
-    } else if (code === 'isotherme') {
-      var g2 = variante === '30oz' ? 1 : .9, tw = W * .3 * g2, th = H * .88 * g2, tx = (W - tw) / 2, ty = (H - th) / 2 + 6;
-      c.shadowColor = 'rgba(0,0,0,.2)'; c.shadowBlur = 14; c.fillStyle = '#fff';
-      c.beginPath(); c.moveTo(tx, ty); c.lineTo(tx + tw, ty); c.lineTo(tx + tw * .88, ty + th); c.lineTo(tx + tw * .12, ty + th); c.closePath(); c.fill(); c.shadowBlur = 0;
-      c.save(); c.beginPath(); c.moveTo(tx + 3, ty + th * .12); c.lineTo(tx + tw - 3, ty + th * .12); c.lineTo(tx + tw * .88 - 3, ty + th - 6); c.lineTo(tx + tw * .12 + 3, ty + th - 6); c.closePath(); c.clip(); ph(tx, ty + th * .1, tw, th * .88); c.restore();
-      c.fillStyle = '#5c2f2b'; rr(c, tx - 4, ty - th * .06, tw + 8, th * .08, 6); c.fill();
-      c.strokeStyle = '#5c2f2b'; c.lineWidth = 5; c.beginPath(); c.moveTo(tx + tw * .62, ty - th * .06); c.lineTo(tx + tw * .85, ty - th * .22); c.stroke();
-    } else if (code === 'portecles') {
-      var kw = W * .34, kh = H * .62, kx = (W - kw) / 2, ky = H * .3;
-      c.strokeStyle = '#a98374'; c.lineWidth = 6; c.beginPath(); c.arc(W / 2, ky - 8, 28, 0, Math.PI * 2); c.stroke();
-      c.shadowColor = 'rgba(0,0,0,.2)'; c.shadowBlur = 12; c.fillStyle = '#fff'; rr(c, kx, ky, kw, kh, 16); c.fill(); c.shadowBlur = 0;
-      rr(c, kx + 8, ky + 8, kw - 16, kh - 16, 10); c.clip(); ph(kx + 8, ky + 8, kw - 16, kh - 16);
-    } else {
-      var cx = W / 2, cy = H * .56, R = Math.min(W, H) * .36;
-      c.strokeStyle = '#8a4f48'; c.lineWidth = 5; c.beginPath(); c.moveTo(cx, cy - R); c.lineTo(cx, H * .1); c.stroke();
-      c.fillStyle = '#c0392b'; c.beginPath(); c.arc(cx, H * .1, 10, 0, 7); c.fill();
-      c.shadowColor = 'rgba(0,0,0,.2)'; c.shadowBlur = 12; c.fillStyle = '#d9b36a'; c.beginPath(); c.arc(cx, cy, R + 7, 0, 7); c.fill(); c.shadowBlur = 0;
-      c.beginPath(); c.arc(cx, cy, R, 0, 7); c.clip(); ph(cx - R, cy - R, R * 2, R * 2);
+  // Aperçu réaliste : la photo de la cliente est placée sur une vraie photo du produit
+  var BASES = {
+    tasse: { src: 'images/boutique-tasse.jpg', zone: { x: 131, y: 46, w: 125, h: 135 }, ombre: true },
+    isotherme: { src: 'images/boutique-isotherme.jpg', zone: { x: 141, y: 50, w: 100, h: 138 }, ombre: true },
+    portecles: { src: 'images/boutique-portecles.jpg', quad: [[142, 68], [238, 85], [108, 172]], poly: [[143, 70], [236, 86], [219, 198], [110, 172]] },
+    ornement: { src: 'images/boutique-ornement.jpg', rond: { x: 198, y: 111, r: 63 } }
+  };
+  var racine = (document.querySelector('link[href*="style.css"]').getAttribute('href') || '').replace(/style\.css.*$/, '');
+  Object.keys(BASES).forEach(function (k) { var b = BASES[k]; b.img = new Image(); b.img.onload = function () { b.pret = true; if (window.__maj) window.__maj(); }; b.img.src = racine + b.src; });
+  function dessiner(cv, code, im) {
+    var b = BASES[code] || BASES.tasse; if (!b.pret) return;
+    var T = 4, bw = b.img.width - 2 * T, bh = b.img.height - 2 * T, k = 1.6;
+    cv.width = Math.round(bw * k); cv.height = Math.round(bh * k);
+    var c = cv.getContext('2d'); c.imageSmoothingQuality = 'high';
+    c.drawImage(b.img, T, T, bw, bh, 0, 0, cv.width, cv.height);
+    if (!im) return;
+    c.save(); c.scale(k, k); c.translate(-T, -T);
+    if (b.zone) {
+      var z = b.zone; c.beginPath(); c.rect(z.x, z.y, z.w, z.h); c.clip(); cover(c, im, z.x - 1, z.y - 1, z.w + 2, z.h + 2);
+      var g = c.createLinearGradient(z.x, 0, z.x + z.w, 0);
+      g.addColorStop(0, 'rgba(40,25,20,.38)'); g.addColorStop(.18, 'rgba(40,25,20,0)'); g.addColorStop(.62, 'rgba(255,255,255,.07)'); g.addColorStop(.85, 'rgba(40,25,20,0)'); g.addColorStop(1, 'rgba(40,25,20,.42)');
+      c.fillStyle = g; c.fillRect(z.x, z.y, z.w, z.h);
+      var v = c.createLinearGradient(0, z.y, 0, z.y + z.h); v.addColorStop(0, 'rgba(40,25,20,.12)'); v.addColorStop(.12, 'rgba(40,25,20,0)'); v.addColorStop(.9, 'rgba(40,25,20,0)'); v.addColorStop(1, 'rgba(40,25,20,.18)');
+      c.fillStyle = v; c.fillRect(z.x, z.y, z.w, z.h);
+    } else if (b.quad) {
+      var q = b.quad, P = b.poly;
+      c.beginPath(); c.moveTo(P[0][0], P[0][1]); for (var i = 1; i < P.length; i++) c.lineTo(P[i][0], P[i][1]); c.closePath(); c.clip();
+      var W = Math.hypot(q[1][0] - q[0][0], q[1][1] - q[0][1]) * 1.1, H = Math.hypot(q[2][0] - q[0][0], q[2][1] - q[0][1]) * 1.1;
+      var r = Math.max(W / im.width, H / im.height), sw = W / r, sh = H / r, sx = (im.width - sw) / 2, sy = (im.height - sh) / 2;
+      var ux = (q[1][0] - q[0][0]) / (W / 1.1), uy = (q[1][1] - q[0][1]) / (W / 1.1), vx = (q[2][0] - q[0][0]) / (H / 1.1), vy = (q[2][1] - q[0][1]) / (H / 1.1);
+      var ox = q[0][0] - ux * W * .05 - vx * H * .05, oy = q[0][1] - uy * W * .05 - vy * H * .05;
+      c.transform(ux * W / sw, uy * W / sw, vx * H / sh, vy * H / sh, ox, oy); c.drawImage(im, sx, sy, sw, sh, 0, 0, sw, sh);
+    } else if (b.rond) {
+      var o = b.rond; c.beginPath(); c.arc(o.x, o.y, o.r, 0, 7); c.clip(); cover(c, im, o.x - o.r, o.y - o.r, o.r * 2, o.r * 2);
+      var rg = c.createRadialGradient(o.x - o.r * .35, o.y - o.r * .45, o.r * .05, o.x, o.y, o.r);
+      rg.addColorStop(0, 'rgba(255,255,255,.35)'); rg.addColorStop(.35, 'rgba(255,255,255,.05)'); rg.addColorStop(.85, 'rgba(255,255,255,0)'); rg.addColorStop(1, 'rgba(255,255,255,.28)');
+      c.fillStyle = rg; c.fillRect(o.x - o.r, o.y - o.r, o.r * 2, o.r * 2);
     }
     c.restore();
   }
@@ -578,7 +586,7 @@
   var selP = $('b-produit'), selV = $('b-variante'), cvA = $('b-apercu');
   function maj() {
     var code = selP.value;
-    if (code) dessiner(cvA, code, img, selV.value); else dessiner(cvA, 'tasse', img, '11oz');
+    dessiner(cvA, code || 'tasse', img);
     var p = code && P[code], v = p && p.v[selV.value];
     $('b-r-prod').textContent = v ? p.nom + ' · ' + v[0] + ' : ' + v[1] + ' $' : '—';
     $('b-r-total').innerHTML = '<strong>' + (v ? (v[1] + LIV) + ' $' : '—') + '</strong>';
@@ -634,5 +642,5 @@
   var q = location.search, m = $('msg-boutique');
   if (/merci=1/.test(q)) { m.textContent = 'Merci ! Votre paiement est reçu. Un courriel de confirmation vous attend.'; m.hidden = false; }
   else if (/annule=1/.test(q)) { m.textContent = 'Le paiement a été annulé. Votre commande n\'a pas été complétée.'; m.hidden = false; }
-  maj();
+  window.__maj = maj; maj();
 })();
