@@ -361,7 +361,7 @@ main{background:var(--creme)}
   .bande-noel .details{flex-wrap:wrap;gap:4u 12u;font-size:14u}
   .bande-noel .petit{font-size:12u}
   .bande-noel .bouton{font-size:14u}
-  .souvenirs{--u:calc(100vw / 420);height:262u;background-size:cover;background-position:left center}
+  .souvenirs{--u:calc(100vw / 420);height:262u;background-size:auto 100%;background-position:-30px center}
   .souvenirs::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(248,238,230,0) 38%,rgba(248,238,230,.92) 52%)}
   .souvenirs .texte{left:192u;top:14u;width:218u}
   .souvenirs h2 .titre-script{width:160u}
@@ -374,7 +374,7 @@ main{background:var(--creme)}
   .grille-univers{padding:0}
   .carte-univers{width:calc(20% - 8u)}
   .carte-univers .photo{height:72u}
-  .carte-univers .nom{font-size:13.5u;margin-top:5u;line-height:1.1}
+  .carte-univers .nom{font-size:12u;margin-top:5u;line-height:1.1}
   .engagements{--u:calc(100vw / 420);height:auto;padding:14u 0 26u}
   .engagements .grille{gap:10u;padding:0 10u;align-items:flex-start}
   .engagement{flex-direction:column;text-align:center;gap:6u;font-size:12u;flex:1}

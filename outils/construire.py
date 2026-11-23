@@ -30,7 +30,7 @@ SEANCES = [  # nom, code, image carte, description
     ('Noël', 'noel', 'noel.jpg', 'Mini-séances de 20 minutes dans un décor de Noël, en décembre.'),
 ]
 UNIVERS = ['grossesse', 'accouchement', 'nouveau-ne', 'famille', 'couple', 'noel', 'fetes', 'garderie-ecole', 'finissants', 'bal']
-UNIV_IMG = {'noel': 'noel-2.jpg', 'grossesse': 'grossesse.jpg', 'nouveau-ne': 'nouveau-ne-ourson.jpg', 'accouchement': 'accouchement-carre.jpg'}
+UNIV_IMG = {'noel': 'noel-2.jpg', 'grossesse': 'grossesse.jpg', 'accouchement': 'accouchement-carre.jpg'}
 
 def reseaux():
     return ('<div class="reseaux">'
@@ -140,7 +140,7 @@ def accueil():
     </div>
   </div>
 </section>
-<section class="souvenirs dechire-bas" style="--fond-dechire:#f6ebe4" role="img" aria-label="Nouveau-né endormi dans un panier avec un bonnet">
+<section class="souvenirs dechire-bas" style="--fond-dechire:#f6ebe4" role="img" aria-label="Nouveau-né endormi avec un bonnet d'ourson">
   <div class="interieur">
     <div class="texte">
       <h2><img class="titre-script" src="{{r}}images/titre-souvenirs.svg" alt="Des souvenirs authentiques" width="176" height="66"><span class="et">&amp; remplis d'émotions</span></h2>
