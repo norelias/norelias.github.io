@@ -560,6 +560,7 @@
   var ex = exemple();
   Array.prototype.forEach.call(cartes, function (a) {
     var cv = a.querySelector('canvas'), code = a.getAttribute('data-code');
+    if (!cv) return;
     dessiner(cv, code, ex, 'x');
     var im = new Image(); im.onload = function () { dessiner(cv, code, im, '30oz'); }; im.src = a.getAttribute('data-ex');
   });
@@ -568,9 +569,12 @@
       var v = b.getAttribute('data-filtre');
       Array.prototype.forEach.call(document.querySelectorAll('[data-filtre]'), function (x) { x.classList.toggle('actif', x === b); });
       Array.prototype.forEach.call(document.querySelectorAll('#grille-prod .prod'), function (a) { a.hidden = v !== 'tous' && a.getAttribute('data-cat') !== v; });
+      var ap = document.querySelector('.apercu-vignette'); if (ap) ap.hidden = v !== 'tous';
     });
   });
 
+  Array.prototype.forEach.call(document.querySelectorAll('.coeur-fav'), function (h) { h.addEventListener('click', function () { h.classList.toggle('on'); }); });
+  var av = document.querySelector('.apercu-vignette'); if (av) av.addEventListener('click', function () { var t = $('commande-titre'); if (t) t.scrollIntoView({ behavior: 'smooth' }); });
   var selP = $('b-produit'), selV = $('b-variante'), cvA = $('b-apercu');
   function maj() {
     var code = selP.value;
