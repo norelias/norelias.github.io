@@ -486,7 +486,7 @@
   (function () {
     var piste = document.querySelector('.grille-temoins');
     if (!piste) return;
-    var prec = document.querySelector('.fleche.prec'), suiv = document.querySelector('.fleche.suiv');
+    var prec = document.querySelector('.fl-t.prec'), suiv = document.querySelector('.fl-t.suiv');
     var pause = false;
     function pas() { var c = piste.querySelector('.temoin'); return c ? c.getBoundingClientRect().width + 14 : 300; }
     function aller(sens) {
