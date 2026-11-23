@@ -150,6 +150,14 @@ main{background:var(--creme)}
 .apropos img{border-radius:calc(16 * var(--u));width:100%;height:calc(322 * var(--u));object-fit:cover;object-position:center 20%}
 .apropos p{font-size:calc(15 * var(--u));color:#1e1411;line-height:1.42;font-weight:600;margin-bottom:calc(9 * var(--u))}
 .apropos p:first-child{font-family:'Cormorant Garamond',serif;font-size:calc(22 * var(--u));font-weight:600;line-height:1.15}
+.apropos-suite{max-width:calc(640 * var(--u));margin:calc(26 * var(--u)) auto 0;text-align:center}
+.apropos-suite h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:calc(28 * var(--u));margin-bottom:calc(8 * var(--u))}
+.apropos-suite h2 span{color:var(--rose-fonce);font-size:.8em}
+.apropos-suite p{font-size:calc(14.5 * var(--u));color:#1e1411;line-height:1.5;margin:0 0 calc(12 * var(--u))}
+.valeurs{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(14 * var(--u));margin:calc(18 * var(--u)) 0 calc(20 * var(--u))}
+.valeurs div{background:#fffaf7;border:1.5px solid #e3cbbf;border-radius:calc(12 * var(--u));padding:calc(14 * var(--u)) calc(12 * var(--u));box-shadow:var(--ombre);display:flex;flex-direction:column;gap:calc(5 * var(--u))}
+.valeurs strong{font-family:'Cormorant Garamond',serif;font-size:calc(22 * var(--u));font-weight:600;color:var(--rose-fonce)}
+.valeurs span{font-size:calc(12.5 * var(--u));line-height:1.4}
 .apropos .bouton{font-size:calc(17 * var(--u));height:calc(42 * var(--u));margin-top:calc(14 * var(--u));padding:0 calc(30 * var(--u))}
 
 /* Tarifs */
@@ -435,7 +443,7 @@ main>.page:last-child{flex:1 0 auto}
   .filtre{font-size:13px;height:30px;padding:0 10px}
   .apropos{grid-template-columns:1fr}
   .apropos img{max-width:300px;margin:0 auto}
-  .grille-tarifs,.extras,.speciales{grid-template-columns:1fr}
+  .grille-tarifs,.extras,.speciales,.valeurs{grid-template-columns:1fr}
   .zone-resa{grid-template-columns:1fr;padding-left:0}
   .zone-resa .vase{display:none}
   .contact{grid-template-columns:1fr;padding:0}

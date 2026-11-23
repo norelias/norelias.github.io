@@ -148,6 +148,14 @@ main{background:var(--creme)}
 .apropos img{border-radius:16u;width:100%;height:322u;object-fit:cover;object-position:center 20%}
 .apropos p{font-size:15u;color:#1e1411;line-height:1.42;font-weight:600;margin-bottom:9u}
 .apropos p:first-child{font-family:'Cormorant Garamond',serif;font-size:22u;font-weight:600;line-height:1.15}
+.apropos-suite{max-width:640u;margin:26u auto 0;text-align:center}
+.apropos-suite h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:28u;margin-bottom:8u}
+.apropos-suite h2 span{color:var(--rose-fonce);font-size:.8em}
+.apropos-suite p{font-size:14.5u;color:#1e1411;line-height:1.5;margin:0 0 12u}
+.valeurs{display:grid;grid-template-columns:repeat(3,1fr);gap:14u;margin:18u 0 20u}
+.valeurs div{background:#fffaf7;border:1.5px solid #e3cbbf;border-radius:12u;padding:14u 12u;box-shadow:var(--ombre);display:flex;flex-direction:column;gap:5u}
+.valeurs strong{font-family:'Cormorant Garamond',serif;font-size:22u;font-weight:600;color:var(--rose-fonce)}
+.valeurs span{font-size:12.5u;line-height:1.4}
 .apropos .bouton{font-size:17u;height:42u;margin-top:14u;padding:0 30u}
 
 /* Tarifs */
@@ -433,7 +441,7 @@ main>.page:last-child{flex:1 0 auto}
   .filtre{font-size:13px;height:30px;padding:0 10px}
   .apropos{grid-template-columns:1fr}
   .apropos img{max-width:300px;margin:0 auto}
-  .grille-tarifs,.extras,.speciales{grid-template-columns:1fr}
+  .grille-tarifs,.extras,.speciales,.valeurs{grid-template-columns:1fr}
   .zone-resa{grid-template-columns:1fr;padding-left:0}
   .zone-resa .vase{display:none}
   .contact{grid-template-columns:1fr;padding:0}
