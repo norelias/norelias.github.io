@@ -502,3 +502,133 @@
     ['mouseleave', 'focusout'].forEach(function (e) { zone.addEventListener(e, function () { pause = false; }); });
     setInterval(function () { if (!pause && !document.hidden) aller(1); }, 6000);
   })();
+
+/* ---------- Boutique : aperçu, photo, commande ---------- */
+(function () {
+  var f = document.getElementById('form-boutique');
+  var cartes = document.querySelectorAll('.prod[data-code]');
+  if (!f) return;
+  var C = window.NORELIAS || {};
+  var P = JSON.parse(f.getAttribute('data-produits'));
+  var LIV = Number(f.getAttribute('data-livraison'));
+  var $ = function (id) { return document.getElementById(id); };
+  var img = null, photoData = null;
+
+  function cover(ctx, im, x, y, w, h) {
+    var r = Math.max(w / im.width, h / im.height), sw = w / r, sh = h / r;
+    ctx.drawImage(im, (im.width - sw) / 2, (im.height - sh) / 2, sw, sh, x, y, w, h);
+  }
+  function rr(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+  function dessiner(cv, code, im, variante) {
+    var c = cv.getContext('2d'), W = cv.width, H = cv.height;
+    c.clearRect(0, 0, W, H); var bg = c.createLinearGradient(0, 0, W, H); bg.addColorStop(0, '#6e4a3a'); bg.addColorStop(.55, '#a77a62'); bg.addColorStop(1, '#e9cdbd'); c.fillStyle = bg; c.fillRect(0, 0, W, H);
+    [[.12, .2, 26], [.3, .1, 16], [.8, .18, 30], [.92, .6, 20], [.06, .75, 22], [.7, .9, 18]].forEach(function (b) { c.fillStyle = 'rgba(255,224,170,.28)'; c.beginPath(); c.arc(W * b[0], H * b[1], b[2] * W / 480, 0, 7); c.fill(); });
+    var ph = function (x, y, w, h) { if (im) cover(c, im, x, y, w, h); else { c.fillStyle = '#e3cbbf'; c.fillRect(x, y, w, h); c.fillStyle = '#fff'; c.font = '600 ' + Math.round(W / 24) + 'px Nunito,sans-serif'; c.textAlign = 'center'; c.fillText('Votre photo ici', x + w / 2, y + h / 2); } };
+    c.save();
+    if (code === 'tasse') {
+      var g = variante === '15oz' ? 1 : .9, w = W * .46 * g, h = H * .72 * g, x = W * .27, y = (H - h) / 2;
+      c.strokeStyle = '#fff'; c.lineWidth = W * .035; c.beginPath(); c.arc(x + w + w * .02, y + h * .5, h * .22, -1.2, 1.2); c.stroke();
+      c.shadowColor = 'rgba(0,0,0,.2)'; c.shadowBlur = 14; c.fillStyle = '#fff'; rr(c, x, y, w, h, 12); c.fill(); c.shadowBlur = 0;
+      rr(c, x + 8, y + 8, w - 16, h - 16, 8); c.clip(); ph(x + 8, y + 8, w - 16, h - 16);
+    } else if (code === 'isotherme') {
+      var g2 = variante === '30oz' ? 1 : .9, tw = W * .3 * g2, th = H * .88 * g2, tx = (W - tw) / 2, ty = (H - th) / 2 + 6;
+      c.shadowColor = 'rgba(0,0,0,.2)'; c.shadowBlur = 14; c.fillStyle = '#fff';
+      c.beginPath(); c.moveTo(tx, ty); c.lineTo(tx + tw, ty); c.lineTo(tx + tw * .88, ty + th); c.lineTo(tx + tw * .12, ty + th); c.closePath(); c.fill(); c.shadowBlur = 0;
+      c.save(); c.beginPath(); c.moveTo(tx + 3, ty + th * .12); c.lineTo(tx + tw - 3, ty + th * .12); c.lineTo(tx + tw * .88 - 3, ty + th - 6); c.lineTo(tx + tw * .12 + 3, ty + th - 6); c.closePath(); c.clip(); ph(tx, ty + th * .1, tw, th * .88); c.restore();
+      c.fillStyle = '#5c2f2b'; rr(c, tx - 4, ty - th * .06, tw + 8, th * .08, 6); c.fill();
+      c.strokeStyle = '#5c2f2b'; c.lineWidth = 5; c.beginPath(); c.moveTo(tx + tw * .62, ty - th * .06); c.lineTo(tx + tw * .85, ty - th * .22); c.stroke();
+    } else if (code === 'portecles') {
+      var kw = W * .34, kh = H * .62, kx = (W - kw) / 2, ky = H * .3;
+      c.strokeStyle = '#a98374'; c.lineWidth = 6; c.beginPath(); c.arc(W / 2, ky - 8, 28, 0, Math.PI * 2); c.stroke();
+      c.shadowColor = 'rgba(0,0,0,.2)'; c.shadowBlur = 12; c.fillStyle = '#fff'; rr(c, kx, ky, kw, kh, 16); c.fill(); c.shadowBlur = 0;
+      rr(c, kx + 8, ky + 8, kw - 16, kh - 16, 10); c.clip(); ph(kx + 8, ky + 8, kw - 16, kh - 16);
+    } else {
+      var cx = W / 2, cy = H * .56, R = Math.min(W, H) * .36;
+      c.strokeStyle = '#8a4f48'; c.lineWidth = 5; c.beginPath(); c.moveTo(cx, cy - R); c.lineTo(cx, H * .1); c.stroke();
+      c.fillStyle = '#c0392b'; c.beginPath(); c.arc(cx, H * .1, 10, 0, 7); c.fill();
+      c.shadowColor = 'rgba(0,0,0,.2)'; c.shadowBlur = 12; c.fillStyle = '#d9b36a'; c.beginPath(); c.arc(cx, cy, R + 7, 0, 7); c.fill(); c.shadowBlur = 0;
+      c.beginPath(); c.arc(cx, cy, R, 0, 7); c.clip(); ph(cx - R, cy - R, R * 2, R * 2);
+    }
+    c.restore();
+  }
+  // vignettes des cartes (photo d'exemple dessinée en dégradé)
+  function exemple() {
+    var cv = document.createElement('canvas'); cv.width = 400; cv.height = 400; var c = cv.getContext('2d');
+    var g = c.createLinearGradient(0, 0, 400, 400); g.addColorStop(0, '#f0c9bd'); g.addColorStop(1, '#a98374'); c.fillStyle = g; c.fillRect(0, 0, 400, 400);
+    c.fillStyle = 'rgba(255,255,255,.85)'; c.font = 'italic 90px Georgia,serif'; c.textAlign = 'center'; c.fillText('♡', 200, 235); return cv;
+  }
+  var ex = exemple();
+  Array.prototype.forEach.call(cartes, function (a) {
+    var cv = a.querySelector('canvas'), code = a.getAttribute('data-code');
+    dessiner(cv, code, ex, 'x');
+    var im = new Image(); im.onload = function () { dessiner(cv, code, im, '30oz'); }; im.src = a.getAttribute('data-ex');
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-filtre]'), function (b) {
+    b.addEventListener('click', function () {
+      var v = b.getAttribute('data-filtre');
+      Array.prototype.forEach.call(document.querySelectorAll('[data-filtre]'), function (x) { x.classList.toggle('actif', x === b); });
+      Array.prototype.forEach.call(document.querySelectorAll('#grille-prod .prod'), function (a) { a.hidden = v !== 'tous' && a.getAttribute('data-cat') !== v; });
+    });
+  });
+
+  var selP = $('b-produit'), selV = $('b-variante'), cvA = $('b-apercu');
+  function maj() {
+    var code = selP.value;
+    if (code) dessiner(cvA, code, img, selV.value); else dessiner(cvA, 'tasse', img, '11oz');
+    var p = code && P[code], v = p && p.v[selV.value];
+    $('b-r-prod').textContent = v ? p.nom + ' · ' + v[0] + ' : ' + v[1] + ' $' : '—';
+    $('b-r-total').innerHTML = '<strong>' + (v ? (v[1] + LIV) + ' $' : '—') + '</strong>';
+  }
+  function choisir(code) {
+    selP.value = code; remplir();
+    var t = $('commande-titre'); if (t) t.scrollIntoView({ behavior: 'smooth' });
+  }
+  function remplir() {
+    var p = P[selP.value]; selV.innerHTML = '';
+    if (!p) { selV.disabled = true; selV.innerHTML = '<option value="">Choisir d\'abord un produit</option>'; maj(); return; }
+    selV.disabled = false;
+    Object.keys(p.v).forEach(function (k) { var o = document.createElement('option'); o.value = k; o.textContent = p.v[k][0] + ' · ' + p.v[k][1] + ' $'; selV.appendChild(o); });
+    maj();
+  }
+  selP.addEventListener('change', remplir); selV.addEventListener('change', maj);
+  Array.prototype.forEach.call(document.querySelectorAll('[data-choisir]'), function (b) { b.addEventListener('click', function () { choisir(b.getAttribute('data-choisir')); }); });
+  Array.prototype.forEach.call(f.querySelectorAll('input[name=cadeau]'), function (r) { r.addEventListener('change', function () { $('b-dest').hidden = f.cadeau.value !== 'oui'; }); });
+
+  $('b-photo').addEventListener('change', function () {
+    var fi = this.files[0], al = $('b-alerte'); al.hidden = true; img = null; photoData = null;
+    if (!fi) { maj(); return; }
+    if (!/^image\/(jpeg|png)$/.test(fi.type)) { al.textContent = 'Choisissez une photo JPEG ou PNG.'; al.hidden = false; this.value = ''; maj(); return; }
+    var im = new Image(), url = URL.createObjectURL(fi);
+    im.onload = function () {
+      var m = Math.min(1, 1600 / Math.max(im.width, im.height)), w = Math.round(im.width * m), h = Math.round(im.height * m);
+      var cv = document.createElement('canvas'); cv.width = w; cv.height = h; cv.getContext('2d').drawImage(im, 0, 0, w, h);
+      photoData = cv.toDataURL('image/jpeg', .9); img = im; URL.revokeObjectURL(url);
+      if (Math.max(im.width, im.height) < 900) { al.textContent = 'Cette photo est de petite taille : l\'impression pourrait manquer de netteté. Une photo plus grande donnerait un meilleur résultat.'; al.hidden = false; }
+      maj();
+    };
+    im.onerror = function () { al.textContent = 'Cette photo n\'a pas pu être lue.'; al.hidden = false; };
+    im.src = url;
+  });
+
+  function erreur(t) { var e = $('b-erreur'); e.textContent = t; e.hidden = !t; }
+  f.addEventListener('submit', function (e) {
+    e.preventDefault(); erreur('');
+    if (!selP.value || !selV.value) return erreur('Choisissez un produit et un format.');
+    if (!photoData) return erreur('Ajoutez votre photo.');
+    var d = {}; ['prenom', 'nom', 'courriel', 'telephone', 'adresse'].forEach(function (k) { d[k] = (f[k].value || '').trim(); });
+    if (!d.prenom || !d.nom || !d.courriel || !d.telephone || !d.adresse) return erreur('Remplissez tous les champs obligatoires (*).');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.courriel)) return erreur('Courriel invalide.');
+    d.action = 'commander'; d.produit = selP.value; d.variante = selV.value; d.photo = photoData; d.piege = f.piege.value;
+    d.cadeau = f.cadeau.value === 'oui'; d.dest_nom = f.dest_nom.value; d.dest_adresse = f.dest_adresse.value; d.note = f.note.value;
+    var b = $('b-envoyer'); b.disabled = true; b.textContent = 'Un instant…';
+    fetch((C.serveur || '').replace('norelias-reservation', 'norelias-stripe'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { if (j && j.ok && j.paiement) { location.href = j.paiement; } else { throw new Error(j && j.erreur); } })
+      .catch(function (er) { erreur((er && er.message) || 'Une erreur est survenue. Écrivez-moi à bonjour@norelias.ca.'); b.disabled = false; b.textContent = 'Payer par carte'; });
+  });
+
+  var q = location.search, m = $('msg-boutique');
+  if (/merci=1/.test(q)) { m.textContent = 'Merci ! Votre paiement est reçu. Un courriel de confirmation vous attend.'; m.hidden = false; }
+  else if (/annule=1/.test(q)) { m.textContent = 'Le paiement a été annulé. Votre commande n\'a pas été complétée.'; m.hidden = false; }
+  maj();
+})();
