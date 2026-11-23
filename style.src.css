@@ -86,7 +86,7 @@ main{background:var(--creme)}
 .bande-noel .petit{font-size:10.5u;font-weight:400;color:#e7cfc6;margin:6u 0 0}
 
 /* Souvenirs */
-.souvenirs{position:relative;height:240u;background:#f6ebe4 url('images/souvenirs-fond.jpg') center/auto 100% no-repeat}
+.souvenirs{position:relative;height:240u;background:#f6ebe4 url('images/souvenirs-ourson.jpg') center/auto 100% no-repeat}
 .souvenirs .interieur{max-width:728u;height:100%;margin:0 auto;position:relative}
 .souvenirs .texte{position:absolute;left:380u;top:22u;width:290u}
 .souvenirs h2{font-size:22u;line-height:1}

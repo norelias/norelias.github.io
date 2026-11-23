@@ -88,7 +88,7 @@ main{background:var(--creme)}
 .bande-noel .petit{font-size:calc(10.5 * var(--u));font-weight:400;color:#e7cfc6;margin:calc(6 * var(--u)) 0 0}
 
 /* Souvenirs */
-.souvenirs{position:relative;height:calc(240 * var(--u));background:#f6ebe4 url('images/souvenirs-fond.jpg') center/auto 100% no-repeat}
+.souvenirs{position:relative;height:calc(240 * var(--u));background:#f6ebe4 url('images/souvenirs-ourson.jpg') center/auto 100% no-repeat}
 .souvenirs .interieur{max-width:calc(728 * var(--u));height:100%;margin:0 auto;position:relative}
 .souvenirs .texte{position:absolute;left:calc(380 * var(--u));top:calc(22 * var(--u));width:calc(290 * var(--u))}
 .souvenirs h2{font-size:calc(22 * var(--u));line-height:1}
