@@ -132,6 +132,15 @@ main{background:var(--creme)}
 .carte-presta img{width:100%;height:140u;object-fit:cover}
 .carte-presta .nom{font-family:'Nunito',sans-serif;font-weight:600;font-size:18u;text-align:center;height:42u;display:flex;align-items:center;justify-content:center}
 .carte-presta .etiquette-promo{font-size:13u;top:8u;left:8u;padding:1u 8u;border-radius:5u}
+.presta-details{margin-top:30u;text-align:center}
+.presta-details h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:28u;margin-bottom:12u}
+.presta-details h2 span{color:var(--rose-fonce);font-size:.8em}
+.liste-presta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12u 18u;text-align:left}
+.liste-presta div{background:#fffaf7;border:1px solid #ecd6cb;border-radius:10u;padding:10u 14u}
+.liste-presta h3{font-family:'Cormorant Garamond',serif;font-size:20u;font-weight:600;color:var(--rose-fonce);margin:0 0 2u}
+.liste-presta p{margin:0 0 4u;font-size:12.5u;line-height:1.4}
+.liste-presta a{font-size:12u;font-weight:700;color:var(--rose-fonce)}
+.presta-details .region{margin:16u auto 0;max-width:560u;font-size:13u;color:#5b4740}
 .prestations-grille-zone{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13u}
 
 /* Portfolio */
@@ -445,7 +454,7 @@ main>.page:last-child{flex:1 0 auto}
   .filtre{font-size:13px;height:30px;padding:0 10px}
   .apropos{grid-template-columns:1fr}
   .apropos img{max-width:300px;margin:0 auto}
-  .grille-tarifs,.extras,.speciales,.valeurs{grid-template-columns:1fr}
+  .grille-tarifs,.extras,.speciales,.valeurs,.liste-presta{grid-template-columns:1fr}
   .zone-resa{grid-template-columns:1fr;padding-left:0}
   .zone-resa .vase{display:none}
   .contact{grid-template-columns:1fr;padding:0}

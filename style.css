@@ -134,6 +134,15 @@ main{background:var(--creme)}
 .carte-presta img{width:100%;height:calc(140 * var(--u));object-fit:cover}
 .carte-presta .nom{font-family:'Nunito',sans-serif;font-weight:600;font-size:calc(18 * var(--u));text-align:center;height:calc(42 * var(--u));display:flex;align-items:center;justify-content:center}
 .carte-presta .etiquette-promo{font-size:calc(13 * var(--u));top:calc(8 * var(--u));left:calc(8 * var(--u));padding:calc(1 * var(--u)) calc(8 * var(--u));border-radius:calc(5 * var(--u))}
+.presta-details{margin-top:calc(30 * var(--u));text-align:center}
+.presta-details h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:calc(28 * var(--u));margin-bottom:calc(12 * var(--u))}
+.presta-details h2 span{color:var(--rose-fonce);font-size:.8em}
+.liste-presta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:calc(12 * var(--u)) calc(18 * var(--u));text-align:left}
+.liste-presta div{background:#fffaf7;border:1px solid #ecd6cb;border-radius:calc(10 * var(--u));padding:calc(10 * var(--u)) calc(14 * var(--u))}
+.liste-presta h3{font-family:'Cormorant Garamond',serif;font-size:calc(20 * var(--u));font-weight:600;color:var(--rose-fonce);margin:0 0 calc(2 * var(--u))}
+.liste-presta p{margin:0 0 calc(4 * var(--u));font-size:calc(12.5 * var(--u));line-height:1.4}
+.liste-presta a{font-size:calc(12 * var(--u));font-weight:700;color:var(--rose-fonce)}
+.presta-details .region{margin:calc(16 * var(--u)) auto 0;max-width:calc(560 * var(--u));font-size:calc(13 * var(--u));color:#5b4740}
 .prestations-grille-zone{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:calc(13 * var(--u))}
 
 /* Portfolio */
@@ -447,7 +456,7 @@ main>.page:last-child{flex:1 0 auto}
   .filtre{font-size:13px;height:30px;padding:0 10px}
   .apropos{grid-template-columns:1fr}
   .apropos img{max-width:300px;margin:0 auto}
-  .grille-tarifs,.extras,.speciales,.valeurs{grid-template-columns:1fr}
+  .grille-tarifs,.extras,.speciales,.valeurs,.liste-presta{grid-template-columns:1fr}
   .zone-resa{grid-template-columns:1fr;padding-left:0}
   .zone-resa .vase{display:none}
   .contact{grid-template-columns:1fr;padding:0}

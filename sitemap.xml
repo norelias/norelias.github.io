@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://norelias.ca/</loc></url>
-  <url><loc>https://norelias.ca/a-propos/</loc></url>
-  <url><loc>https://norelias.ca/prestations/</loc></url>
-  <url><loc>https://norelias.ca/portfolio/</loc></url>
-  <url><loc>https://norelias.ca/tarifs/</loc></url>
-  <url><loc>https://norelias.ca/reservation/</loc></url>
-  <url><loc>https://norelias.ca/politique-reservation/</loc></url>
-  <url><loc>https://norelias.ca/confidentialite/</loc></url>
+  <url><loc>https://norelias.ca/</loc><lastmod>2026-11-22</lastmod></url>
+  <url><loc>https://norelias.ca/a-propos/</loc><lastmod>2026-11-22</lastmod></url>
+  <url><loc>https://norelias.ca/prestations/</loc><lastmod>2026-11-22</lastmod></url>
+  <url><loc>https://norelias.ca/portfolio/</loc><lastmod>2026-11-22</lastmod></url>
+  <url><loc>https://norelias.ca/tarifs/</loc><lastmod>2026-11-22</lastmod></url>
+  <url><loc>https://norelias.ca/reservation/</loc><lastmod>2026-11-22</lastmod></url>
+  <url><loc>https://norelias.ca/politique-reservation/</loc><lastmod>2026-11-22</lastmod></url>
+  <url><loc>https://norelias.ca/confidentialite/</loc><lastmod>2026-11-22</lastmod></url>
 </urlset>
