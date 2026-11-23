@@ -179,6 +179,7 @@ main{background:var(--creme)}
 
 /* Formulaires */
 .champ{display:flex;flex-direction:column;gap:4u;margin-bottom:14u}
+.champ[hidden]{display:none}
 .champ label{font-weight:600;font-size:14u}
 .champ input,.champ select,.champ textarea{font:inherit;font-size:16u;font-weight:600;padding:0 14u;height:45u;border:1px solid #dcc9be;border-radius:6u;background:#fff;color:var(--brun);width:100%;box-shadow:0 1u 3u rgba(58,42,36,.08)}
 .champ textarea{height:auto;padding:10u 14u}
