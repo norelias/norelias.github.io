@@ -559,8 +559,8 @@
 
   /* ---- Aperçu réaliste : la photo de la cliente est posée sur une vraie photo du produit ---- */
   var BASES = {
-    tasse11: { src: 'images/pp-tasse11.jpg', zone: { x: 293, y: 155, w: 712, h: 780, r: 0, multiplier: 1 }, vues: [{}, { miroir: 1 }, { zoom: [649, 555, 1.7] }] },
-    tasse15: { src: 'images/pp-tasse15.jpg', zone: { x: 387, y: 162, w: 586, h: 705, r: 0, multiplier: 1 }, vues: [{}, { miroir: 1 }, { zoom: [680, 542, 1.7] }] },
+    tasse11: { src: 'images/pp-tasse11.jpg', zone: { x: 514, y: 308, w: 598, h: 655, r: 0, multiplier: 1 }, vues: [{}, { miroir: 1 }, { zoom: [813, 635, 1.7] }] },
+    tasse15: { src: 'images/pp-tasse15.jpg', zone: { x: 504, y: 153, w: 622, h: 748, r: 0, multiplier: 1 }, vues: [{}, { miroir: 1 }, { zoom: [815, 527, 1.7] }] },
     isotherme: { src: 'images/pp-isotherme.jpg', zone: { x: 340, y: 78, w: 220, h: 392, r: 4, fondu: [350, 440] }, vues: [{}, { miroir: 1 }, { zoom: [448, 240, 1.75] }] },
     rond: { src: 'images/pp-rond.jpg', rond: { x: 229, y: 359, r: 120 }, vues: [{}, { zoom: [229, 359, 1.9] }] },
     ornement: { src: 'images/pp-ornement.jpg', rond: { x: 194, y: 107, r: 63 }, vues: [{}, { zoom: [194, 107, 2] }] },
