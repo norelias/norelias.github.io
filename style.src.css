@@ -2,7 +2,7 @@
    Les mesures en « u » suivent la maquette (1u = 1 pixel de la maquette de 728 px de large).
    Après modification, lancez : python3 outils/construire.py  (qui génère style.css) */
 :root{
-  --u:clamp(1px, calc(100vw / 728), 1.22px);
+  --u:clamp(1px, calc(100vw / 728), 1.1px);
   --creme:#f7ece6; --creme-2:#fbf4ef; --blanc:#fffaf7;
   --brun:#2b1d18; --brun-2:#4a3630; --gris:#6f5a52;
   --rose-fonce:#8a4f48; --noel:#5c2f2b; --noel-rouge:#8c1c26; --or:#ecc478; --signature:#8c6450;
@@ -152,24 +152,41 @@ main{background:var(--creme)}
 
 /* Tarifs */
 .grille-tarifs{display:grid;grid-template-columns:repeat(3,1fr);gap:15u}
-.tarif{background:#fdf8f5;border-radius:16u;box-shadow:var(--ombre);text-align:center;overflow:hidden;display:flex;flex-direction:column}
-.tarif .tete{padding:14u 10u 8u}
+.tarif{position:relative;background:#fdf8f5;border-radius:16u;box-shadow:var(--ombre);text-align:center;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:inherit;transition:transform .25s,box-shadow .25s}
+.tarif:hover,.speciale:hover,.extra:hover{transform:translateY(-4u);box-shadow:0 14u 30u rgba(92,47,43,.18)}
+.photo-tarif{height:105u;background-size:cover;background-position:center 30%;position:relative}
+.photo-tarif::after{content:'';position:absolute;inset:auto 0 0 0;height:40%;background:linear-gradient(transparent,rgba(253,248,245,.9))}
+.ruban{position:absolute;top:10u;right:-30u;z-index:2;transform:rotate(35deg);background:var(--or,#d8b26a);color:#3d2622;font-size:9.5u;font-weight:800;padding:3u 34u;box-shadow:0 2u 6u rgba(0,0,0,.2)}
+.sous-titre-tarifs{text-align:center;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:26u;margin:22u 0 4u;color:var(--brun)}
+.sous-titre-tarifs span{color:var(--rose-fonce);font-size:.8em}
+.tarif .tete{padding:8u 10u 8u}
 .tarif .montant{font-family:'Cormorant Garamond',serif;font-size:27u;color:var(--rose-fonce);line-height:1}
 .tarif h3{font-family:'Cormorant Garamond',serif;font-size:25u;font-weight:500}
-.tarif ul{text-align:left;padding:4u 8u 12u 30u;margin:0;font-size:13.5u;flex:1}
-.tarif li{margin-bottom:4u}
+.tarif ul{text-align:left;padding:6u 14u 6u 18u;margin:0;font-size:13u;flex:1;list-style:none}
+.tarif li{margin-bottom:5u;padding-left:16u;position:relative}
+.tarif li::before{content:'♡';position:absolute;left:0;top:0;color:var(--rose-fonce);font-size:.95em}
+.tarif.vedette{outline:2u solid var(--signature);transform:translateY(-6u)}
+.tarif.vedette:hover{transform:translateY(-10u)}
 .tarif.vedette .tete{background:var(--signature)}
+.tarif.vedette .photo-tarif::after{background:linear-gradient(transparent,rgba(122,52,44,.85))}
 .tarif.vedette .tete h3,.tarif.vedette .tete .montant{color:#fff}
-.tarif .choisir{display:none}
+.choisir{display:inline-flex;align-items:center;gap:6u;align-self:center;margin:4u auto 14u;padding:6u 18u;border-radius:30u;background:linear-gradient(180deg,#e1b2a4,#cb9483);color:#2b1d18;font-weight:700;font-size:12.5u}
+.tarif.vedette .choisir{background:var(--signature);color:#fff}
 .speciales{display:grid;grid-template-columns:repeat(3,1fr);gap:15u;margin-top:12u}
-.speciale{background:#fffaf7;border:1.5px solid #dcb7aa;border-radius:10u;padding:8u 12u 6u;text-align:center;text-decoration:none;color:var(--brun);box-shadow:var(--ombre)}
+.speciale{background:#fffaf7;border:1.5px solid #dcb7aa;border-radius:12u;overflow:hidden;text-align:center;text-decoration:none;color:var(--brun);box-shadow:var(--ombre);display:flex;flex-direction:column;transition:transform .25s,box-shadow .25s}
+.speciale .photo-tarif{height:95u}
+.speciale .corps{padding:4u 12u 0;display:flex;flex-direction:column;flex:1}
+.speciale .corps p{flex:1}
+.speciale .choisir{margin-top:8u;margin-bottom:12u}
 .speciale h3{font-size:21u;line-height:1.05}
 .speciale .montant{font-family:'Cormorant Garamond',serif;font-size:24u;color:var(--rose-fonce);line-height:1.1}
 .speciale .montant small{font-size:13u}
 .speciale p{margin:3u 0 0;font-size:11.5u;color:#5b4740;line-height:1.35}
 .extras{display:grid;grid-template-columns:1fr 1fr;gap:15u;margin-top:10u}
-.extra{border-radius:10u;padding:6u 14u;display:flex;align-items:center;justify-content:space-between;gap:10u;text-decoration:none;min-height:54u}
-.extra h3{font-size:24u;line-height:1}
+.extra{border-radius:12u;padding:0 16u 0 0;overflow:hidden;display:flex;align-items:center;gap:12u;text-decoration:none;min-height:64u;transition:transform .25s,box-shadow .25s;box-shadow:var(--ombre)}
+.extra>div:nth-child(2){flex:1}
+.photo-extra{align-self:stretch;width:78u;flex:none;background-size:cover;background-position:center}
+.extra h3{font-size:20u;line-height:1.05}
 .extra p{margin:2u 0 0;font-size:12u}
 .extra.noel{background:var(--noel-rouge);color:#fbe6dc;border:1.5px solid var(--or)}
 .extra.noel h3{color:#fff}
