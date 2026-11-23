@@ -503,6 +503,17 @@
     setInterval(function () { if (!pause && !document.hidden) aller(1); }, 6000);
   })();
 
+/* ---------- Panier (stockage local) ---------- */
+(function () {
+  var CLE = 'norelias_panier';
+  function lire() { try { var a = JSON.parse(localStorage.getItem(CLE) || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+  function ecrire(a) { try { localStorage.setItem(CLE, JSON.stringify(a)); } catch (e) { return false; } maj(); return true; }
+  function n() { return lire().reduce(function (t, x) { return t + (Number(x.quantite) || 1); }, 0); }
+  function maj() { Array.prototype.forEach.call(document.querySelectorAll('.panier-n'), function (e) { var k = n(); e.textContent = k; e.hidden = !k; }); }
+  window.NBQ = { lire: lire, ecrire: ecrire, n: n, vider: function () { try { localStorage.removeItem(CLE); } catch (e) {} maj(); } };
+  maj();
+})();
+
 /* ---------- Boutique ---------- */
 (function () {
   var $ = function (id) { return document.getElementById(id); };
@@ -517,7 +528,7 @@
   });
   Array.prototype.forEach.call(document.querySelectorAll('.coeur-fav'), function (h) { h.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); h.classList.toggle('on'); }); });
   var q0 = location.search, m0 = $('msg-boutique');
-  if (m0 && /merci=1/.test(q0)) { m0.textContent = 'Merci ! Votre paiement est reçu. Un courriel de confirmation vous attend.'; m0.hidden = false; }
+  if (m0 && /merci=1/.test(q0)) { if (window.NBQ) window.NBQ.vider(); m0.textContent = 'Merci ! Votre paiement est reçu. Un courriel de confirmation vous attend.'; m0.hidden = false; }
   else if (m0 && /annule=1/.test(q0)) { m0.textContent = "Le paiement a été annulé. Votre commande n'a pas été complétée."; m0.hidden = false; }
 
   var f = $('form-produit');
@@ -525,13 +536,24 @@
   var C = window.NORELIAS || {};
   var P = JSON.parse(f.getAttribute('data-produit'));
   var CODE = f.getAttribute('data-code'), LIV = Number(f.getAttribute('data-livraison'));
-  var img = null, photoData = null, vue = 0;
+  var img = null, photoData = null, vue = 0, nomFichier = '', tailleFichier = '', idModif = null;
+  var cad = { z: 1, x: 0, y: 0 };
+  var txt = { t: '', police: 'Dancing Script', couleur: CODE === 'isotherme' ? '#5c2f2b' : '#ffffff', pos: 'devant' };
   var cvA = $('pp-apercu'), qte = $('pp-qte'), fi = $('pp-photo');
   function radios() { return f.querySelectorAll('input[name=variante]'); }
   function variante() { var r = f.querySelector('input[name=variante]:checked'); return r ? r.value : Object.keys(P.v)[0]; }
   function cover(ctx, im, x, y, w, h) {
-    var r = Math.max(w / im.width, h / im.height), sw = w / r, sh = h / r;
-    ctx.drawImage(im, (im.width - sw) / 2, (im.height - sh) / 2, sw, sh, x, y, w, h);
+    var r = Math.max(w / im.width, h / im.height) * cad.z, sw = w / r, sh = h / r;
+    ctx.drawImage(im, (im.width - sw) / 2 * (1 + cad.x), (im.height - sh) / 2 * (1 + cad.y), sw, sh, x, y, w, h);
+  }
+  function ecrire(c, x, y, maxw) {
+    if (!txt.t) return;
+    c.save(); c.textAlign = 'center'; c.textBaseline = 'middle';
+    var px = 36, pol = function () { c.font = px + 'px "' + txt.police + '", cursive'; }; pol();
+    var w = c.measureText(txt.t).width; if (w > maxw) { px = Math.max(10, Math.floor(px * maxw / w)); pol(); }
+    var h = txt.couleur.replace('#', ''), lum = (parseInt(h.substr(0, 2), 16) * .3 + parseInt(h.substr(2, 2), 16) * .59 + parseInt(h.substr(4, 2), 16) * .11);
+    c.shadowColor = lum > 150 ? 'rgba(0,0,0,.5)' : 'rgba(255,255,255,.55)'; c.shadowBlur = 5; c.shadowOffsetY = 1;
+    c.fillStyle = txt.couleur; c.fillText(txt.t, x, y); c.restore();
   }
   var racine = (document.querySelector('link[href*="style.css"]').getAttribute('href') || '').replace(/style\.css.*$/, '');
 
@@ -568,12 +590,12 @@
       var S = 120, hy = cy - S * .26;
       anneau(c, cx, hy - S * .64 - 22, 36);
       heart(c, cx, hy, S); c.fillStyle = argent(c, cx - S, hy - S, cx + S, hy + S); c.fill(); c.shadowColor = 'transparent';
-      if (face) { c.save(); heart(c, cx, hy + 1, S * .9); c.clip(); if (im) cover(c, im, cx - S, hy - S * .66, S * 2, S * 1.84); else { c.fillStyle = '#d9c7bb'; c.fillRect(cx - S, hy - S, S * 2, S * 2.2); } c.restore(); }
+      if (face) { c.save(); heart(c, cx, hy + 1, S * .9); c.clip(); if (im) cover(c, im, cx - S, hy - S * .66, S * 2, S * 1.84); else { c.fillStyle = '#d9c7bb'; c.fillRect(cx - S, hy - S, S * 2, S * 2.2); } if (im) ecrire(c, cx, hy + S * .42, S * 1.1); c.restore(); }
       else { heart(c, cx, hy + 1, S * .9); var g = c.createLinearGradient(cx - S, hy - S * .6, cx + S, hy + S); g.addColorStop(0, '#cfd0d2'); g.addColorStop(.5, '#e9eaeb'); g.addColorStop(1, '#b4b6b8'); c.fillStyle = g; c.fill(); }
     } else if (v === 'rect') {
       anneau(c, cx, cy - 188, 36); rr(c, cx - 22, cy - 160, 44, 36, 8); c.fillStyle = argent(c, cx - 22, cy - 160, cx + 22, cy - 124); c.fill();
       rr(c, cx - 100, cy - 128, 200, 262, 12); c.fillStyle = argent(c, cx - 100, cy - 128, cx + 100, cy + 134); c.fill(); c.shadowColor = 'transparent';
-      if (face) { c.save(); rr(c, cx - 86, cy - 114, 172, 234, 6); c.clip(); if (im) cover(c, im, cx - 86, cy - 114, 172, 234); else { c.fillStyle = '#d9c7bb'; c.fillRect(cx - 90, cy - 118, 180, 242); } c.restore(); }
+      if (face) { c.save(); rr(c, cx - 86, cy - 114, 172, 234, 6); c.clip(); if (im) cover(c, im, cx - 86, cy - 114, 172, 234); else { c.fillStyle = '#d9c7bb'; c.fillRect(cx - 90, cy - 118, 180, 242); } if (im) ecrire(c, cx, cy + 92, 150); c.restore(); }
       else { rr(c, cx - 86, cy - 114, 172, 234, 6); c.fillStyle = '#dcdddf'; c.fill(); }
     } else {
       anneau(c, cx, cy - 196, 36);
@@ -581,7 +603,7 @@
       rr(c, cx - 104, cy - 112, 208, 262, 22); var g2 = c.createLinearGradient(cx - 104, cy - 112, cx + 104, cy + 150); g2.addColorStop(0, '#343032'); g2.addColorStop(.5, '#1b191a'); g2.addColorStop(1, '#2a2628'); c.fillStyle = g2; c.fill(); c.shadowColor = 'transparent';
       c.beginPath(); c.arc(cx, cy - 128, 12, 0, 7); c.fillStyle = argent(c, cx - 12, cy - 140, cx + 12, cy - 116); c.fill();
       c.setLineDash([5, 4]); c.lineWidth = 1.6; c.strokeStyle = '#8a8284'; rr(c, cx - 94, cy - 102, 188, 242, 16); c.stroke(); c.setLineDash([]);
-      if (face) { c.save(); rr(c, cx - 70, cy - 66, 140, 180, 5); c.clip(); if (im) cover(c, im, cx - 70, cy - 66, 140, 180); else { c.fillStyle = '#d9c7bb'; c.fillRect(cx - 72, cy - 68, 144, 184); } c.restore(); c.lineWidth = 3; c.strokeStyle = '#4a4446'; rr(c, cx - 70, cy - 66, 140, 180, 5); c.stroke(); }
+      if (face) { c.save(); rr(c, cx - 70, cy - 66, 140, 180, 5); c.clip(); if (im) cover(c, im, cx - 70, cy - 66, 140, 180); else { c.fillStyle = '#d9c7bb'; c.fillRect(cx - 72, cy - 68, 144, 184); } if (im) ecrire(c, cx, cy + 96, 120); c.restore(); c.lineWidth = 3; c.strokeStyle = '#4a4446'; rr(c, cx - 70, cy - 66, 140, 180, 5); c.stroke(); }
     }
     c.restore();
   }
@@ -615,18 +637,21 @@
     if (b.zone) {
       var z = b.zone, zx = v.miroir ? W - z.x - z.w : z.x, m = v.miroir ? -1 : 1;
       c.save(); rr(c, zx, z.y, z.w, z.h, z.r || 0); c.clip();
-      if (z.fondu) {
+      var dos = v.miroir && txt.pos === 'derriere' && txt.t && (CODE === 'tasse' || CODE === 'isotherme');
+      if (dos) { c.fillStyle = '#f4f1f2'; c.fillRect(zx, z.y, z.w, z.h); }
+      else if (z.fondu) {
         cover(c, im, zx - 1, z.y - 1, z.w + 2, z.fondu[1] - z.y + 40);
         var g0 = c.createLinearGradient(0, z.fondu[0], 0, z.fondu[1] + 18); g0.addColorStop(0, 'rgba(243,240,241,0)'); g0.addColorStop(1, 'rgba(243,240,241,1)');
         c.fillStyle = g0; c.fillRect(zx, z.fondu[0], z.w, z.h); c.fillStyle = '#f3f0f1'; c.fillRect(zx, z.fondu[1] + 17, z.w, z.h);
       } else cover(c, im, zx - 1, z.y - 1, z.w + 2, z.h + 2);
+      if (txt.t && ((!v.miroir && txt.pos === 'devant') || dos)) ecrire(c, zx + z.w / 2, z.y + z.h - (z.fondu ? 62 : 34), z.w - 28);
       var g = c.createLinearGradient(zx, 0, zx + z.w, 0), s = function (p) { return m > 0 ? p : 1 - p; };
       g.addColorStop(0, 'rgba(40,25,20,.34)'); g.addColorStop(.16, 'rgba(40,25,20,0)'); g.addColorStop(s(.62), 'rgba(255,255,255,.07)'); g.addColorStop(.86, 'rgba(40,25,20,0)'); g.addColorStop(1, 'rgba(40,25,20,.4)');
       c.fillStyle = g; c.fillRect(zx, z.y, z.w, z.h);
       var vg = c.createLinearGradient(0, z.y, 0, z.y + z.h); vg.addColorStop(0, 'rgba(40,25,20,.12)'); vg.addColorStop(.1, 'rgba(40,25,20,0)'); vg.addColorStop(.92, 'rgba(40,25,20,0)'); vg.addColorStop(1, 'rgba(40,25,20,.16)');
       c.fillStyle = vg; c.fillRect(zx, z.y, z.w, z.h); c.restore();
     } else if (b.rond) {
-      var q = b.rond; c.save(); c.beginPath(); c.arc(q.x, q.y, q.r, 0, 7); c.clip(); cover(c, im, q.x - q.r, q.y - q.r, q.r * 2, q.r * 2);
+      var q = b.rond; c.save(); c.beginPath(); c.arc(q.x, q.y, q.r, 0, 7); c.clip(); cover(c, im, q.x - q.r, q.y - q.r, q.r * 2, q.r * 2); ecrire(c, q.x, q.y + q.r - 30, q.r * 1.45);
       var rg = c.createRadialGradient(q.x - q.r * .35, q.y - q.r * .45, q.r * .05, q.x, q.y, q.r);
       rg.addColorStop(0, 'rgba(255,255,255,.3)'); rg.addColorStop(.35, 'rgba(255,255,255,.04)'); rg.addColorStop(.85, 'rgba(255,255,255,0)'); rg.addColorStop(1, 'rgba(255,255,255,.22)');
       c.fillStyle = rg; c.fillRect(q.x - q.r, q.y - q.r, q.r * 2, q.r * 2); c.restore();
@@ -657,22 +682,149 @@
     bt.addEventListener('click', function () { var r = f.querySelector('input[name=variante][value="' + bt.getAttribute('data-modele') + '"]'); if (r) { r.checked = true; maj(); } });
   });
 
-  /* ---- prix, taxes, adresses ---- */
+  /* ---- prix ---- */
+  function fmt(n) { return (Math.round(n * 100) / 100).toLocaleString('fr-CA', { minimumFractionDigits: 2 }) + ' $'; }
+  function maj() {
+    dessinerVues();
+    var v = P.v[variante()] || P.v[Object.keys(P.v)[0]], q = Math.max(1, Math.min(10, Number(qte.value) || 1));
+    $('pp-prix').textContent = fmt(v[1]);
+    $('pp-total-prod').textContent = fmt(v[1] * q);
+    var badge = $('pp-badge-txt'); if (badge && CODE === 'tasse') badge.innerHTML = '<b>' + v[0].split(' (')[0] + '</b><small>(' + (v[0].split(' (')[1] || '').replace(')', '') + ')</small>';
+    Array.prototype.forEach.call(document.querySelectorAll('[data-modele]'), function (bt) { bt.classList.toggle('on', bt.getAttribute('data-modele') === variante()); });
+  }
+  window.__maj = maj;
+  Array.prototype.forEach.call(radios(), function (r) { r.addEventListener('change', maj); });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-qte]'), function (b) { b.addEventListener('click', function () { qte.value = Math.max(1, Math.min(10, (Number(qte.value) || 1) + Number(b.getAttribute('data-qte')))); maj(); }); });
+  qte.addEventListener('input', maj);
+  var liste = $('pp-liste'); if (liste) liste.addEventListener('click', function () { liste.classList.toggle('on'); });
+
+  /* ---- texte : police, couleur, devant / derrière ---- */
+  var tIn = $('pp-texte'), tOpts = $('pp-texte-opts');
+  function chargerPolice() { if (document.fonts && document.fonts.load) document.fonts.load('40px "' + txt.police + '"').then(function () { maj(); }); }
+  tIn.addEventListener('input', function () { txt.t = this.value; $('pp-compte').textContent = this.value.length + ' / 50'; tOpts.hidden = !this.value.trim(); chargerPolice(); maj(); });
+  Array.prototype.forEach.call(f.querySelectorAll('[data-police]'), function (b) { b.addEventListener('click', function () { txt.police = b.getAttribute('data-police'); Array.prototype.forEach.call(f.querySelectorAll('[data-police]'), function (x) { x.classList.toggle('on', x === b); }); chargerPolice(); maj(); }); });
+  Array.prototype.forEach.call(f.querySelectorAll('[data-couleur]'), function (b) { b.addEventListener('click', function () { txt.couleur = b.getAttribute('data-couleur'); Array.prototype.forEach.call(f.querySelectorAll('[data-couleur]'), function (x) { x.classList.toggle('on', x === b); }); maj(); }); });
+  Array.prototype.forEach.call(f.querySelectorAll('input[name=position]'), function (r) { r.addEventListener('change', function () { txt.pos = r.value; if (CODE === 'tasse' || CODE === 'isotherme') { vue = r.value === 'derriere' ? 1 : 0; } maj(); }); });
+  Array.prototype.forEach.call(f.querySelectorAll('[data-couleur]'), function (b) { if (b.getAttribute('data-couleur') === txt.couleur) b.classList.add('on'); });
+
+  /* ---- cadrage de la photo : zoom et déplacement ---- */
+  var aj = $('pp-ajust'), zm = $('pp-zoom');
+  function zoomer(z) { cad.z = Math.max(1, Math.min(3, z)); zm.value = cad.z; maj(); }
+  zm.addEventListener('input', function () { cad.z = Number(zm.value) || 1; maj(); });
+  $('pp-z-moins').addEventListener('click', function () { zoomer(cad.z - .15); });
+  $('pp-z-plus').addEventListener('click', function () { zoomer(cad.z + .15); });
+  $('pp-recentrer').addEventListener('click', function () { cad = { z: 1, x: 0, y: 0 }; zm.value = 1; maj(); });
+  var glisse = null;
+  cvA.addEventListener('pointerdown', function (e) { if (!img) return; glisse = { x: e.clientX, y: e.clientY }; try { cvA.setPointerCapture(e.pointerId); } catch (er) {} });
+  cvA.addEventListener('pointermove', function (e) {
+    if (!glisse) return;
+    cad.x = Math.max(-1, Math.min(1, cad.x - (e.clientX - glisse.x) / (cvA.clientWidth * .22)));
+    cad.y = Math.max(-1, Math.min(1, cad.y - (e.clientY - glisse.y) / (cvA.clientHeight * .28)));
+    glisse = { x: e.clientX, y: e.clientY }; maj();
+  });
+  ['pointerup', 'pointercancel'].forEach(function (ev) { cvA.addEventListener(ev, function () { glisse = null; }); });
+  cvA.addEventListener('wheel', function (e) { if (!img) return; e.preventDefault(); zoomer(cad.z + (e.deltaY < 0 ? .1 : -.1)); }, { passive: false });
+
+  /* ---- téléversement ---- */
+  var zone = $('pp-zone'), vign = $('pp-vignette'), alerte = $('pp-alerte'), src = null;
+  $('pp-changer').addEventListener('click', function () { fi.click(); });
+  ['dragover', 'dragenter'].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.add('survol'); }); });
+  ['dragleave', 'drop'].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.remove('survol'); }); });
+  zone.addEventListener('drop', function (e) { if (e.dataTransfer.files[0]) { fi.files = e.dataTransfer.files; lire(); } });
+  fi.addEventListener('change', lire);
+  function reduire(im, max, q) {
+    var m = Math.min(1, max / Math.max(im.width, im.height)), cv = document.createElement('canvas'); cv.width = Math.round(im.width * m); cv.height = Math.round(im.height * m);
+    cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height); return cv.toDataURL('image/jpeg', q);
+  }
+  function afficherPhoto(im, nom, taille) {
+    img = im; photoData = true; nomFichier = nom; tailleFichier = taille;
+    $('pp-miniature').src = reduire(im, 200, .8); vign.hidden = false; zone.hidden = true; aj.hidden = false;
+    $('pp-nom').textContent = nom; $('pp-taille').textContent = taille; maj();
+  }
+  function lire() {
+    var fic = fi.files[0]; alerte.hidden = true;
+    if (!fic) return;
+    if (!/^image\/(jpeg|png)$/.test(fic.type)) { alerte.textContent = 'Choisissez une photo JPEG ou PNG.'; alerte.hidden = false; fi.value = ''; return; }
+    if (fic.size > 10 * 1024 * 1024) { alerte.textContent = 'La photo est trop lourde (maximum 10 Mo).'; alerte.hidden = false; fi.value = ''; return; }
+    var im = new Image(), url = URL.createObjectURL(fic);
+    im.onload = function () {
+      src = reduire(im, 1400, .86); cad = { z: 1, x: 0, y: 0 }; zm.value = 1;
+      var t = fic.size > 1048576 ? (fic.size / 1048576).toFixed(1).replace('.', ',') + ' Mo' : Math.round(fic.size / 1024) + ' Ko';
+      var im2 = new Image(); im2.onload = function () { afficherPhoto(im2, fic.name, t); }; im2.src = src;
+      if (Math.max(im.width, im.height) < 900) { alerte.textContent = "Cette photo est de petite taille : l'impression pourrait manquer de netteté. Une photo plus grande donnerait un meilleur résultat."; alerte.hidden = false; }
+    };
+    im.onerror = function () { alerte.textContent = "Cette photo n'a pas pu être lue."; alerte.hidden = false; };
+    im.src = url;
+  }
+
+  /* ---- ajouter au panier ---- */
+  var ASPECT = { tasse: [267, 296], isotherme: [234, 394], rond: [1, 1], ornement: [1, 1], coeur: [228, 222], rect: [172, 234], cuir: [140, 180] };
+  function exporter() {
+    var a = ASPECT[CODE === 'portecles' ? variante() : CODE] || [1, 1], long = 1500, w = a[0] >= a[1] ? long : Math.round(long * a[0] / a[1]), h = a[0] >= a[1] ? Math.round(long * a[1] / a[0]) : long;
+    var cv = document.createElement('canvas'); cv.width = w; cv.height = h; var c = cv.getContext('2d'); cover(c, img, 0, 0, w, h); return cv.toDataURL('image/jpeg', .88);
+  }
+  var q0 = new URLSearchParams(location.search).get('modifier');
+  if (q0 && window.NBQ) {
+    var ex = window.NBQ.lire().filter(function (x) { return x.id === q0; })[0];
+    if (ex && ex.src) {
+      idModif = ex.id; var r = f.querySelector('input[name=variante][value="' + ex.variante + '"]'); if (r) r.checked = true;
+      qte.value = ex.quantite; cad = ex.cad || cad; zm.value = cad.z; txt.t = ex.texte || ''; txt.police = ex.police || txt.police; txt.couleur = ex.couleur || txt.couleur; txt.pos = ex.position || 'devant';
+      tIn.value = txt.t; $('pp-compte').textContent = txt.t.length + ' / 50'; tOpts.hidden = !txt.t;
+      Array.prototype.forEach.call(f.querySelectorAll('[data-police]'), function (x) { x.classList.toggle('on', x.getAttribute('data-police') === txt.police); });
+      Array.prototype.forEach.call(f.querySelectorAll('[data-couleur]'), function (x) { x.classList.toggle('on', x.getAttribute('data-couleur') === txt.couleur); });
+      var rp = f.querySelector('input[name=position][value="' + txt.pos + '"]'); if (rp) rp.checked = true;
+      src = ex.src; var im3 = new Image(); im3.onload = function () { afficherPhoto(im3, ex.nom || 'photo.jpg', ex.taille || ''); chargerPolice(); }; im3.src = src;
+      $('pp-ajouter').firstChild.nextSibling.textContent = 'Enregistrer les changements';
+    }
+  }
+  $('pp-ajouter').addEventListener('click', function () {
+    if (!img) { alerte.textContent = "Ajoutez d'abord votre photo."; alerte.hidden = false; zone.hidden ? vign.scrollIntoView({ block: 'center', behavior: 'smooth' }) : zone.scrollIntoView({ block: 'center', behavior: 'smooth' }); return; }
+    var cle = cleBase(variante()), b = BASES[cle], keep = vue; vue = 0;
+    var ap = document.createElement('canvas'); dessiner(ap, cle, img, { vue: b.vues[0], ech: echelle(), w: 360 }); vue = keep;
+    var item = { id: idModif || ('i' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6)), code: CODE, variante: variante(), quantite: Number(qte.value) || 1,
+      texte: txt.t.trim(), police: txt.t.trim() ? txt.police : '', couleur: txt.t.trim() ? txt.couleur : '', position: txt.t.trim() ? txt.pos : '', cad: cad, cadrage: JSON.stringify(cad),
+      photo: exporter(), src: src, nom: nomFichier, taille: tailleFichier, apercu: ap.toDataURL('image/jpeg', .8) };
+    var a = window.NBQ.lire(), i = a.map(function (x) { return x.id; }).indexOf(item.id);
+    if (i > -1) a[i] = item; else a.push(item);
+    if (!window.NBQ.ecrire(a)) { alerte.textContent = "Le panier est plein : finalisez ou retirez un article, puis réessayez."; alerte.hidden = false; return; }
+    var ok = $('pp-ajoute'); ok.hidden = false; ok.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  });
+  maj();
+})();
+
+/* ---------- Page panier ---------- */
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var f = $('form-panier'); if (!f || !window.NBQ) return;
+  var C = window.NORELIAS || {}, PR = JSON.parse(f.getAttribute('data-produits')), LIV = Number(f.getAttribute('data-livraison'));
+  var racine = (document.querySelector('link[href*="style.css"]').getAttribute('href') || '').replace(/style\.css.*$/, '');
   var TX = { QC: { tps: 5, tvq: 9.975 }, NB: { tvh: 15 }, NL: { tvh: 15 }, NS: { tvh: 14 }, PE: { tvh: 15 }, ON: { tvh: 13 }, AB: { tps: 5 }, BC: { tps: 5 }, MB: { tps: 5 }, SK: { tps: 5 }, NT: { tps: 5 }, NU: { tps: 5 }, YT: { tps: 5 } };
   var PREM = { A: 'NL', B: 'NS', C: 'PE', E: 'NB', G: 'QC', H: 'QC', J: 'QC', K: 'ON', L: 'ON', M: 'ON', N: 'ON', P: 'ON', R: 'MB', S: 'SK', T: 'AB', V: 'BC', X: 'NT', Y: 'YT' };
   var NOMS = { 'quebec': 'QC', 'new brunswick': 'NB', 'nouveau-brunswick': 'NB', 'nova scotia': 'NS', 'nouvelle-ecosse': 'NS', 'ontario': 'ON', 'manitoba': 'MB', 'saskatchewan': 'SK', 'alberta': 'AB', 'british columbia': 'BC', 'colombie-britannique': 'BC', 'prince edward island': 'PE', 'ile-du-prince-edouard': 'PE', 'newfoundland and labrador': 'NL', 'terre-neuve-et-labrador': 'NL', 'newfoundland': 'NL', 'yukon': 'YT', 'northwest territories': 'NT', 'territoires du nord-ouest': 'NT', 'nunavut': 'NU' };
   function provDe(nom) { var s = String(nom || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim(); return NOMS[s] || (TX[s.toUpperCase()] ? s.toUpperCase() : ''); }
   function cpOk(prov, cp) { var c = String(cp || '').toUpperCase().replace(/\s/g, ''); if (!/^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(c)) return false; var p = PREM[c[0]]; return p === prov || (p === 'NT' && prov === 'NU'); }
   function fmt(n) { return (Math.round(n * 100) / 100).toLocaleString('fr-CA', { minimumFractionDigits: 2 }) + ' $'; }
+  function esc(t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function provTaxes() { return (f.cadeau.value === 'oui' && $('d-adresse').value.trim()) ? $('d-prov').value : $('b-prov').value; }
-  function maj() {
-    dessinerVues();
-    var v = P.v[variante()] || P.v[Object.keys(P.v)[0]], q = Math.max(1, Math.min(10, Number(qte.value) || 1)), sous = v[1] * q, base = sous + LIV;
-    $('pp-prix').textContent = fmt(v[1]);
-    $('pp-total-prod').textContent = fmt(sous);
-    var badge = $('pp-badge-txt'); if (badge && CODE === 'tasse') badge.innerHTML = '<b>' + v[0].split(' (')[0] + '</b><small>(' + (v[0].split(' (')[1] || '').replace(')', '') + ')</small>';
-    Array.prototype.forEach.call(document.querySelectorAll('[data-modele]'), function (bt) { bt.classList.toggle('on', bt.getAttribute('data-modele') === variante()); });
-    var prov = provTaxes(), t = TX[prov], lig = '<dt>Sous-total (' + q + ' article' + (q > 1 ? 's' : '') + ')</dt><dd>' + fmt(sous) + '</dd><dt>Livraison par la poste</dt><dd>' + fmt(LIV) + '</dd>', tot = base;
+
+  function rendre() {
+    var a = window.NBQ.lire(), L = $('pn-liste');
+    $('pn-vide').hidden = a.length > 0; $('pn-coord').hidden = !a.length; $('pn-resume').hidden = !a.length;
+    L.innerHTML = a.map(function (x, i) {
+      var p = PR[x.code] || { nom: x.code, v: {} }, v = p.v[x.variante] || ['', 0];
+      return '<article class="pn-art" data-i="' + i + '"><img src="' + esc(x.apercu) + '" alt=""><div class="pn-inf"><b>' + esc(p.nom) + '</b><span>' + esc(v[0]) + '</span>' +
+        (x.texte ? '<small>Texte : « ' + esc(x.texte) + ' »</small>' : '') +
+        '<div class="pn-act"><a class="lien" href="' + racine + 'boutique/' + esc(x.code) + '/?modifier=' + esc(x.id) + '">Modifier</a><button type="button" class="lien" data-suppr="' + i + '">Retirer</button></div></div>' +
+        '<div class="pn-qte"><button type="button" data-q="-1" aria-label="Moins">&minus;</button><b>' + (Number(x.quantite) || 1) + '</b><button type="button" data-q="1" aria-label="Plus">+</button></div>' +
+        '<div class="pn-prix">' + fmt(v[1] * (Number(x.quantite) || 1)) + '</div></article>';
+    }).join('');
+    totaux();
+  }
+  function totaux() {
+    var a = window.NBQ.lire(), sous = 0;
+    a.forEach(function (x) { var v = (PR[x.code] || { v: {} }).v[x.variante]; if (v) sous += v[1] * (Number(x.quantite) || 1); });
+    var base = sous + LIV, prov = provTaxes(), t = TX[prov], tot = base, n = a.reduce(function (s, x) { return s + (Number(x.quantite) || 1); }, 0);
+    var lig = '<dt>Sous-total (' + n + ' article' + (n > 1 ? 's' : '') + ')</dt><dd>' + fmt(sous) + '</dd><dt>Livraison par la poste</dt><dd>' + fmt(LIV) + '</dd>';
     function ajout(nom, p) { var m = Math.round(base * p) / 100; tot += m; lig += '<dt>' + nom + '</dt><dd>' + fmt(m) + '</dd>'; }
     if (t) { if (t.tps) ajout('TPS (5 %)', t.tps); if (t.tvq) ajout('TVQ (9,975 %)', t.tvq); if (t.tvh) ajout('TVH (' + t.tvh + ' %)', t.tvh); }
     else lig += '<dt class="gris">Taxes</dt><dd class="gris">selon votre province</dd>';
@@ -680,19 +832,20 @@
     $('pp-totaux').innerHTML = lig + '<dt class="t">Total</dt><dd class="t">' + fmt(tot) + (t ? '' : ' + taxes') + '</dd>';
     $('pp-btn-total').textContent = fmt(tot) + (t ? '' : ' + taxes');
   }
-  window.__maj = maj;
-  Array.prototype.forEach.call(radios(), function (r) { r.addEventListener('change', maj); });
-  Array.prototype.forEach.call(document.querySelectorAll('[data-qte]'), function (b) { b.addEventListener('click', function () { qte.value = Math.max(1, Math.min(10, (Number(qte.value) || 1) + Number(b.getAttribute('data-qte')))); maj(); }); });
-  qte.addEventListener('input', maj);
-  $('pp-texte').addEventListener('input', function () { $('pp-compte').textContent = this.value.length + ' / 50'; });
-  Array.prototype.forEach.call(f.querySelectorAll('input[name=cadeau]'), function (r) { r.addEventListener('change', function () { $('b-dest').hidden = f.cadeau.value !== 'oui'; maj(); }); });
-  var liste = $('pp-liste'); if (liste) liste.addEventListener('click', function () { liste.classList.toggle('on'); });
+  $('pn-liste').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return; var a = window.NBQ.lire(), art = e.target.closest('.pn-art'), i = Number(art.getAttribute('data-i'));
+    if (b.hasAttribute('data-suppr')) a.splice(i, 1);
+    else if (b.hasAttribute('data-q')) a[i].quantite = Math.max(1, Math.min(10, (Number(a[i].quantite) || 1) + Number(b.getAttribute('data-q'))));
+    else return;
+    window.NBQ.ecrire(a); rendre();
+  });
+  Array.prototype.forEach.call(f.querySelectorAll('input[name=cadeau]'), function (r) { r.addEventListener('change', function () { $('b-dest').hidden = f.cadeau.value !== 'oui'; totaux(); }); });
+  var m0 = $('msg-boutique'); if (m0 && /annule=1/.test(location.search)) { m0.textContent = "Le paiement a été annulé. Votre panier est conservé."; m0.hidden = false; }
 
-  // adresses : suggestions partout au Canada (Photon / OpenStreetMap)
   function adresse(p) {
     var rue = $(p + '-adresse'), ville = $(p + '-ville'), prov = $(p + '-prov'), cp = $(p + '-cp'), ul = $(p + '-liste'), items = [], cur = -1, t, ctl;
     function fermer() { ul.hidden = true; ul.innerHTML = ''; items = []; cur = -1; rue.setAttribute('aria-expanded', 'false'); }
-    function choisir(i) { var a = items[i]; if (!a) return; rue.value = a.rue; ville.value = a.ville; if (a.prov) prov.value = a.prov; cp.value = a.cp; fermer(); maj(); (a.cp ? cp : ville).focus(); }
+    function choisir(i) { var a = items[i]; if (!a) return; rue.value = a.rue; ville.value = a.ville; if (a.prov) prov.value = a.prov; cp.value = a.cp; fermer(); totaux(); (a.cp ? cp : ville).focus(); }
     function montrer() {
       ul.innerHTML = ''; items.forEach(function (a, i) { var li = document.createElement('li'); li.setAttribute('role', 'option'); li.innerHTML = '<b></b><span></span>'; li.firstChild.textContent = a.rue; li.lastChild.textContent = a.ville + (a.prov ? ', ' + a.prov : '') + (a.cp ? ' ' + a.cp : ''); li.addEventListener('mousedown', function (e) { e.preventDefault(); choisir(i); }); ul.appendChild(li); });
       ul.hidden = !items.length; rue.setAttribute('aria-expanded', String(!!items.length)); cur = -1;
@@ -722,55 +875,24 @@
       else if (e.key === 'Escape') fermer();
     });
     rue.addEventListener('blur', function () { setTimeout(fermer, 150); });
-    prov.addEventListener('change', maj);
+    prov.addEventListener('change', totaux);
     cp.addEventListener('input', function () {
       var v = cp.value.toUpperCase().replace(/[^A-Z0-9 ]/g, ''); if (v.replace(' ', '').length > 3 && v.indexOf(' ') < 0) v = v.slice(0, 3) + ' ' + v.slice(3); cp.value = v.slice(0, 7);
-      if (!prov.value && PREM[v[0]]) { prov.value = PREM[v[0]]; maj(); }
+      if (!prov.value && PREM[v[0]]) { prov.value = PREM[v[0]]; totaux(); }
     });
   }
   adresse('b'); adresse('d');
 
-  /* ---- téléversement ---- */
-  var zone = $('pp-zone'), vign = $('pp-vignette'), alerte = $('pp-alerte');
-  function effacer() { img = null; photoData = null; fi.value = ''; vign.hidden = true; zone.hidden = false; alerte.hidden = true; maj(); }
-  $('pp-changer').addEventListener('click', function () { fi.click(); });
-  ['dragover', 'dragenter'].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.add('survol'); }); });
-  ['dragleave', 'drop'].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.remove('survol'); }); });
-  zone.addEventListener('drop', function (e) { if (e.dataTransfer.files[0]) { fi.files = e.dataTransfer.files; lire(); } });
-  fi.addEventListener('change', lire);
-  function lire() {
-    var fic = fi.files[0]; alerte.hidden = true;
-    if (!fic) return;
-    if (!/^image\/(jpeg|png)$/.test(fic.type)) { alerte.textContent = 'Choisissez une photo JPEG ou PNG.'; alerte.hidden = false; fi.value = ''; return; }
-    if (fic.size > 10 * 1024 * 1024) { alerte.textContent = 'La photo est trop lourde (maximum 10 Mo).'; alerte.hidden = false; fi.value = ''; return; }
-    var im = new Image(), url = URL.createObjectURL(fic);
-    im.onload = function () {
-      var m = Math.min(1, 1600 / Math.max(im.width, im.height)), w = Math.round(im.width * m), h = Math.round(im.height * m);
-      var cv = document.createElement('canvas'); cv.width = w; cv.height = h; cv.getContext('2d').drawImage(im, 0, 0, w, h);
-      photoData = cv.toDataURL('image/jpeg', .9); img = im; $('pp-miniature').src = photoData; vign.hidden = false; zone.hidden = true;
-      $('pp-nom').textContent = fic.name; $('pp-taille').textContent = fic.size > 1048576 ? (fic.size / 1048576).toFixed(1).replace('.', ',') + ' Mo' : Math.round(fic.size / 1024) + ' Ko';
-      if (Math.max(im.width, im.height) < 900) { alerte.textContent = "Cette photo est de petite taille : l'impression pourrait manquer de netteté. Une photo plus grande donnerait un meilleur résultat."; alerte.hidden = false; }
-      maj();
-    };
-    im.onerror = function () { alerte.textContent = "Cette photo n'a pas pu être lue."; alerte.hidden = false; };
-    im.src = url;
-  }
-
-  /* ---- commander ---- */
   function erreur(t) { var e = $('b-erreur'); e.textContent = t; e.hidden = !t; if (t) e.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
-  $('pp-commander').addEventListener('click', function () {
-    if (!photoData) { alerte.textContent = "Ajoutez d'abord votre photo."; alerte.hidden = false; zone.hidden ? vign.scrollIntoView({ block: 'center' }) : zone.scrollIntoView({ block: 'center', behavior: 'smooth' }); return; }
-    $('commande').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
   f.addEventListener('submit', function (e) {
     e.preventDefault(); erreur('');
-    if (!photoData) return erreur("Ajoutez votre photo (haut de la page).");
+    var a = window.NBQ.lire(); if (!a.length) return erreur('Votre panier est vide.');
     var d = {}; ['prenom', 'nom', 'courriel', 'telephone', 'adresse', 'ville', 'province', 'code_postal'].forEach(function (k) { d[k] = (f[k].value || '').trim(); });
     if (!d.prenom || !d.nom || !d.courriel || !d.telephone || !d.adresse || !d.ville || !d.province) return erreur('Remplissez tous les champs obligatoires (*).');
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.courriel)) return erreur('Courriel invalide.');
     if (!cpOk(d.province, d.code_postal)) return erreur('Vérifiez votre code postal : il doit correspondre à la province (ex. : E3N 2S1).');
-    d.action = 'commander'; d.produit = CODE; d.variante = variante(); d.quantite = Number(qte.value) || 1; d.texte = $('pp-texte').value; d.photo = photoData; d.piege = f.piege.value;
-    d.cadeau = f.cadeau.value === 'oui'; d.dest_nom = f.dest_nom.value; d.note = f.note.value;
+    d.action = 'commander'; d.piege = f.piege.value; d.cadeau = f.cadeau.value === 'oui'; d.dest_nom = f.dest_nom.value; d.note = f.note.value;
+    d.lignes = a.map(function (x) { return { produit: x.code, variante: x.variante, quantite: x.quantite, texte: x.texte, police: x.police, couleur: x.couleur, position: x.position, cadrage: x.cadrage, photo: x.photo }; });
     if (d.cadeau && f.dest_adresse.value.trim()) {
       d.dest_adresse = f.dest_adresse.value.trim(); d.dest_ville = f.dest_ville.value.trim(); d.dest_province = f.dest_province.value; d.dest_code_postal = f.dest_code_postal.value.trim();
       if (!d.dest_ville || !d.dest_province) return erreur("Complétez l'adresse du destinataire (ville et province).");
@@ -782,5 +904,5 @@
       .then(function (j) { if (j && j.ok && j.paiement) { location.href = j.paiement; } else { throw new Error(j && j.erreur); } })
       .catch(function (er) { erreur((er && er.message) || 'Une erreur est survenue. Écrivez-moi à bonjour@norelias.ca.'); b.disabled = false; b.firstChild.textContent = 'Payer par carte · '; });
   });
-  maj();
+  rendre();
 })();
