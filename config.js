@@ -7,7 +7,7 @@ window.NORELIAS = {
 
   // Système de réservations et de courriels automatiques (Supabase). Ne pas modifier.
   // Mettre true quand la clé Stripe est installée dans Supabase (paiement par carte au montant exact)
-  paiementCarteActif: false,
+  paiementCarteActif: true,
   serveur: 'https://evoivwqcxohfwaxlumvj.supabase.co/functions/v1/norelias-reservation',
   telephone: '506-787-0667',
 
