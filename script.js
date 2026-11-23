@@ -525,75 +525,215 @@
   var C = window.NORELIAS || {};
   var P = JSON.parse(f.getAttribute('data-produit'));
   var CODE = f.getAttribute('data-code'), LIV = Number(f.getAttribute('data-livraison'));
-  var img = null, photoData = null;
+  var img = null, photoData = null, vue = 0;
+  var cvA = $('pp-apercu'), qte = $('pp-qte'), fi = $('pp-photo');
+  function radios() { return f.querySelectorAll('input[name=variante]'); }
+  function variante() { var r = f.querySelector('input[name=variante]:checked'); return r ? r.value : Object.keys(P.v)[0]; }
   function cover(ctx, im, x, y, w, h) {
     var r = Math.max(w / im.width, h / im.height), sw = w / r, sh = h / r;
     ctx.drawImage(im, (im.width - sw) / 2, (im.height - sh) / 2, sw, sh, x, y, w, h);
   }
-  // Aperçu réaliste : la photo de la cliente est placée sur une vraie photo du produit
-  var BASES = {
-    tasse: { src: 'images/boutique-tasse.jpg', zone: { x: 131, y: 46, w: 125, h: 135 }, ombre: true },
-    isotherme: { src: 'images/boutique-isotherme.jpg', zone: { x: 141, y: 50, w: 100, h: 138 }, ombre: true },
-    portecles: { src: 'images/boutique-portecles.jpg', quad: [[142, 68], [238, 85], [108, 172]], poly: [[143, 70], [236, 86], [219, 198], [110, 172]] },
-    ornement: { src: 'images/boutique-ornement.jpg', rond: { x: 198, y: 111, r: 63 } }
-  };
   var racine = (document.querySelector('link[href*="style.css"]').getAttribute('href') || '').replace(/style\.css.*$/, '');
-  Object.keys(BASES).forEach(function (k) { var b = BASES[k]; b.img = new Image(); b.img.onload = function () { b.pret = true; if (window.__maj) window.__maj(); }; b.img.src = racine + b.src; });
-  function dessiner(cv, code, im, ech) {
-    var b = BASES[code] || BASES.tasse; if (!b.pret) return;
-    var T = 4, bw = b.img.width - 2 * T, bh = b.img.height - 2 * T, k = 1.6;
-    cv.width = Math.round(bw * k); cv.height = Math.round(bh * k);
-    var c = cv.getContext('2d'); c.imageSmoothingQuality = 'high';
-    ech = ech || 1; var px = cv.width / 2, py = cv.height * .75;
-    c.save(); c.translate(px, py); c.scale(ech, ech); c.translate(-px, -py);
-    c.drawImage(b.img, T, T, bw, bh, 0, 0, cv.width, cv.height);
-    if (!im) { c.restore(); return; }
-    c.save(); c.scale(k, k); c.translate(-T, -T);
-    if (b.zone) {
-      var z = b.zone; c.beginPath(); c.rect(z.x, z.y, z.w, z.h); c.clip(); cover(c, im, z.x - 1, z.y - 1, z.w + 2, z.h + 2);
-      var g = c.createLinearGradient(z.x, 0, z.x + z.w, 0);
-      g.addColorStop(0, 'rgba(40,25,20,.38)'); g.addColorStop(.18, 'rgba(40,25,20,0)'); g.addColorStop(.62, 'rgba(255,255,255,.07)'); g.addColorStop(.85, 'rgba(40,25,20,0)'); g.addColorStop(1, 'rgba(40,25,20,.42)');
-      c.fillStyle = g; c.fillRect(z.x, z.y, z.w, z.h);
-      var v = c.createLinearGradient(0, z.y, 0, z.y + z.h); v.addColorStop(0, 'rgba(40,25,20,.12)'); v.addColorStop(.12, 'rgba(40,25,20,0)'); v.addColorStop(.9, 'rgba(40,25,20,0)'); v.addColorStop(1, 'rgba(40,25,20,.18)');
-      c.fillStyle = v; c.fillRect(z.x, z.y, z.w, z.h);
-    } else if (b.quad) {
-      var q = b.quad, P = b.poly;
-      c.beginPath(); c.moveTo(P[0][0], P[0][1]); for (var i = 1; i < P.length; i++) c.lineTo(P[i][0], P[i][1]); c.closePath(); c.clip();
-      var W = Math.hypot(q[1][0] - q[0][0], q[1][1] - q[0][1]) * 1.1, H = Math.hypot(q[2][0] - q[0][0], q[2][1] - q[0][1]) * 1.1;
-      var r = Math.max(W / im.width, H / im.height), sw = W / r, sh = H / r, sx = (im.width - sw) / 2, sy = (im.height - sh) / 2;
-      var ux = (q[1][0] - q[0][0]) / (W / 1.1), uy = (q[1][1] - q[0][1]) / (W / 1.1), vx = (q[2][0] - q[0][0]) / (H / 1.1), vy = (q[2][1] - q[0][1]) / (H / 1.1);
-      var ox = q[0][0] - ux * W * .05 - vx * H * .05, oy = q[0][1] - uy * W * .05 - vy * H * .05;
-      c.transform(ux * W / sw, uy * W / sw, vx * H / sh, vy * H / sh, ox, oy); c.drawImage(im, sx, sy, sw, sh, 0, 0, sw, sh);
-    } else if (b.rond) {
-      var o = b.rond; c.beginPath(); c.arc(o.x, o.y, o.r, 0, 7); c.clip(); cover(c, im, o.x - o.r, o.y - o.r, o.r * 2, o.r * 2);
-      var rg = c.createRadialGradient(o.x - o.r * .35, o.y - o.r * .45, o.r * .05, o.x, o.y, o.r);
-      rg.addColorStop(0, 'rgba(255,255,255,.35)'); rg.addColorStop(.35, 'rgba(255,255,255,.05)'); rg.addColorStop(.85, 'rgba(255,255,255,0)'); rg.addColorStop(1, 'rgba(255,255,255,.28)');
-      c.fillStyle = rg; c.fillRect(o.x - o.r, o.y - o.r, o.r * 2, o.r * 2);
+
+  /* ---- Aperçu réaliste : la photo de la cliente est posée sur une vraie photo du produit ---- */
+  var BASES = {
+    tasse: { src: 'images/pp-tasse.jpg', zone: { x: 263, y: 101, w: 267, h: 296, r: 6 }, vues: [{}, { miroir: 1 }, { zoom: [396, 250, 1.75] }] },
+    isotherme: { src: 'images/pp-isotherme.jpg', zone: { x: 333, y: 76, w: 234, h: 394, r: 4, fondu: [350, 440] }, vues: [{}, { miroir: 1 }, { zoom: [448, 240, 1.75] }] },
+    rond: { src: 'images/pp-rond.jpg', rond: { x: 229, y: 359, r: 120 }, vues: [{}, { zoom: [229, 359, 1.9] }] },
+    ornement: { src: 'images/pp-ornement.jpg', rond: { x: 194, y: 107, r: 63 }, vues: [{}, { zoom: [194, 107, 2] }] },
+    proc: { vues: [{}, { zoom: [225, 335, 1.8] }], W: 681, H: 551, pret: true }
+  };
+  var vitesse = 0;
+  Object.keys(BASES).forEach(function (k) { var b = BASES[k]; if (!b.src) return; b.img = new Image(); b.img.onload = function () { b.pret = true; b.W = b.img.width; b.H = b.img.height; if (window.__maj) window.__maj(); }; b.img.src = racine + b.src; });
+  function cleBase(v) { if (CODE === 'portecles') return v === 'rond' ? 'rond' : 'proc'; return CODE; }
+
+  function heart(c, cx, cy, s) {
+    c.beginPath();
+    for (var i = 0; i <= 80; i++) {
+      var t = i / 80 * Math.PI * 2, x = Math.pow(Math.sin(t), 3), y = (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) / 16;
+      if (i) c.lineTo(cx + x * s, cy - y * s + s * .1); else c.moveTo(cx + x * s, cy - y * s + s * .1);
     }
-    c.restore(); c.restore();
+    c.closePath();
+  }
+  function rr(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+  function argent(c, x0, y0, x1, y1) { var g = c.createLinearGradient(x0, y0, x1, y1); g.addColorStop(0, '#f7f7f7'); g.addColorStop(.3, '#b9bbbd'); g.addColorStop(.55, '#efeff0'); g.addColorStop(.8, '#8f9193'); g.addColorStop(1, '#d9dadb'); return g; }
+  function anneau(c, x, y, r) {
+    c.save(); c.lineWidth = 9; c.strokeStyle = argent(c, x - r, y - r, x + r, y + r); c.shadowColor = 'rgba(60,40,30,.3)'; c.shadowBlur = 8; c.shadowOffsetY = 4;
+    c.beginPath(); c.arc(x, y, r, 0, 7); c.stroke(); c.restore();
+  }
+  // porte-clés dessinés (cœur, rectangle, simili cuir) : face avec la photo + dos
+  function objet(c, v, im, cx, cy, face) {
+    c.save(); c.shadowColor = 'rgba(70,45,35,.32)'; c.shadowBlur = 20; c.shadowOffsetX = 7; c.shadowOffsetY = 12;
+    if (v === 'coeur') {
+      var S = 120, hy = cy - S * .26;
+      anneau(c, cx, hy - S * .64 - 22, 36);
+      heart(c, cx, hy, S); c.fillStyle = argent(c, cx - S, hy - S, cx + S, hy + S); c.fill(); c.shadowColor = 'transparent';
+      if (face) { c.save(); heart(c, cx, hy + 1, S * .9); c.clip(); if (im) cover(c, im, cx - S, hy - S * .66, S * 2, S * 1.84); else { c.fillStyle = '#d9c7bb'; c.fillRect(cx - S, hy - S, S * 2, S * 2.2); } c.restore(); }
+      else { heart(c, cx, hy + 1, S * .9); var g = c.createLinearGradient(cx - S, hy - S * .6, cx + S, hy + S); g.addColorStop(0, '#cfd0d2'); g.addColorStop(.5, '#e9eaeb'); g.addColorStop(1, '#b4b6b8'); c.fillStyle = g; c.fill(); }
+    } else if (v === 'rect') {
+      anneau(c, cx, cy - 188, 36); rr(c, cx - 22, cy - 160, 44, 36, 8); c.fillStyle = argent(c, cx - 22, cy - 160, cx + 22, cy - 124); c.fill();
+      rr(c, cx - 100, cy - 128, 200, 262, 12); c.fillStyle = argent(c, cx - 100, cy - 128, cx + 100, cy + 134); c.fill(); c.shadowColor = 'transparent';
+      if (face) { c.save(); rr(c, cx - 86, cy - 114, 172, 234, 6); c.clip(); if (im) cover(c, im, cx - 86, cy - 114, 172, 234); else { c.fillStyle = '#d9c7bb'; c.fillRect(cx - 90, cy - 118, 180, 242); } c.restore(); }
+      else { rr(c, cx - 86, cy - 114, 172, 234, 6); c.fillStyle = '#dcdddf'; c.fill(); }
+    } else {
+      anneau(c, cx, cy - 196, 36);
+      rr(c, cx - 36, cy - 168, 72, 80, 14); c.fillStyle = '#1b191a'; c.fill();
+      rr(c, cx - 104, cy - 112, 208, 262, 22); var g2 = c.createLinearGradient(cx - 104, cy - 112, cx + 104, cy + 150); g2.addColorStop(0, '#343032'); g2.addColorStop(.5, '#1b191a'); g2.addColorStop(1, '#2a2628'); c.fillStyle = g2; c.fill(); c.shadowColor = 'transparent';
+      c.beginPath(); c.arc(cx, cy - 128, 12, 0, 7); c.fillStyle = argent(c, cx - 12, cy - 140, cx + 12, cy - 116); c.fill();
+      c.setLineDash([5, 4]); c.lineWidth = 1.6; c.strokeStyle = '#8a8284'; rr(c, cx - 94, cy - 102, 188, 242, 16); c.stroke(); c.setLineDash([]);
+      if (face) { c.save(); rr(c, cx - 70, cy - 66, 140, 180, 5); c.clip(); if (im) cover(c, im, cx - 70, cy - 66, 140, 180); else { c.fillStyle = '#d9c7bb'; c.fillRect(cx - 72, cy - 68, 144, 184); } c.restore(); c.lineWidth = 3; c.strokeStyle = '#4a4446'; rr(c, cx - 70, cy - 66, 140, 180, 5); c.stroke(); }
+    }
+    c.restore();
+  }
+  function pastille(c, x, y, t) {
+    c.save(); rr(c, x - 52, y - 17, 104, 34, 17); c.fillStyle = 'rgba(250,243,239,.96)'; c.shadowColor = 'rgba(70,45,35,.2)'; c.shadowBlur = 8; c.fill(); c.shadowColor = 'transparent';
+    c.fillStyle = '#3a2a24'; c.font = '600 19px Nunito, Arial, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(t, x, y + 1); c.restore();
   }
 
-  var cvA = $('pp-apercu'), selV = $('pp-variante'), qte = $('pp-qte'), fi = $('pp-photo');
+  function dessiner(cv, cle, im, o) {
+    o = o || {};
+    var b = BASES[cle]; if (!b || !b.pret) return;
+    var v = o.vue || {}, ech = o.ech || 1, W = b.W, H = b.H, k = (o.w || W) / W;
+    cv.width = Math.round(W * k); cv.height = Math.round(H * k);
+    var c = cv.getContext('2d'); c.imageSmoothingQuality = 'high';
+    function vueT() {
+      c.scale(k, k);
+      var px = W / 2, py = H * .78; c.translate(px, py); c.scale(ech, ech); c.translate(-px, -py);
+      if (v.zoom) { var z = v.zoom; c.translate(W / 2, H / 2); c.scale(z[2], z[2]); c.translate(-z[0], -z[1]); }
+    }
+    c.save(); vueT();
+    if (cle === 'proc') {
+      var fond = c.createLinearGradient(0, 0, 0, H); fond.addColorStop(0, '#f6eee9'); fond.addColorStop(1, '#ead9cf'); c.fillStyle = fond; c.fillRect(-400, -400, W + 800, H + 800);
+      var vr = variante(); objet(c, vr, im, 228, 335, true); objet(c, vr, im, 472, 335, false); pastille(c, 228, 520, 'Avant'); pastille(c, 472, 520, 'Arrière');
+      c.restore(); return;
+    }
+    if (v.miroir) { c.translate(W, 0); c.scale(-1, 1); }
+    c.drawImage(b.img, 0, 0);
+    c.restore();
+    if (!im) return;
+    c.save(); vueT();
+    if (b.zone) {
+      var z = b.zone, zx = v.miroir ? W - z.x - z.w : z.x, m = v.miroir ? -1 : 1;
+      c.save(); rr(c, zx, z.y, z.w, z.h, z.r || 0); c.clip();
+      if (z.fondu) {
+        cover(c, im, zx - 1, z.y - 1, z.w + 2, z.fondu[1] - z.y + 40);
+        var g0 = c.createLinearGradient(0, z.fondu[0], 0, z.fondu[1] + 18); g0.addColorStop(0, 'rgba(243,240,241,0)'); g0.addColorStop(1, 'rgba(243,240,241,1)');
+        c.fillStyle = g0; c.fillRect(zx, z.fondu[0], z.w, z.h); c.fillStyle = '#f3f0f1'; c.fillRect(zx, z.fondu[1] + 17, z.w, z.h);
+      } else cover(c, im, zx - 1, z.y - 1, z.w + 2, z.h + 2);
+      var g = c.createLinearGradient(zx, 0, zx + z.w, 0), s = function (p) { return m > 0 ? p : 1 - p; };
+      g.addColorStop(0, 'rgba(40,25,20,.34)'); g.addColorStop(.16, 'rgba(40,25,20,0)'); g.addColorStop(s(.62), 'rgba(255,255,255,.07)'); g.addColorStop(.86, 'rgba(40,25,20,0)'); g.addColorStop(1, 'rgba(40,25,20,.4)');
+      c.fillStyle = g; c.fillRect(zx, z.y, z.w, z.h);
+      var vg = c.createLinearGradient(0, z.y, 0, z.y + z.h); vg.addColorStop(0, 'rgba(40,25,20,.12)'); vg.addColorStop(.1, 'rgba(40,25,20,0)'); vg.addColorStop(.92, 'rgba(40,25,20,0)'); vg.addColorStop(1, 'rgba(40,25,20,.16)');
+      c.fillStyle = vg; c.fillRect(zx, z.y, z.w, z.h); c.restore();
+    } else if (b.rond) {
+      var q = b.rond; c.save(); c.beginPath(); c.arc(q.x, q.y, q.r, 0, 7); c.clip(); cover(c, im, q.x - q.r, q.y - q.r, q.r * 2, q.r * 2);
+      var rg = c.createRadialGradient(q.x - q.r * .35, q.y - q.r * .45, q.r * .05, q.x, q.y, q.r);
+      rg.addColorStop(0, 'rgba(255,255,255,.3)'); rg.addColorStop(.35, 'rgba(255,255,255,.04)'); rg.addColorStop(.85, 'rgba(255,255,255,0)'); rg.addColorStop(1, 'rgba(255,255,255,.22)');
+      c.fillStyle = rg; c.fillRect(q.x - q.r, q.y - q.r, q.r * 2, q.r * 2); c.restore();
+    }
+    c.restore();
+  }
+
+  /* ---- galerie : vue principale + vignettes dessinées avec la photo de la cliente ---- */
+  var vitrine = $('pp-vues');
+  function echelle() { var i = Array.prototype.indexOf.call(radios(), f.querySelector('input[name=variante]:checked')); return CODE === 'tasse' ? 1 + .08 * Math.max(0, i) : CODE === 'isotherme' ? 1 + .09 * Math.max(0, i) : 1; }
+  function dessinerVues() {
+    var cle = cleBase(variante()), b = BASES[cle]; if (!b || !b.pret) return;
+    var n = b.vues.length; if (vue >= n) vue = 0;
+    dessiner(cvA, cle, img, { vue: b.vues[vue], ech: echelle(), w: 1000 });
+    if (vitrine) {
+      while (vitrine.children.length < n) { (function (i) { var bt = document.createElement('button'); bt.type = 'button'; bt.className = 'vig'; bt.setAttribute('aria-label', 'Vue ' + (i + 1)); bt.appendChild(document.createElement('canvas')); bt.addEventListener('click', function () { vue = i; maj(); }); vitrine.appendChild(bt); })(vitrine.children.length); }
+      while (vitrine.children.length > n) vitrine.removeChild(vitrine.lastChild);
+      Array.prototype.forEach.call(vitrine.children, function (bt, i) { bt.classList.toggle('on', i === vue); dessiner(bt.firstChild, cle, img, { vue: b.vues[i], ech: echelle(), w: 280 }); });
+    }
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-vue]'), function (bt) {
+    bt.addEventListener('click', function () {
+      var cle = cleBase(variante()), n = BASES[cle].vues.length, d = bt.getAttribute('data-vue');
+      vue = d === 'zoom' ? n - 1 : (vue + Number(d) + n) % n; maj();
+    });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-modele]'), function (bt) {
+    bt.addEventListener('click', function () { var r = f.querySelector('input[name=variante][value="' + bt.getAttribute('data-modele') + '"]'); if (r) { r.checked = true; maj(); } });
+  });
+
+  /* ---- prix, taxes, adresses ---- */
+  var TX = { QC: { tps: 5, tvq: 9.975 }, NB: { tvh: 15 }, NL: { tvh: 15 }, NS: { tvh: 14 }, PE: { tvh: 15 }, ON: { tvh: 13 }, AB: { tps: 5 }, BC: { tps: 5 }, MB: { tps: 5 }, SK: { tps: 5 }, NT: { tps: 5 }, NU: { tps: 5 }, YT: { tps: 5 } };
+  var PREM = { A: 'NL', B: 'NS', C: 'PE', E: 'NB', G: 'QC', H: 'QC', J: 'QC', K: 'ON', L: 'ON', M: 'ON', N: 'ON', P: 'ON', R: 'MB', S: 'SK', T: 'AB', V: 'BC', X: 'NT', Y: 'YT' };
+  var NOMS = { 'quebec': 'QC', 'new brunswick': 'NB', 'nouveau-brunswick': 'NB', 'nova scotia': 'NS', 'nouvelle-ecosse': 'NS', 'ontario': 'ON', 'manitoba': 'MB', 'saskatchewan': 'SK', 'alberta': 'AB', 'british columbia': 'BC', 'colombie-britannique': 'BC', 'prince edward island': 'PE', 'ile-du-prince-edouard': 'PE', 'newfoundland and labrador': 'NL', 'terre-neuve-et-labrador': 'NL', 'newfoundland': 'NL', 'yukon': 'YT', 'northwest territories': 'NT', 'territoires du nord-ouest': 'NT', 'nunavut': 'NU' };
+  function provDe(nom) { var s = String(nom || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim(); return NOMS[s] || (TX[s.toUpperCase()] ? s.toUpperCase() : ''); }
+  function cpOk(prov, cp) { var c = String(cp || '').toUpperCase().replace(/\s/g, ''); if (!/^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(c)) return false; var p = PREM[c[0]]; return p === prov || (p === 'NT' && prov === 'NU'); }
   function fmt(n) { return (Math.round(n * 100) / 100).toLocaleString('fr-CA', { minimumFractionDigits: 2 }) + ' $'; }
+  function provTaxes() { return (f.cadeau.value === 'oui' && $('d-adresse').value.trim()) ? $('d-prov').value : $('b-prov').value; }
   function maj() {
-    var ks = Object.keys(P.v), ix = Math.max(0, ks.indexOf(selV.value));
-    dessiner(cvA, CODE, img, (CODE === 'tasse' ? 1 + .08 * ix : CODE === 'isotherme' ? 1 + .09 * ix : 1));
-    var v = P.v[selV.value] || P.v[Object.keys(P.v)[0]], q = Math.max(1, Math.min(10, Number(qte.value) || 1));
+    dessinerVues();
+    var v = P.v[variante()] || P.v[Object.keys(P.v)[0]], q = Math.max(1, Math.min(10, Number(qte.value) || 1)), sous = v[1] * q, base = sous + LIV;
     $('pp-prix').textContent = fmt(v[1]);
-    $('pp-sous').textContent = fmt(v[1] * q); $('pp-total').textContent = fmt(v[1] * q + LIV);
-    $('pp-btn-total').textContent = fmt(v[1] * q + LIV);
+    $('pp-total-prod').textContent = fmt(sous);
+    var badge = $('pp-badge-txt'); if (badge && CODE === 'tasse') badge.innerHTML = '<b>' + v[0].split(' (')[0] + '</b><small>(' + (v[0].split(' (')[1] || '').replace(')', '') + ')</small>';
+    Array.prototype.forEach.call(document.querySelectorAll('[data-modele]'), function (bt) { bt.classList.toggle('on', bt.getAttribute('data-modele') === variante()); });
+    var prov = provTaxes(), t = TX[prov], lig = '<dt>Sous-total (' + q + ' article' + (q > 1 ? 's' : '') + ')</dt><dd>' + fmt(sous) + '</dd><dt>Livraison par la poste</dt><dd>' + fmt(LIV) + '</dd>', tot = base;
+    function ajout(nom, p) { var m = Math.round(base * p) / 100; tot += m; lig += '<dt>' + nom + '</dt><dd>' + fmt(m) + '</dd>'; }
+    if (t) { if (t.tps) ajout('TPS (5 %)', t.tps); if (t.tvq) ajout('TVQ (9,975 %)', t.tvq); if (t.tvh) ajout('TVH (' + t.tvh + ' %)', t.tvh); }
+    else lig += '<dt class="gris">Taxes</dt><dd class="gris">selon votre province</dd>';
+    tot = Math.round(tot * 100) / 100;
+    $('pp-totaux').innerHTML = lig + '<dt class="t">Total</dt><dd class="t">' + fmt(tot) + (t ? '' : ' + taxes') + '</dd>';
+    $('pp-btn-total').textContent = fmt(tot) + (t ? '' : ' + taxes');
   }
   window.__maj = maj;
-  selV.addEventListener('change', maj);
+  Array.prototype.forEach.call(radios(), function (r) { r.addEventListener('change', maj); });
   Array.prototype.forEach.call(document.querySelectorAll('[data-qte]'), function (b) { b.addEventListener('click', function () { qte.value = Math.max(1, Math.min(10, (Number(qte.value) || 1) + Number(b.getAttribute('data-qte')))); maj(); }); });
   qte.addEventListener('input', maj);
   $('pp-texte').addEventListener('input', function () { $('pp-compte').textContent = this.value.length + ' / 50'; });
-  Array.prototype.forEach.call(f.querySelectorAll('input[name=cadeau]'), function (r) { r.addEventListener('change', function () { $('b-dest').hidden = f.cadeau.value !== 'oui'; }); });
+  Array.prototype.forEach.call(f.querySelectorAll('input[name=cadeau]'), function (r) { r.addEventListener('change', function () { $('b-dest').hidden = f.cadeau.value !== 'oui'; maj(); }); });
   var liste = $('pp-liste'); if (liste) liste.addEventListener('click', function () { liste.classList.toggle('on'); });
 
+  // adresses : suggestions partout au Canada (Photon / OpenStreetMap)
+  function adresse(p) {
+    var rue = $(p + '-adresse'), ville = $(p + '-ville'), prov = $(p + '-prov'), cp = $(p + '-cp'), ul = $(p + '-liste'), items = [], cur = -1, t, ctl;
+    function fermer() { ul.hidden = true; ul.innerHTML = ''; items = []; cur = -1; rue.setAttribute('aria-expanded', 'false'); }
+    function choisir(i) { var a = items[i]; if (!a) return; rue.value = a.rue; ville.value = a.ville; if (a.prov) prov.value = a.prov; cp.value = a.cp; fermer(); maj(); (a.cp ? cp : ville).focus(); }
+    function montrer() {
+      ul.innerHTML = ''; items.forEach(function (a, i) { var li = document.createElement('li'); li.setAttribute('role', 'option'); li.innerHTML = '<b></b><span></span>'; li.firstChild.textContent = a.rue; li.lastChild.textContent = a.ville + (a.prov ? ', ' + a.prov : '') + (a.cp ? ' ' + a.cp : ''); li.addEventListener('mousedown', function (e) { e.preventDefault(); choisir(i); }); ul.appendChild(li); });
+      ul.hidden = !items.length; rue.setAttribute('aria-expanded', String(!!items.length)); cur = -1;
+    }
+    rue.addEventListener('input', function () {
+      clearTimeout(t); var q = rue.value.trim(); if (q.length < 4) return fermer();
+      t = setTimeout(function () {
+        if (ctl && ctl.abort) ctl.abort(); ctl = window.AbortController ? new AbortController() : null;
+        fetch('https://photon.komoot.io/api/?limit=10&lang=fr&bbox=-141.1,41.6,-52.5,83.2&q=' + encodeURIComponent(q), ctl ? { signal: ctl.signal } : {})
+          .then(function (r) { return r.json(); })
+          .then(function (j) {
+            var vus = {}; items = [];
+            (j.features || []).forEach(function (ft) {
+              var pr = ft.properties || {}; if (pr.countrycode !== 'CA') return;
+              var r = ((pr.housenumber ? pr.housenumber + ' ' : '') + (pr.street || '')).trim(); if (!r) return;
+              var a = { rue: r, ville: pr.city || pr.town || pr.village || pr.municipality || pr.locality || pr.district || pr.county || '', prov: provDe(pr.state), cp: (pr.postcode || '').toUpperCase() };
+              var cle = a.rue + '|' + a.ville + '|' + a.prov; if (vus[cle] || !a.prov) return; vus[cle] = 1; items.push(a);
+            });
+            montrer();
+          }).catch(function () {});
+      }, 320);
+    });
+    rue.addEventListener('keydown', function (e) {
+      if (ul.hidden) return; var li = ul.children;
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); cur = (cur + (e.key === 'ArrowDown' ? 1 : -1) + li.length) % li.length; Array.prototype.forEach.call(li, function (x, i) { x.classList.toggle('on', i === cur); }); }
+      else if (e.key === 'Enter' && cur > -1) { e.preventDefault(); choisir(cur); }
+      else if (e.key === 'Escape') fermer();
+    });
+    rue.addEventListener('blur', function () { setTimeout(fermer, 150); });
+    prov.addEventListener('change', maj);
+    cp.addEventListener('input', function () {
+      var v = cp.value.toUpperCase().replace(/[^A-Z0-9 ]/g, ''); if (v.replace(' ', '').length > 3 && v.indexOf(' ') < 0) v = v.slice(0, 3) + ' ' + v.slice(3); cp.value = v.slice(0, 7);
+      if (!prov.value && PREM[v[0]]) { prov.value = PREM[v[0]]; maj(); }
+    });
+  }
+  adresse('b'); adresse('d');
+
+  /* ---- téléversement ---- */
   var zone = $('pp-zone'), vign = $('pp-vignette'), alerte = $('pp-alerte');
   function effacer() { img = null; photoData = null; fi.value = ''; vign.hidden = true; zone.hidden = false; alerte.hidden = true; maj(); }
-  $('pp-suppr').addEventListener('click', effacer);
+  $('pp-changer').addEventListener('click', function () { fi.click(); });
   ['dragover', 'dragenter'].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.add('survol'); }); });
   ['dragleave', 'drop'].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.remove('survol'); }); });
   zone.addEventListener('drop', function (e) { if (e.dataTransfer.files[0]) { fi.files = e.dataTransfer.files; lire(); } });
@@ -608,6 +748,7 @@
       var m = Math.min(1, 1600 / Math.max(im.width, im.height)), w = Math.round(im.width * m), h = Math.round(im.height * m);
       var cv = document.createElement('canvas'); cv.width = w; cv.height = h; cv.getContext('2d').drawImage(im, 0, 0, w, h);
       photoData = cv.toDataURL('image/jpeg', .9); img = im; $('pp-miniature').src = photoData; vign.hidden = false; zone.hidden = true;
+      $('pp-nom').textContent = fic.name; $('pp-taille').textContent = fic.size > 1048576 ? (fic.size / 1048576).toFixed(1).replace('.', ',') + ' Mo' : Math.round(fic.size / 1024) + ' Ko';
       if (Math.max(im.width, im.height) < 900) { alerte.textContent = "Cette photo est de petite taille : l'impression pourrait manquer de netteté. Une photo plus grande donnerait un meilleur résultat."; alerte.hidden = false; }
       maj();
     };
@@ -615,15 +756,26 @@
     im.src = url;
   }
 
-  function erreur(t) { var e = $('b-erreur'); e.textContent = t; e.hidden = !t; }
+  /* ---- commander ---- */
+  function erreur(t) { var e = $('b-erreur'); e.textContent = t; e.hidden = !t; if (t) e.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+  $('pp-commander').addEventListener('click', function () {
+    if (!photoData) { alerte.textContent = "Ajoutez d'abord votre photo."; alerte.hidden = false; zone.hidden ? vign.scrollIntoView({ block: 'center' }) : zone.scrollIntoView({ block: 'center', behavior: 'smooth' }); return; }
+    $('commande').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
   f.addEventListener('submit', function (e) {
     e.preventDefault(); erreur('');
-    if (!photoData) return erreur('Ajoutez votre photo (étape 1).');
-    var d = {}; ['prenom', 'nom', 'courriel', 'telephone', 'adresse'].forEach(function (k) { d[k] = (f[k].value || '').trim(); });
-    if (!d.prenom || !d.nom || !d.courriel || !d.telephone || !d.adresse) return erreur('Remplissez tous les champs obligatoires (*).');
+    if (!photoData) return erreur("Ajoutez votre photo (haut de la page).");
+    var d = {}; ['prenom', 'nom', 'courriel', 'telephone', 'adresse', 'ville', 'province', 'code_postal'].forEach(function (k) { d[k] = (f[k].value || '').trim(); });
+    if (!d.prenom || !d.nom || !d.courriel || !d.telephone || !d.adresse || !d.ville || !d.province) return erreur('Remplissez tous les champs obligatoires (*).');
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.courriel)) return erreur('Courriel invalide.');
-    d.action = 'commander'; d.produit = CODE; d.variante = selV.value; d.quantite = Number(qte.value) || 1; d.texte = $('pp-texte').value; d.photo = photoData; d.piege = f.piege.value;
-    d.cadeau = f.cadeau.value === 'oui'; d.dest_nom = f.dest_nom.value; d.dest_adresse = f.dest_adresse.value; d.note = f.note.value;
+    if (!cpOk(d.province, d.code_postal)) return erreur('Vérifiez votre code postal : il doit correspondre à la province (ex. : E3N 2S1).');
+    d.action = 'commander'; d.produit = CODE; d.variante = variante(); d.quantite = Number(qte.value) || 1; d.texte = $('pp-texte').value; d.photo = photoData; d.piege = f.piege.value;
+    d.cadeau = f.cadeau.value === 'oui'; d.dest_nom = f.dest_nom.value; d.note = f.note.value;
+    if (d.cadeau && f.dest_adresse.value.trim()) {
+      d.dest_adresse = f.dest_adresse.value.trim(); d.dest_ville = f.dest_ville.value.trim(); d.dest_province = f.dest_province.value; d.dest_code_postal = f.dest_code_postal.value.trim();
+      if (!d.dest_ville || !d.dest_province) return erreur("Complétez l'adresse du destinataire (ville et province).");
+      if (d.dest_code_postal && !cpOk(d.dest_province, d.dest_code_postal)) return erreur('Le code postal du destinataire ne correspond pas à sa province.');
+    }
     var b = $('b-envoyer'); b.disabled = true; b.firstChild.textContent = 'Un instant… ';
     fetch((C.serveur || '').replace('norelias-reservation', 'norelias-stripe'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) })
       .then(function (r) { return r.json(); })
