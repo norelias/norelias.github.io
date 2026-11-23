@@ -4,7 +4,7 @@
    Après modification, lancez : python3 outils/construire.py  (qui génère style.css) */
 :root{
   --masque:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 26' preserveAspectRatio='none'%3E%3Cpath d='M0 13 L11 15.3 L22 14.8 L35 12.6 L47 12.5 L60 14.4 L65 13.9 L71 11.3 L85 8.6 L95 11.9 L109 13.5 L123 11.3 L127 13.6 L132 10.8 L139 13.4 L152 10.4 L163 9.5 L176 12.0 L188 10.5 L196 10.7 L210 8.3 L224 7.4 L236 11.1 L241 12.6 L250 14.2 L262 12.8 L267 13.2 L272 12.6 L280 11.9 L284 14.2 L288 12.3 L292 12.2 L302 11.7 L315 12.7 L329 11.3 L334 10.2 L338 13.4 L343 11.1 L348 8.2 L359 10.6 L365 11.9 L372 11.7 L379 14.9 L385 14.2 L395 11.7 L405 14.9 L409 13.3 L422 12.0 L426 10.3 L436 13.7 L449 14.5 L454 11.5 L460 9.8 L468 7.0 L481 6.6 L489 6.5 L494 4.6 L507 6.3 L511 7.6 L520 8.9 L526 12.2 L537 14.4 L543 16.5 L549 17.0 L557 19.2 L570 17.0 L577 14.4 L591 17.0 L598 17.8 L608 19.7 L621 16.4 L625 13.6 L629 13.6 L637 11.9 L647 10.5 L660 10.7 L672 8.9 L677 6.9 L688 7.9 L701 9.1 L709 7.7 L716 9.8 L721 8.7 L732 7.5 L736 6.0 L745 6.9 L751 5.0 L757 8.2 L766 9.7 L778 10.6 L784 11.4 L788 11.4 L797 12.8 L801 9.8 L815 7.4 L820 9.5 L829 7.5 L834 5.4 L846 5.3 L850 8.6 L856 10.9 L865 10.2 L879 10.3 L884 12.9 L894 15.7 L898 17.7 L911 14.2 L925 13.3 L938 10.2 L943 7.9 L957 6.0 L965 9.0 L974 8.7 L987 8.9 L998 11.4 L1003 11.7 L1015 8.9 L1028 6.7 L1032 5.6 L1037 6.3 L1050 8.0 L1061 7.0 L1065 6.8 L1071 8.5 L1078 9.1 L1087 10.5 L1098 10.7 L1105 9.8 L1119 8.6 L1133 8.6 L1140 11.4 L1150 9.8 L1159 8.3 L1165 8.8 L1169 10.5 L1177 12.8 L1182 12.5 L1190 15.2 L1200 12 L1200 26 L0 26 Z'/%3E%3C/svg%3E");
-  --u:clamp(1px, calc(100vw / 728), 1.5px);
+  --u:clamp(1px, calc(100vw / 728), 1.22px);
   --creme:#f7ece6; --creme-2:#fbf4ef; --blanc:#fffaf7;
   --brun:#2b1d18; --brun-2:#4a3630; --gris:#6f5a52;
   --rose-fonce:#8a4f48; --noel:#5c2f2b; --noel-rouge:#8c1c26; --or:#ecc478; --signature:#8c6450;
@@ -39,8 +39,9 @@ main{background:var(--creme)}
 
 /* En-tête */
 .entete{position:sticky;top:0;z-index:50;background:#f9f1ec}
-.entete .barre{max-width:calc(728 * var(--u));margin:0 auto;height:calc(66 * var(--u));display:flex;align-items:center;padding:0 calc(20 * var(--u));gap:calc(10 * var(--u))}
-.logo img{height:calc(56 * var(--u));width:auto}
+.entete .barre{max-width:calc(728 * var(--u));margin:0 auto;height:calc(80 * var(--u));display:flex;align-items:center;padding:0 calc(20 * var(--u));gap:calc(10 * var(--u))}
+.logo{display:block;line-height:0}
+.logo img{height:calc(70 * var(--u));width:auto}
 .nav{margin-left:auto;margin-right:auto}
 .menu{display:flex;align-items:center;gap:calc(15 * var(--u));white-space:nowrap;list-style:none;margin:0;padding:0}
 .menu>li{position:relative}
@@ -183,7 +184,7 @@ main{background:var(--creme)}
 .champ{display:flex;flex-direction:column;gap:calc(4 * var(--u));margin-bottom:calc(14 * var(--u))}
 .champ[hidden]{display:none}
 .champ label{font-weight:600;font-size:calc(14 * var(--u))}
-.champ input,.champ select,.champ textarea{font:inherit;font-size:calc(16 * var(--u));font-weight:600;padding:0 calc(14 * var(--u));height:calc(45 * var(--u));border:1px solid #dcc9be;border-radius:calc(6 * var(--u));background:#fff;color:var(--brun);width:100%;box-shadow:0 calc(1 * var(--u)) calc(3 * var(--u)) rgba(58,42,36,.08)}
+.champ input,.champ select,.champ textarea{font:inherit;font-size:calc(14 * var(--u));font-weight:600;padding:0 calc(13 * var(--u));height:calc(40 * var(--u));border:1px solid #dcc9be;border-radius:calc(6 * var(--u));background:#fff;color:var(--brun);width:100%;box-shadow:0 calc(1 * var(--u)) calc(3 * var(--u)) rgba(58,42,36,.08)}
 .champ textarea{height:auto;padding:calc(10 * var(--u)) calc(14 * var(--u))}
 .deux-col{display:grid;grid-template-columns:1fr 1fr;gap:calc(12 * var(--u))}
 .case{display:flex;align-items:flex-start;gap:calc(8 * var(--u));margin:calc(10 * var(--u)) 0;font-size:calc(14 * var(--u))}
@@ -192,7 +193,7 @@ main{background:var(--creme)}
 
 /* Réservation */
 .etapes{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0;list-style:none;padding:0;margin:0 0 calc(18 * var(--u))}
-.etapes li{display:flex;align-items:center;gap:calc(6 * var(--u));font-size:calc(14.5 * var(--u));font-weight:600}
+.etapes li{display:flex;align-items:center;gap:calc(6 * var(--u));font-size:calc(13 * var(--u));font-weight:600}
 .etapes li:not(:last-child)::after{content:"";width:calc(16 * var(--u));height:1px;background:#a8928a;margin:0 calc(6 * var(--u))}
 .etapes .num{width:calc(22 * var(--u));height:calc(22 * var(--u));border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:1px solid #8f7a72;background:#fff;font-size:calc(12 * var(--u))}
 .etapes li.active .num,.etapes li.faite .num{background:#a8685e;border-color:#a8685e;color:#fff}
@@ -240,7 +241,8 @@ main{background:var(--creme)}
 /* Pied de page */
 .pied{background:#3d2622;color:#f1dcd4}
 .pied .barre{max-width:calc(728 * var(--u));margin:0 auto;height:calc(34 * var(--u));display:flex;align-items:center;justify-content:space-between;gap:calc(12 * var(--u));padding:0 calc(20 * var(--u))}
-.pied .marque{font-family:'Great Vibes',cursive;font-size:calc(20 * var(--u));color:#fbeee8;text-decoration:none}
+.pied .marque{font-family:'Great Vibes',cursive;font-size:calc(20 * var(--u));color:#fbeee8;text-decoration:none;line-height:0}
+.pied .marque img{height:calc(30 * var(--u));width:auto;display:block}
 .pied nav{display:flex;flex-wrap:wrap;gap:calc(4 * var(--u)) calc(8 * var(--u));align-items:center}
 .pied nav a,.pied .coord a{color:#f1dcd4;text-decoration:none;font-size:calc(8 * var(--u));font-weight:400}
 .pied nav span{color:#b99b90;font-size:calc(8 * var(--u))}
@@ -304,7 +306,7 @@ main{background:var(--creme)}
 @media (max-width:1024px){
   .burger{display:inline-flex;margin-left:auto}
   .entete .reseaux{display:none}
-  .nav{position:fixed;left:0;right:0;top:calc(66 * var(--u));background:var(--blanc);padding:14px 22px 20px;display:none;box-shadow:0 14px 30px rgba(0,0,0,.12);margin:0}
+  .nav{position:fixed;left:0;right:0;top:calc(84 * var(--u));background:var(--blanc);padding:14px 22px 20px;display:none;box-shadow:0 14px 30px rgba(0,0,0,.12);margin:0}
   .nav.ouvert{display:block}
   .menu{flex-direction:column;align-items:flex-start;gap:4px}
   .menu a,.sous-menu a{font-size:16px}
@@ -318,8 +320,8 @@ main{background:var(--creme)}
 /* ----- Tablette ----- */
 @media (min-width:601px) and (max-width:1024px){
   :root{--u:calc(100vw / 728)}
-  .entete .barre{height:calc(74 * var(--u))}
-  .logo img{height:calc(60 * var(--u))}
+  .entete .barre{height:calc(84 * var(--u))}
+  .logo img{height:calc(72 * var(--u))}
   .nav{top:calc(74 * var(--u))}
   body{font-size:14px}
   .titre-page p{font-size:calc(18 * var(--u))}
@@ -347,6 +349,7 @@ main{background:var(--creme)}
   .pied nav{justify-content:center}
   .pied nav a,.pied .coord,.pied .coord a,.pied nav span{font-size:13px}
   .pied .marque{font-size:30px}
+  .pied .marque img{height:60px}
 }
 
 /* ----- Cellulaire ----- */
@@ -401,6 +404,7 @@ main{background:var(--creme)}
   .pied .barre{height:auto;flex-direction:column;padding:20px;text-align:center}
   .pied nav a,.pied .coord,.pied .coord a,.pied nav span{font-size:14px}
   .pied .marque{font-size:34px}
+  .pied .marque img{height:64px}
   .deco{display:none}
 }
 @media (max-width:480px){

@@ -2,7 +2,7 @@
    Les mesures en « u » suivent la maquette (1u = 1 pixel de la maquette de 728 px de large).
    Après modification, lancez : python3 outils/construire.py  (qui génère style.css) */
 :root{
-  --u:clamp(1px, calc(100vw / 728), 1.5px);
+  --u:clamp(1px, calc(100vw / 728), 1.22px);
   --creme:#f7ece6; --creme-2:#fbf4ef; --blanc:#fffaf7;
   --brun:#2b1d18; --brun-2:#4a3630; --gris:#6f5a52;
   --rose-fonce:#8a4f48; --noel:#5c2f2b; --noel-rouge:#8c1c26; --or:#ecc478; --signature:#8c6450;
@@ -37,8 +37,9 @@ main{background:var(--creme)}
 
 /* En-tête */
 .entete{position:sticky;top:0;z-index:50;background:#f9f1ec}
-.entete .barre{max-width:728u;margin:0 auto;height:66u;display:flex;align-items:center;padding:0 20u;gap:10u}
-.logo img{height:56u;width:auto}
+.entete .barre{max-width:728u;margin:0 auto;height:80u;display:flex;align-items:center;padding:0 20u;gap:10u}
+.logo{display:block;line-height:0}
+.logo img{height:70u;width:auto}
 .nav{margin-left:auto;margin-right:auto}
 .menu{display:flex;align-items:center;gap:15u;white-space:nowrap;list-style:none;margin:0;padding:0}
 .menu>li{position:relative}
@@ -181,7 +182,7 @@ main{background:var(--creme)}
 .champ{display:flex;flex-direction:column;gap:4u;margin-bottom:14u}
 .champ[hidden]{display:none}
 .champ label{font-weight:600;font-size:14u}
-.champ input,.champ select,.champ textarea{font:inherit;font-size:16u;font-weight:600;padding:0 14u;height:45u;border:1px solid #dcc9be;border-radius:6u;background:#fff;color:var(--brun);width:100%;box-shadow:0 1u 3u rgba(58,42,36,.08)}
+.champ input,.champ select,.champ textarea{font:inherit;font-size:14u;font-weight:600;padding:0 13u;height:40u;border:1px solid #dcc9be;border-radius:6u;background:#fff;color:var(--brun);width:100%;box-shadow:0 1u 3u rgba(58,42,36,.08)}
 .champ textarea{height:auto;padding:10u 14u}
 .deux-col{display:grid;grid-template-columns:1fr 1fr;gap:12u}
 .case{display:flex;align-items:flex-start;gap:8u;margin:10u 0;font-size:14u}
@@ -190,7 +191,7 @@ main{background:var(--creme)}
 
 /* Réservation */
 .etapes{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0;list-style:none;padding:0;margin:0 0 18u}
-.etapes li{display:flex;align-items:center;gap:6u;font-size:14.5u;font-weight:600}
+.etapes li{display:flex;align-items:center;gap:6u;font-size:13u;font-weight:600}
 .etapes li:not(:last-child)::after{content:"";width:16u;height:1px;background:#a8928a;margin:0 6u}
 .etapes .num{width:22u;height:22u;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:1px solid #8f7a72;background:#fff;font-size:12u}
 .etapes li.active .num,.etapes li.faite .num{background:#a8685e;border-color:#a8685e;color:#fff}
@@ -238,7 +239,8 @@ main{background:var(--creme)}
 /* Pied de page */
 .pied{background:#3d2622;color:#f1dcd4}
 .pied .barre{max-width:728u;margin:0 auto;height:34u;display:flex;align-items:center;justify-content:space-between;gap:12u;padding:0 20u}
-.pied .marque{font-family:'Great Vibes',cursive;font-size:20u;color:#fbeee8;text-decoration:none}
+.pied .marque{font-family:'Great Vibes',cursive;font-size:20u;color:#fbeee8;text-decoration:none;line-height:0}
+.pied .marque img{height:30u;width:auto;display:block}
 .pied nav{display:flex;flex-wrap:wrap;gap:4u 8u;align-items:center}
 .pied nav a,.pied .coord a{color:#f1dcd4;text-decoration:none;font-size:8u;font-weight:400}
 .pied nav span{color:#b99b90;font-size:8u}
@@ -302,7 +304,7 @@ main{background:var(--creme)}
 @media (max-width:1024px){
   .burger{display:inline-flex;margin-left:auto}
   .entete .reseaux{display:none}
-  .nav{position:fixed;left:0;right:0;top:66u;background:var(--blanc);padding:14px 22px 20px;display:none;box-shadow:0 14px 30px rgba(0,0,0,.12);margin:0}
+  .nav{position:fixed;left:0;right:0;top:84u;background:var(--blanc);padding:14px 22px 20px;display:none;box-shadow:0 14px 30px rgba(0,0,0,.12);margin:0}
   .nav.ouvert{display:block}
   .menu{flex-direction:column;align-items:flex-start;gap:4px}
   .menu a,.sous-menu a{font-size:16px}
@@ -316,8 +318,8 @@ main{background:var(--creme)}
 /* ----- Tablette ----- */
 @media (min-width:601px) and (max-width:1024px){
   :root{--u:calc(100vw / 728)}
-  .entete .barre{height:74u}
-  .logo img{height:60u}
+  .entete .barre{height:84u}
+  .logo img{height:72u}
   .nav{top:74u}
   body{font-size:14px}
   .titre-page p{font-size:18u}
@@ -345,6 +347,7 @@ main{background:var(--creme)}
   .pied nav{justify-content:center}
   .pied nav a,.pied .coord,.pied .coord a,.pied nav span{font-size:13px}
   .pied .marque{font-size:30px}
+  .pied .marque img{height:60px}
 }
 
 /* ----- Cellulaire ----- */
@@ -399,6 +402,7 @@ main{background:var(--creme)}
   .pied .barre{height:auto;flex-direction:column;padding:20px;text-align:center}
   .pied nav a,.pied .coord,.pied .coord a,.pied nav span{font-size:14px}
   .pied .marque{font-size:34px}
+  .pied .marque img{height:64px}
   .deco{display:none}
 }
 @media (max-width:480px){
