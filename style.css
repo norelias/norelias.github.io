@@ -347,9 +347,9 @@ main>.page:last-child{flex:1 0 auto}
   .heros-texte{top:50%;transform:translateY(-50%)}
   .bande-noel .contenu{grid-template-columns:calc(270 * var(--u)) 1fr;height:calc(165 * var(--u))}
   .bande-noel img{height:calc(165 * var(--u))}
-  .souvenirs{height:calc(300 * var(--u));background:linear-gradient(to right,#faf5f1 calc(50% - calc(455 * var(--u))),rgba(250,245,241,0) calc(50% - calc(395 * var(--u))),rgba(250,245,241,0) calc(50% + calc(390 * var(--u))),#faf5f1 calc(50% + calc(455 * var(--u)))) no-repeat,url('images/souvenirs-ourson.jpg') center top/auto 100% no-repeat,#faf5f1}
+  .souvenirs{height:min(calc(100vw / 3.03), max(400px, 25vw));background:#faf5f1 url('images/souvenirs-ourson.jpg') left 40%/cover no-repeat}
   .souvenirs .interieur{max-width:none}
-  .souvenirs .texte{left:calc(50% + calc(10 * var(--u)));top:50%;transform:translateY(-50%);width:calc(310 * var(--u))}
+  .souvenirs .texte{left:51%;top:50%;transform:translateY(-50%);width:min(32vw, 400px)}
   .grille-univers{gap:calc(18 * var(--u)) calc(22 * var(--u))}
   .carte-univers .photo{height:auto;aspect-ratio:4/3}
   .carte-presta img{height:auto;aspect-ratio:4/3}
