@@ -527,15 +527,15 @@ main>.page:last-child{flex:1 0 auto}
 
 /* ---- Cartes-cadeaux ---- */
 .grille-montants{display:grid;grid-template-columns:repeat(3,1fr);gap:14u;max-width:600u;margin:20u auto 0}
-.montant{display:flex;flex-direction:column;align-items:center;gap:6u;text-align:center;text-decoration:none;color:#3a2a24;background:#fffaf7;border:1px solid #ecdcd2;border-radius:14u;padding:22u 12u 16u;box-shadow:0 2u 8u rgba(150,90,75,.12);transition:transform .2s,box-shadow .2s}
-.montant:hover{transform:translateY(-3px);box-shadow:0 6u 14u rgba(150,90,75,.22)}
-.montant .prix{font-family:'Great Vibes',cursive;font-size:44u;line-height:1;color:#a8685e}
-.montant .desc{font-size:13u;color:#6f5a52}
-.montant .choisir{margin-top:8u;display:inline-block;background:linear-gradient(180deg,#e1b2a4 0%,#cb9483 100%);color:#2b1d18;font-weight:700;font-size:12.5u;padding:7u 14u;border-radius:5u}
+.mt-cadeau{display:flex;flex-direction:column;align-items:center;gap:6u;text-align:center;text-decoration:none;color:#3a2a24;background:#fffaf7;border:1px solid #ecdcd2;border-radius:14u;padding:22u 12u 16u;box-shadow:0 2u 8u rgba(150,90,75,.12);transition:transform .2s,box-shadow .2s}
+.mt-cadeau:hover{transform:translateY(-3px);box-shadow:0 6u 14u rgba(150,90,75,.22)}
+.mt-cadeau .prix{font-family:'Great Vibes',cursive;font-size:44u;line-height:1;color:#a8685e}
+.mt-cadeau .desc{font-size:13u;color:#6f5a52}
+.mt-cadeau .choisir{margin-top:8u;display:inline-block;background:linear-gradient(180deg,#e1b2a4 0%,#cb9483 100%);color:#2b1d18;font-weight:700;font-size:12.5u;padding:7u 14u;border-radius:5u}
 .autre-montant{text-align:center;margin-top:16u;font-size:13.5u;color:#4a3830}
 .autre-montant a{color:#a8685e;font-weight:700}
 .etapes-cadeau{display:grid;grid-template-columns:repeat(3,1fr);gap:14u;max-width:600u;margin:22u auto 0}
 .etapes-cadeau div{text-align:center}
 .etapes-cadeau span{display:inline-flex;width:30u;height:30u;border-radius:50%;background:#f1ddd3;color:#a8685e;font-weight:800;align-items:center;justify-content:center;font-size:15u}
 .etapes-cadeau p{margin:8u 0 0;font-size:13u;line-height:1.5;color:#4a3830}
-@media (max-width:1024px){.grille-montants,.etapes-cadeau{grid-template-columns:1fr;max-width:420px;gap:16px}.montant{padding:24px 14px 18px}.montant .prix{font-size:56px}.montant .desc{font-size:16px}.montant .choisir{font-size:15px;padding:10px 20px}.autre-montant{font-size:16px;margin-top:20px}.etapes-cadeau{margin-top:28px}.etapes-cadeau span{width:36px;height:36px;font-size:18px}.etapes-cadeau p{font-size:16px}}
+@media (max-width:1024px){.grille-montants,.etapes-cadeau{grid-template-columns:1fr;max-width:420px;gap:16px}.mt-cadeau{padding:24px 14px 18px}.mt-cadeau .prix{font-size:56px}.mt-cadeau .desc{font-size:16px}.mt-cadeau .choisir{font-size:15px;padding:10px 20px}.autre-montant{font-size:16px;margin-top:20px}.etapes-cadeau{margin-top:28px}.etapes-cadeau span{width:36px;height:36px;font-size:18px}.etapes-cadeau p{font-size:16px}}
