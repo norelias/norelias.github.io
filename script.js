@@ -744,7 +744,7 @@
     var v = P.v[variante()] || P.v[Object.keys(P.v)[0]], q = Math.max(1, Math.min(10, Number(qte.value) || 1));
     $('pp-prix').textContent = fmt(v[1]);
     $('pp-total-prod').textContent = fmt(v[1] * q);
-    var badge = $('pp-badge-txt'); if (badge && CODE === 'tasse') badge.innerHTML = '<b>' + v[0].split(' (')[0] + '</b><small>(' + (v[0].split(' (')[1] || '').replace(')', '') + ')</small>';
+    var badge = $('pp-badge-txt'); if (badge && CODE === 'tasse') badge.innerHTML = '<b>' + v[0].split(' (')[0] + '</b> <small>(' + (v[0].split(' (')[1] || '').replace(')', '') + ')</small>';
     Array.prototype.forEach.call(document.querySelectorAll('[data-modele]'), function (bt) { bt.classList.toggle('on', bt.getAttribute('data-modele') === variante()); });
   }
   window.__maj = maj;
