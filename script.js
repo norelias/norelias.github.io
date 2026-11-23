@@ -579,6 +579,7 @@
     proc: { vues: [{}, { zoom: [225, 335, 1.8] }], W: 681, H: 551, pret: true }
   };
   var vitesse = 0;
+  var demo = new Image(); demo.onload = function () { if (window.__maj) window.__maj(); }; demo.src = racine + 'images/famille-2.jpg';
   function charger(o) { o.img = new Image(); o.img.onload = function () { o.pret = true; o.W = o.img.width; o.H = o.img.height; if (window.__maj) window.__maj(); }; o.img.src = racine + o.src; }
   Object.keys(BASES).forEach(function (k) { var b = BASES[k]; if (b.src) charger(b); (b.vues || []).forEach(function (v) { if (v.src) charger(v); }); });
   function cleBase(v) { if (CODE === 'tasse') return v === '15oz' ? 'tasse15' : 'tasse11'; if (CODE === 'portecles') return v === 'rond' ? 'rond' : 'proc'; return CODE; }
@@ -694,11 +695,11 @@
   function dessinerVues() {
     var cle = cleBase(variante()), b = BASES[cle]; if (!b || !b.pret) return;
     var n = b.vues.length; if (vue >= n) vue = 0;
-    dessiner(cvA, cle, img, { vue: b.vues[vue], ech: echelle(), w: 1000 });
+    dessiner(cvA, cle, img || (demo.naturalWidth ? demo : null), { vue: b.vues[vue], ech: echelle(), w: 1000 });
     if (vitrine) {
       while (vitrine.children.length < n) { (function (i) { var bt = document.createElement('button'); bt.type = 'button'; bt.className = 'vig'; bt.setAttribute('aria-label', 'Vue ' + (i + 1)); bt.appendChild(document.createElement('canvas')); bt.addEventListener('click', function () { vue = i; maj(); }); vitrine.appendChild(bt); })(vitrine.children.length); }
       while (vitrine.children.length > n) vitrine.removeChild(vitrine.lastChild);
-      Array.prototype.forEach.call(vitrine.children, function (bt, i) { bt.classList.toggle('on', i === vue); dessiner(bt.firstChild, cle, img, { vue: b.vues[i], ech: echelle(), w: 280 }); });
+      Array.prototype.forEach.call(vitrine.children, function (bt, i) { bt.classList.toggle('on', i === vue); dessiner(bt.firstChild, cle, img || (demo.naturalWidth ? demo : null), { vue: b.vues[i], ech: echelle(), w: 280 }); });
     }
   }
   Array.prototype.forEach.call(document.querySelectorAll('[data-vue]'), function (bt) {
