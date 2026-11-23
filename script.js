@@ -559,15 +559,28 @@
 
   /* ---- Aperçu réaliste : la photo de la cliente est posée sur une vraie photo du produit ---- */
   var BASES = {
-    tasse11: { src: 'images/pp-tasse11.jpg', zone: { x: 514, y: 308, w: 598, h: 655, r: 0, multiplier: 1 }, vues: [{}, { miroir: 1 }, { zoom: [813, 635, 1.7] }] },
-    tasse15: { src: 'images/pp-tasse15.jpg', zone: { x: 504, y: 153, w: 622, h: 748, r: 0, multiplier: 1 }, vues: [{}, { miroir: 1 }, { zoom: [815, 527, 1.7] }] },
+    tasse11: { vues: [
+      { src: 'images/pp-t11-1.jpg', zone: { x: 354, y: 352, w: 525, h: 533, r: 0, multiplier: 1 } },
+      { src: 'images/pp-t11-2.jpg', zone: { x: 335, y: 400, w: 480, h: 515, r: 0, multiplier: 1 } },
+      { src: 'images/pp-t11-3.jpg', zone: { x: 340, y: 392, w: 510, h: 508, r: 0, multiplier: 1 } },
+      { src: 'images/pp-t11-4.jpg', zone: { x: 296, y: 380, w: 408, h: 376, r: 0, multiplier: 1 } },
+      { src: 'images/pp-t11-5.jpg', dos: 1, zone: { x: 385, y: 262, w: 550, h: 583, r: 0, multiplier: 1 } }
+    ], pret: true },
+    tasse15: { vues: [
+      { src: 'images/pp-t15-1.jpg', zone: { x: 355, y: 243, w: 510, h: 642, r: 0, multiplier: 1 } },
+      { src: 'images/pp-t15-2.jpg', zone: { x: 335, y: 263, w: 485, h: 642, r: 0, multiplier: 1 } },
+      { src: 'images/pp-t15-3.jpg', zone: { x: 345, y: 263, w: 505, h: 617, r: 0, multiplier: 1 } },
+      { src: 'images/pp-t15-4.jpg', zone: { x: 325, y: 273, w: 515, h: 697, r: 0, multiplier: 1 } },
+      { src: 'images/pp-t15-5.jpg', dos: 1, zone: { x: 405, y: 253, w: 485, h: 627, r: 0, multiplier: 1 } }
+    ], pret: true },
     isotherme: { src: 'images/pp-isotherme.jpg', zone: { x: 340, y: 78, w: 220, h: 392, r: 4, fondu: [350, 440] }, vues: [{}, { miroir: 1 }, { zoom: [448, 240, 1.75] }] },
     rond: { src: 'images/pp-rond.jpg', rond: { x: 229, y: 359, r: 120 }, vues: [{}, { zoom: [229, 359, 1.9] }] },
     ornement: { src: 'images/pp-ornement.jpg', rond: { x: 194, y: 107, r: 63 }, vues: [{}, { zoom: [194, 107, 2] }] },
     proc: { vues: [{}, { zoom: [225, 335, 1.8] }], W: 681, H: 551, pret: true }
   };
   var vitesse = 0;
-  Object.keys(BASES).forEach(function (k) { var b = BASES[k]; if (!b.src) return; b.img = new Image(); b.img.onload = function () { b.pret = true; b.W = b.img.width; b.H = b.img.height; if (window.__maj) window.__maj(); }; b.img.src = racine + b.src; });
+  function charger(o) { o.img = new Image(); o.img.onload = function () { o.pret = true; o.W = o.img.width; o.H = o.img.height; if (window.__maj) window.__maj(); }; o.img.src = racine + o.src; }
+  Object.keys(BASES).forEach(function (k) { var b = BASES[k]; if (b.src) charger(b); (b.vues || []).forEach(function (v) { if (v.src) charger(v); }); });
   function cleBase(v) { if (CODE === 'tasse') return v === '15oz' ? 'tasse15' : 'tasse11'; if (CODE === 'portecles') return v === 'rond' ? 'rond' : 'proc'; return CODE; }
 
   /* Projection cylindrique : la photo est enroulée sur le cylindre (compression naturelle vers les bords, haut et bas courbés comme le rebord) */
@@ -627,8 +640,9 @@
 
   function dessiner(cv, cle, im, o) {
     o = o || {};
-    var b = BASES[cle]; if (!b || !b.pret) return;
-    var v = o.vue || {}, ech = o.ech || 1, W = b.W, H = b.H, k = (o.w || W) / W;
+    var b = BASES[cle]; if (!b) return;
+    var v = o.vue || {}, vb = v.src ? v : b; if (!vb.pret) return;
+    var ech = o.ech || 1, W = vb.W, H = vb.H, k = (o.w || W) / W;
     cv.width = Math.round(W * k); cv.height = Math.round(H * k);
     var c = cv.getContext('2d'); c.imageSmoothingQuality = 'high';
     function vueT() {
@@ -643,27 +657,27 @@
       c.restore(); return;
     }
     if (v.miroir) { c.translate(W, 0); c.scale(-1, 1); }
-    c.drawImage(b.img, 0, 0);
+    c.drawImage(vb.img, 0, 0);
     c.restore();
     if (!im) return;
     c.save(); vueT();
-    if (b.zone) {
-      var z = b.zone, zx = v.miroir ? W - z.x - z.w : z.x, m = v.miroir ? -1 : 1;
+    if (vb.zone) {
+      var z = vb.zone, zx = v.miroir ? W - z.x - z.w : z.x, m = v.miroir ? -1 : 1;
       c.save(); rr(c, zx, z.y, z.w, z.h, z.r || 0); c.clip();
-      var dos = v.miroir && (CODE === 'tasse' || CODE === 'isotherme');
+      var dos = v.dos || (v.miroir && CODE === 'isotherme');
       if (dos) plaque(c, im, zx, z.y, z.w, z.h, true, !z.fondu && txt.pos === 'derriere', z.multiplier ? 'transparent' : null);
       else if (z.fondu) {
         plaque(c, im, zx, z.y, z.w, z.fondu[1] - z.y + 40, false, false);
         var g0 = c.createLinearGradient(0, z.fondu[0], 0, z.fondu[1] + 18); g0.addColorStop(0, 'rgba(243,240,241,0)'); g0.addColorStop(1, 'rgba(243,240,241,1)');
         c.fillStyle = g0; c.fillRect(zx, z.fondu[0], z.w, z.h); c.fillStyle = '#f3f0f1'; c.fillRect(zx, z.fondu[1] + 17, z.w, z.h);
-      } else plaque(c, im, zx, z.y, z.w, z.h, false, !v.miroir && txt.pos === 'devant');
-      if (z.fondu && txt.t && ((!v.miroir && txt.pos === 'devant') || (dos && txt.pos === 'derriere'))) ecrire(c, zx + z.w / 2, z.y + z.h - (z.fondu ? 62 : 34), z.w - 28);
+      } else plaque(c, im, zx, z.y, z.w, z.h, false, !dos && txt.pos === 'devant');
+      if (z.fondu && txt.t && ((!dos && txt.pos === 'devant') || (dos && txt.pos === 'derriere'))) ecrire(c, zx + z.w / 2, z.y + z.h - (z.fondu ? 62 : 34), z.w - 28);
       var g = c.createLinearGradient(zx, 0, zx + z.w, 0), s = function (p) { return m > 0 ? p : 1 - p; };
       g.addColorStop(0, 'rgba(40,25,20,.34)'); g.addColorStop(.16, 'rgba(40,25,20,0)'); g.addColorStop(s(.62), 'rgba(255,255,255,.07)'); g.addColorStop(.86, 'rgba(40,25,20,0)'); g.addColorStop(1, 'rgba(40,25,20,.4)');
       if (!z.multiplier) { c.fillStyle = g; c.fillRect(zx, z.y, z.w, z.h); }
       var vg = c.createLinearGradient(0, z.y, 0, z.y + z.h); vg.addColorStop(0, 'rgba(40,25,20,.12)'); vg.addColorStop(.1, 'rgba(40,25,20,0)'); vg.addColorStop(.92, 'rgba(40,25,20,0)'); vg.addColorStop(1, 'rgba(40,25,20,.16)');
       if (!z.multiplier) { c.fillStyle = vg; c.fillRect(zx, z.y, z.w, z.h); }
-      if (z.multiplier && !dos) { c.globalCompositeOperation = 'multiply'; if (v.miroir) { c.translate(W, 0); c.scale(-1, 1); } c.drawImage(b.img, 0, 0); c.globalCompositeOperation = 'source-over'; }
+      if (z.multiplier && !dos) { c.globalCompositeOperation = 'multiply'; if (v.miroir) { c.translate(W, 0); c.scale(-1, 1); } c.drawImage(vb.img, 0, 0); c.globalCompositeOperation = 'source-over'; }
       c.restore();
     } else if (b.rond) {
       var q = b.rond; c.save(); c.beginPath(); c.arc(q.x, q.y, q.r, 0, 7); c.clip(); cover(c, im, q.x - q.r, q.y - q.r, q.r * 2, q.r * 2); ecrire(c, q.x, q.y + q.r - 30, q.r * 1.45);
