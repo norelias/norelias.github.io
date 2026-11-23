@@ -538,7 +538,7 @@
   var CODE = f.getAttribute('data-code'), LIV = Number(f.getAttribute('data-livraison'));
   var img = null, photoData = null, vue = 0, nomFichier = '', tailleFichier = '', idModif = null;
   var cad = { z: 1, x: 0, y: 0 };
-  var txt = { t: '', police: 'Dancing Script', couleur: CODE === 'isotherme' ? '#5c2f2b' : '#ffffff', pos: 'devant' };
+  var txt = { t: '', police: 'Dancing Script', couleur: '#ffffff', pos: 'devant' };
   var cvA = $('pp-apercu'), qte = $('pp-qte'), fi = $('pp-photo');
   function radios() { return f.querySelectorAll('input[name=variante]'); }
   function variante() { var r = f.querySelector('input[name=variante]:checked'); return r ? r.value : Object.keys(P.v)[0]; }
@@ -573,7 +573,21 @@
       { src: 'images/pp-t15-4.jpg', zone: { x: 325, y: 273, w: 515, h: 697, r: 0, multiplier: 1 } },
       { src: 'images/pp-t15-5.jpg', dos: 1, zone: { x: 405, y: 253, w: 485, h: 627, r: 0, multiplier: 1 } }
     ], pret: true },
-    isotherme: { src: 'images/pp-isotherme.jpg', zone: { x: 340, y: 78, w: 220, h: 392, r: 4, fondu: [350, 440] }, vues: [{}, { miroir: 1 }, { zoom: [448, 240, 1.75] }] },
+    iso20: { vues: [
+      { src: 'images/pp-iso-L.jpg', zone: { x: 291, y: 190, w: 247, h: 390, r: 0, multiplier: 1, poly: [[291,190],[538,190],[515,580],[320,580]] } },
+      { src: 'images/pp-iso-groupe.jpg', zone: { x: 291, y: 440, w: 247, h: 390, r: 0, multiplier: 1, poly: [[291,440],[538,440],[515,830],[320,830]] } },
+      { src: 'images/pp-iso-L.jpg', miroir: 1, dos: 1, zone: { x: 291, y: 190, w: 247, h: 390, r: 0, multiplier: 1, poly: [[291,190],[538,190],[515,580],[320,580]] } }
+    ], pret: true },
+    iso30: { vues: [
+      { src: 'images/pp-iso-M.jpg', zone: { x: 129, y: 138, w: 301, h: 504, r: 0, multiplier: 1, poly: [[129,138],[430,138],[412,642],[152,642]] } },
+      { src: 'images/pp-iso-groupe.jpg', zone: { x: 597, y: 318, w: 301, h: 504, r: 0, multiplier: 1, poly: [[597,318],[898,318],[880,822],[620,822]] } },
+      { src: 'images/pp-iso-M.jpg', miroir: 1, dos: 1, zone: { x: 129, y: 138, w: 301, h: 504, r: 0, multiplier: 1, poly: [[129,138],[430,138],[412,642],[152,642]] } }
+    ], pret: true },
+    iso40: { vues: [
+      { src: 'images/pp-iso-R.jpg', zone: { x: 50, y: 98, w: 348, h: 628, r: 0, multiplier: 1, poly: [[50,98],[398,98],[370,726],[80,726]] } },
+      { src: 'images/pp-iso-groupe.jpg', zone: { x: 955, y: 178, w: 348, h: 628, r: 0, multiplier: 1, poly: [[955,178],[1303,178],[1275,806],[985,806]] } },
+      { src: 'images/pp-iso-R.jpg', miroir: 1, dos: 1, zone: { x: 50, y: 98, w: 348, h: 628, r: 0, multiplier: 1, poly: [[50,98],[398,98],[370,726],[80,726]] } }
+    ], pret: true },
     rond: { src: 'images/pp-rond.jpg', rond: { x: 229, y: 359, r: 120 }, vues: [{}, { zoom: [229, 359, 1.9] }] },
     ornement: { src: 'images/pp-ornement.jpg', rond: { x: 194, y: 107, r: 63 }, vues: [{}, { zoom: [194, 107, 2] }] },
     proc: { vues: [{}, { zoom: [225, 335, 1.8] }], W: 681, H: 551, pret: true }
@@ -582,7 +596,7 @@
   var demo = new Image(); demo.onload = function () { if (window.__maj) window.__maj(); }; demo.src = racine + 'images/famille-2.jpg';
   function charger(o) { o.img = new Image(); o.img.onload = function () { o.pret = true; o.W = o.img.width; o.H = o.img.height; if (window.__maj) window.__maj(); }; o.img.src = racine + o.src; }
   Object.keys(BASES).forEach(function (k) { var b = BASES[k]; if (b.src) charger(b); (b.vues || []).forEach(function (v) { if (v.src) charger(v); }); });
-  function cleBase(v) { if (CODE === 'tasse') return v === '15oz' ? 'tasse15' : 'tasse11'; if (CODE === 'portecles') return v === 'rond' ? 'rond' : 'proc'; return CODE; }
+  function cleBase(v) { if (CODE === 'tasse') return v === '15oz' ? 'tasse15' : 'tasse11'; if (CODE === 'portecles') return v === 'rond' ? 'rond' : 'proc'; if (CODE === 'isotherme') return 'iso' + parseInt(v, 10); return CODE; }
 
   /* Projection cylindrique : la photo est enroulée sur le cylindre (compression naturelle vers les bords, haut et bas courbés comme le rebord) */
   function plaque(c, im, x, y, w, h, seul, avecTexte, blanc) {
@@ -663,8 +677,9 @@
     if (!im) return;
     c.save(); vueT();
     if (vb.zone) {
-      var z = vb.zone, zx = v.miroir ? W - z.x - z.w : z.x, m = v.miroir ? -1 : 1;
-      c.save(); rr(c, zx, z.y, z.w, z.h, z.r || 0); c.clip();
+      var z = vb.zone.poly ? { x: vb.zone.x, y: vb.zone.y, w: vb.zone.w, h: vb.zone.h + vb.zone.w * .07, r: 0, multiplier: 1, poly: vb.zone.poly } : vb.zone, zx = v.miroir ? W - z.x - z.w : z.x, m = v.miroir ? -1 : 1;
+      c.save();
+      if (z.poly) { var pl = z.poly.map(function (q) { return [v.miroir ? W - q[0] : q[0], q[1]]; }), dd = z.w * .035, mx = (pl[0][0] + pl[1][0]) / 2, mb = (pl[2][0] + pl[3][0]) / 2; c.beginPath(); c.moveTo(pl[0][0], pl[0][1]); c.quadraticCurveTo(mx, pl[0][1] + 2 * dd, pl[1][0], pl[1][1]); c.lineTo(pl[2][0], pl[2][1]); c.quadraticCurveTo(mb, pl[2][1] + 2 * dd, pl[3][0], pl[3][1]); c.closePath(); c.clip(); } else { rr(c, zx, z.y, z.w, z.h, z.r || 0); c.clip(); }
       var dos = v.dos || (v.miroir && CODE === 'isotherme');
       if (dos) plaque(c, im, zx, z.y, z.w, z.h, true, !z.fondu && txt.pos === 'derriere', z.multiplier ? 'transparent' : null);
       else if (z.fondu) {
@@ -691,7 +706,7 @@
 
   /* ---- galerie : vue principale + vignettes dessinées avec la photo de la cliente ---- */
   var vitrine = $('pp-vues');
-  function echelle() { var i = Array.prototype.indexOf.call(radios(), f.querySelector('input[name=variante]:checked')); return CODE === 'isotherme' ? 1 + .09 * Math.max(0, i) : 1; }
+  function echelle() { var i = Array.prototype.indexOf.call(radios(), f.querySelector('input[name=variante]:checked')); return 1; }
   function dessinerVues() {
     var cle = cleBase(variante()), b = BASES[cle]; if (!b || !b.pret) return;
     var n = b.vues.length; if (vue >= n) vue = 0;
@@ -734,7 +749,7 @@
   tIn.addEventListener('input', function () { txt.t = this.value; $('pp-compte').textContent = this.value.length + ' / 50'; tOpts.hidden = !this.value.trim(); chargerPolice(); maj(); });
   Array.prototype.forEach.call(f.querySelectorAll('[data-police]'), function (b) { b.addEventListener('click', function () { txt.police = b.getAttribute('data-police'); Array.prototype.forEach.call(f.querySelectorAll('[data-police]'), function (x) { x.classList.toggle('on', x === b); }); chargerPolice(); maj(); }); });
   Array.prototype.forEach.call(f.querySelectorAll('[data-couleur]'), function (b) { b.addEventListener('click', function () { txt.couleur = b.getAttribute('data-couleur'); Array.prototype.forEach.call(f.querySelectorAll('[data-couleur]'), function (x) { x.classList.toggle('on', x === b); }); maj(); }); });
-  Array.prototype.forEach.call(f.querySelectorAll('input[name=position]'), function (r) { r.addEventListener('change', function () { txt.pos = r.value; if (CODE === 'tasse' || CODE === 'isotherme') { vue = r.value === 'derriere' ? 1 : 0; } maj(); }); });
+  Array.prototype.forEach.call(f.querySelectorAll('input[name=position]'), function (r) { r.addEventListener('change', function () { txt.pos = r.value; if (CODE === 'tasse' || CODE === 'isotherme') { var bb = BASES[cleBase(variante())], k0 = 0; if (r.value === 'derriere' && bb) bb.vues.forEach(function (q, j) { if (q.dos && !k0) k0 = j; }); vue = r.value === 'derriere' ? k0 : 0; } maj(); }); });
   Array.prototype.forEach.call(f.querySelectorAll('[data-couleur]'), function (b) { if (b.getAttribute('data-couleur') === txt.couleur) b.classList.add('on'); });
 
   /* ---- cadrage de la photo : zoom et déplacement ---- */
