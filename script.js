@@ -503,22 +503,33 @@
     setInterval(function () { if (!pause && !document.hidden) aller(1); }, 6000);
   })();
 
-/* ---------- Boutique : aperçu, photo, commande ---------- */
+/* ---------- Boutique ---------- */
 (function () {
-  var f = document.getElementById('form-boutique');
-  var cartes = document.querySelectorAll('.prod[data-code]');
+  var $ = function (id) { return document.getElementById(id); };
+  // listing : filtres, favoris
+  Array.prototype.forEach.call(document.querySelectorAll('[data-filtre]'), function (b) {
+    b.addEventListener('click', function () {
+      var v = b.getAttribute('data-filtre');
+      Array.prototype.forEach.call(document.querySelectorAll('[data-filtre]'), function (x) { x.classList.toggle('actif', x === b); });
+      Array.prototype.forEach.call(document.querySelectorAll('#grille-prod .prod'), function (a) { a.hidden = v !== 'tous' && a.getAttribute('data-cat') !== v; });
+      var ap = document.querySelector('.apercu-vignette'); if (ap) ap.hidden = v !== 'tous';
+    });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.coeur-fav'), function (h) { h.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); h.classList.toggle('on'); }); });
+  var q0 = location.search, m0 = $('msg-boutique');
+  if (m0 && /merci=1/.test(q0)) { m0.textContent = 'Merci ! Votre paiement est reçu. Un courriel de confirmation vous attend.'; m0.hidden = false; }
+  else if (m0 && /annule=1/.test(q0)) { m0.textContent = "Le paiement a été annulé. Votre commande n'a pas été complétée."; m0.hidden = false; }
+
+  var f = $('form-produit');
   if (!f) return;
   var C = window.NORELIAS || {};
-  var P = JSON.parse(f.getAttribute('data-produits'));
-  var LIV = Number(f.getAttribute('data-livraison'));
-  var $ = function (id) { return document.getElementById(id); };
+  var P = JSON.parse(f.getAttribute('data-produit'));
+  var CODE = f.getAttribute('data-code'), LIV = Number(f.getAttribute('data-livraison'));
   var img = null, photoData = null;
-
   function cover(ctx, im, x, y, w, h) {
     var r = Math.max(w / im.width, h / im.height), sw = w / r, sh = h / r;
     ctx.drawImage(im, (im.width - sw) / 2, (im.height - sh) / 2, sw, sh, x, y, w, h);
   }
-  function rr(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
   // Aperçu réaliste : la photo de la cliente est placée sur une vraie photo du produit
   var BASES = {
     tasse: { src: 'images/boutique-tasse.jpg', zone: { x: 131, y: 46, w: 125, h: 135 }, ombre: true },
@@ -559,88 +570,62 @@
     }
     c.restore();
   }
-  // vignettes des cartes (photo d'exemple dessinée en dégradé)
-  function exemple() {
-    var cv = document.createElement('canvas'); cv.width = 400; cv.height = 400; var c = cv.getContext('2d');
-    var g = c.createLinearGradient(0, 0, 400, 400); g.addColorStop(0, '#f0c9bd'); g.addColorStop(1, '#a98374'); c.fillStyle = g; c.fillRect(0, 0, 400, 400);
-    c.fillStyle = 'rgba(255,255,255,.85)'; c.font = 'italic 90px Georgia,serif'; c.textAlign = 'center'; c.fillText('♡', 200, 235); return cv;
-  }
-  var ex = exemple();
-  Array.prototype.forEach.call(cartes, function (a) {
-    var cv = a.querySelector('canvas'), code = a.getAttribute('data-code');
-    if (!cv) return;
-    dessiner(cv, code, ex, 'x');
-    var im = new Image(); im.onload = function () { dessiner(cv, code, im, '30oz'); }; im.src = a.getAttribute('data-ex');
-  });
-  Array.prototype.forEach.call(document.querySelectorAll('[data-filtre]'), function (b) {
-    b.addEventListener('click', function () {
-      var v = b.getAttribute('data-filtre');
-      Array.prototype.forEach.call(document.querySelectorAll('[data-filtre]'), function (x) { x.classList.toggle('actif', x === b); });
-      Array.prototype.forEach.call(document.querySelectorAll('#grille-prod .prod'), function (a) { a.hidden = v !== 'tous' && a.getAttribute('data-cat') !== v; });
-      var ap = document.querySelector('.apercu-vignette'); if (ap) ap.hidden = v !== 'tous';
-    });
-  });
 
-  Array.prototype.forEach.call(document.querySelectorAll('.coeur-fav'), function (h) { h.addEventListener('click', function () { h.classList.toggle('on'); }); });
-  var av = document.querySelector('.apercu-vignette'); if (av) av.addEventListener('click', function () { var t = $('commande-titre'); if (t) t.scrollIntoView({ behavior: 'smooth' }); });
-  var selP = $('b-produit'), selV = $('b-variante'), cvA = $('b-apercu');
+  var cvA = $('pp-apercu'), selV = $('pp-variante'), qte = $('pp-qte'), fi = $('pp-photo');
+  function fmt(n) { return (Math.round(n * 100) / 100).toLocaleString('fr-CA', { minimumFractionDigits: 2 }) + ' $'; }
   function maj() {
-    var code = selP.value;
-    dessiner(cvA, code || 'tasse', img);
-    var p = code && P[code], v = p && p.v[selV.value];
-    $('b-r-prod').textContent = v ? p.nom + ' · ' + v[0] + ' : ' + v[1] + ' $' : '—';
-    $('b-r-total').innerHTML = '<strong>' + (v ? (v[1] + LIV) + ' $' : '—') + '</strong>';
+    dessiner(cvA, CODE, img);
+    var v = P.v[selV.value] || P.v[Object.keys(P.v)[0]], q = Math.max(1, Math.min(10, Number(qte.value) || 1));
+    $('pp-prix').textContent = fmt(v[1]);
+    $('pp-sous').textContent = fmt(v[1] * q); $('pp-total').textContent = fmt(v[1] * q + LIV);
+    $('pp-btn-total').textContent = fmt(v[1] * q + LIV);
   }
-  function choisir(code) {
-    selP.value = code; remplir();
-    var t = $('commande-titre'); if (t) t.scrollIntoView({ behavior: 'smooth' });
-  }
-  function remplir() {
-    var p = P[selP.value]; selV.innerHTML = '';
-    if (!p) { selV.disabled = true; selV.innerHTML = '<option value="">Choisir d\'abord un produit</option>'; maj(); return; }
-    selV.disabled = false;
-    Object.keys(p.v).forEach(function (k) { var o = document.createElement('option'); o.value = k; o.textContent = p.v[k][0] + ' · ' + p.v[k][1] + ' $'; selV.appendChild(o); });
-    maj();
-  }
-  selP.addEventListener('change', remplir); selV.addEventListener('change', maj);
-  Array.prototype.forEach.call(document.querySelectorAll('[data-choisir]'), function (b) { b.addEventListener('click', function () { choisir(b.getAttribute('data-choisir')); }); });
+  window.__maj = maj;
+  selV.addEventListener('change', maj);
+  Array.prototype.forEach.call(document.querySelectorAll('[data-qte]'), function (b) { b.addEventListener('click', function () { qte.value = Math.max(1, Math.min(10, (Number(qte.value) || 1) + Number(b.getAttribute('data-qte')))); maj(); }); });
+  qte.addEventListener('input', maj);
+  $('pp-texte').addEventListener('input', function () { $('pp-compte').textContent = this.value.length + ' / 50'; });
   Array.prototype.forEach.call(f.querySelectorAll('input[name=cadeau]'), function (r) { r.addEventListener('change', function () { $('b-dest').hidden = f.cadeau.value !== 'oui'; }); });
+  var liste = $('pp-liste'); if (liste) liste.addEventListener('click', function () { liste.classList.toggle('on'); });
 
-  $('b-photo').addEventListener('change', function () {
-    var fi = this.files[0], al = $('b-alerte'); al.hidden = true; img = null; photoData = null;
-    if (!fi) { maj(); return; }
-    if (!/^image\/(jpeg|png)$/.test(fi.type)) { al.textContent = 'Choisissez une photo JPEG ou PNG.'; al.hidden = false; this.value = ''; maj(); return; }
-    var im = new Image(), url = URL.createObjectURL(fi);
+  var zone = $('pp-zone'), vign = $('pp-vignette'), alerte = $('pp-alerte');
+  function effacer() { img = null; photoData = null; fi.value = ''; vign.hidden = true; zone.hidden = false; alerte.hidden = true; maj(); }
+  $('pp-suppr').addEventListener('click', effacer);
+  ['dragover', 'dragenter'].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.add('survol'); }); });
+  ['dragleave', 'drop'].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.remove('survol'); }); });
+  zone.addEventListener('drop', function (e) { if (e.dataTransfer.files[0]) { fi.files = e.dataTransfer.files; lire(); } });
+  fi.addEventListener('change', lire);
+  function lire() {
+    var fic = fi.files[0]; alerte.hidden = true;
+    if (!fic) return;
+    if (!/^image\/(jpeg|png)$/.test(fic.type)) { alerte.textContent = 'Choisissez une photo JPEG ou PNG.'; alerte.hidden = false; fi.value = ''; return; }
+    if (fic.size > 10 * 1024 * 1024) { alerte.textContent = 'La photo est trop lourde (maximum 10 Mo).'; alerte.hidden = false; fi.value = ''; return; }
+    var im = new Image(), url = URL.createObjectURL(fic);
     im.onload = function () {
       var m = Math.min(1, 1600 / Math.max(im.width, im.height)), w = Math.round(im.width * m), h = Math.round(im.height * m);
       var cv = document.createElement('canvas'); cv.width = w; cv.height = h; cv.getContext('2d').drawImage(im, 0, 0, w, h);
-      photoData = cv.toDataURL('image/jpeg', .9); img = im; URL.revokeObjectURL(url);
-      if (Math.max(im.width, im.height) < 900) { al.textContent = 'Cette photo est de petite taille : l\'impression pourrait manquer de netteté. Une photo plus grande donnerait un meilleur résultat.'; al.hidden = false; }
+      photoData = cv.toDataURL('image/jpeg', .9); img = im; $('pp-miniature').src = photoData; vign.hidden = false; zone.hidden = true;
+      if (Math.max(im.width, im.height) < 900) { alerte.textContent = "Cette photo est de petite taille : l'impression pourrait manquer de netteté. Une photo plus grande donnerait un meilleur résultat."; alerte.hidden = false; }
       maj();
     };
-    im.onerror = function () { al.textContent = 'Cette photo n\'a pas pu être lue.'; al.hidden = false; };
+    im.onerror = function () { alerte.textContent = "Cette photo n'a pas pu être lue."; alerte.hidden = false; };
     im.src = url;
-  });
+  }
 
   function erreur(t) { var e = $('b-erreur'); e.textContent = t; e.hidden = !t; }
   f.addEventListener('submit', function (e) {
     e.preventDefault(); erreur('');
-    if (!selP.value || !selV.value) return erreur('Choisissez un produit et un format.');
-    if (!photoData) return erreur('Ajoutez votre photo.');
+    if (!photoData) return erreur('Ajoutez votre photo (étape 1).');
     var d = {}; ['prenom', 'nom', 'courriel', 'telephone', 'adresse'].forEach(function (k) { d[k] = (f[k].value || '').trim(); });
     if (!d.prenom || !d.nom || !d.courriel || !d.telephone || !d.adresse) return erreur('Remplissez tous les champs obligatoires (*).');
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.courriel)) return erreur('Courriel invalide.');
-    d.action = 'commander'; d.produit = selP.value; d.variante = selV.value; d.photo = photoData; d.piege = f.piege.value;
+    d.action = 'commander'; d.produit = CODE; d.variante = selV.value; d.quantite = Number(qte.value) || 1; d.texte = $('pp-texte').value; d.photo = photoData; d.piege = f.piege.value;
     d.cadeau = f.cadeau.value === 'oui'; d.dest_nom = f.dest_nom.value; d.dest_adresse = f.dest_adresse.value; d.note = f.note.value;
-    var b = $('b-envoyer'); b.disabled = true; b.textContent = 'Un instant…';
+    var b = $('b-envoyer'); b.disabled = true; b.firstChild.textContent = 'Un instant… ';
     fetch((C.serveur || '').replace('norelias-reservation', 'norelias-stripe'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) })
       .then(function (r) { return r.json(); })
       .then(function (j) { if (j && j.ok && j.paiement) { location.href = j.paiement; } else { throw new Error(j && j.erreur); } })
-      .catch(function (er) { erreur((er && er.message) || 'Une erreur est survenue. Écrivez-moi à bonjour@norelias.ca.'); b.disabled = false; b.textContent = 'Payer par carte'; });
+      .catch(function (er) { erreur((er && er.message) || 'Une erreur est survenue. Écrivez-moi à bonjour@norelias.ca.'); b.disabled = false; b.firstChild.textContent = 'Payer par carte · '; });
   });
-
-  var q = location.search, m = $('msg-boutique');
-  if (/merci=1/.test(q)) { m.textContent = 'Merci ! Votre paiement est reçu. Un courriel de confirmation vous attend.'; m.hidden = false; }
-  else if (/annule=1/.test(q)) { m.textContent = 'Le paiement a été annulé. Votre commande n\'a pas été complétée.'; m.hidden = false; }
-  window.__maj = maj; maj();
+  maj();
 })();
