@@ -312,6 +312,8 @@ main{background:var(--creme)}
    cellulaire (600 px et moins)
    ========================================================= */
 
+.duo{display:flex;flex-direction:column}
+.duo .bande-noel{order:-1}
 /* Toutes les pages remplissent l'écran : le pied de page reste en bas */
 body{display:flex;flex-direction:column;min-height:100vh}
 main{flex:1 0 auto;display:flex;flex-direction:column}
@@ -348,6 +350,16 @@ main>.page:last-child{flex:1 0 auto}
   .souvenirs{height:min(calc(100vw / 3.03), max(400px, 25vw));background:#faf5f1 url('images/souvenirs-ourson.jpg') left 40%/cover no-repeat}
   .souvenirs .interieur{max-width:none}
   .souvenirs .texte{left:51%;top:50%;transform:translateY(-50%);width:min(32vw, 400px)}
+  /* Bébé à gauche, Noël à droite, côte à côte */
+  .duo{display:grid;grid-template-columns:1fr 1fr;position:relative}
+  .duo::before{content:"";position:absolute;left:0;right:0;top:-8u;height:9u;z-index:3;background:#faf5f1;-webkit-mask:var(--masque) center/100% 100% no-repeat;mask:var(--masque) center/100% 100% no-repeat;filter:drop-shadow(0 -1.2u 0 #fffaf5) drop-shadow(0 -.5u 1u rgba(58,42,36,.25))}
+  .duo .bande-noel{order:0}
+  .duo .bande-noel::before,.duo .souvenirs::after{display:none}
+  .duo .souvenirs{height:auto;min-height:300u;background-position:left 40%}
+  .duo .souvenirs .texte{left:auto;right:4%;width:46%}
+  .duo .bande-noel .contenu{grid-template-columns:44% 1fr;height:100%;max-width:none}
+  .duo .bande-noel img{height:100%;min-height:300u}
+  .duo .bande-noel .texte{flex-direction:column;align-items:flex-start;justify-content:center;gap:16u;padding:0 26u}
   .grille-univers{gap:18u 22u}
   .carte-univers .photo{height:auto;aspect-ratio:4/3}
   .carte-presta img{height:auto;aspect-ratio:4/3}
