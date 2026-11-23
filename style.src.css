@@ -485,3 +485,49 @@ main>.page:last-child{flex:1 0 auto}
   .etapes li{font-size:0}
   .etapes li .num{font-size:13px}
 }
+
+/* ---- Barre « Réserver » collée (téléphone / tablette) ---- */
+.barre-reserver{display:none}
+@media (max-width:1024px){
+  body.avec-barre{padding-bottom:64px}
+  .barre-reserver{display:flex;align-items:center;justify-content:center;position:fixed;left:0;right:0;bottom:0;z-index:40;height:56px;background:linear-gradient(180deg,#e1b2a4 0%,#cb9483 100%);color:#2b1d18;font-family:'Nunito',sans-serif;font-weight:700;font-size:16px;text-decoration:none;box-shadow:0 -3px 12px rgba(58,42,36,.28);padding-bottom:env(safe-area-inset-bottom)}
+}
+
+/* ---- Témoignages ---- */
+.temoignages{background:#fbf3ee;padding:30u 0 34u}
+.temoignages .interieur{max-width:728u;margin:0 auto;padding:0 20u}
+.grille-temoins{display:grid;grid-template-columns:repeat(3,1fr);gap:14u;margin-top:18u}
+.temoin{position:relative;margin:0;background:#fffaf7;border:1px solid #ecdcd2;border-radius:12u;padding:26u 16u 16u;text-align:center;box-shadow:0 2u 8u rgba(150,90,75,.1)}
+.temoin .guillemet{position:absolute;top:-6u;left:50%;transform:translateX(-50%);font-family:'Great Vibes',cursive;font-size:56u;line-height:1;color:#cb9483}
+.temoin blockquote{margin:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16u;line-height:1.45;color:#3a2a24}
+.temoin figcaption{margin-top:12u;display:flex;flex-direction:column;gap:2u;font-size:12u;color:#7a4a40}
+.temoin figcaption strong{font-size:13.5u;color:#3a2a24}
+@media (min-width:1025px){.temoignages .interieur{max-width:var(--largeur)}}
+@media (max-width:1024px){.grille-temoins{grid-template-columns:1fr;gap:22px}.temoin{padding:30px 20px 20px}.temoin blockquote{font-size:19px}.temoin figcaption{font-size:14px}.temoin figcaption strong{font-size:15px}.temoignages{padding:36px 0 40px}}
+
+/* ---- FAQ ---- */
+.faq{max-width:640u;margin:18u auto 0;display:flex;flex-direction:column;gap:8u}
+.faq .q{background:#fffaf7;border:1px solid #ecdcd2;border-radius:10u;padding:0 16u;transition:box-shadow .2s}
+.faq .q[open]{box-shadow:0 2u 8u rgba(150,90,75,.15)}
+.faq summary{cursor:pointer;list-style:none;padding:12u 22u 12u 0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18u;color:#3a2a24;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:0;top:50%;transform:translateY(-50%);font-family:'Nunito',sans-serif;font-size:20u;color:#a8685e}
+.faq .q[open] summary::after{content:"−"}
+.faq .q p{margin:0 0 14u;font-size:13.5u;line-height:1.6;color:#4a3830;font-weight:400}
+.faq-fin{text-align:center;margin-top:22u}
+@media (max-width:1024px){.faq{max-width:none;gap:10px}.faq .q{padding:0 16px;border-radius:12px}.faq summary{padding:15px 26px 15px 0;font-size:20px}.faq summary::after{font-size:24px}.faq .q p{font-size:16px;margin-bottom:16px}.faq-fin .bouton{height:46px;font-size:16px;padding:0 26px}}
+
+/* ---- Cartes-cadeaux ---- */
+.grille-montants{display:grid;grid-template-columns:repeat(3,1fr);gap:14u;max-width:600u;margin:20u auto 0}
+.montant{display:flex;flex-direction:column;align-items:center;gap:6u;text-align:center;text-decoration:none;color:#3a2a24;background:#fffaf7;border:1px solid #ecdcd2;border-radius:14u;padding:22u 12u 16u;box-shadow:0 2u 8u rgba(150,90,75,.12);transition:transform .2s,box-shadow .2s}
+.montant:hover{transform:translateY(-3px);box-shadow:0 6u 14u rgba(150,90,75,.22)}
+.montant .prix{font-family:'Great Vibes',cursive;font-size:44u;line-height:1;color:#a8685e}
+.montant .desc{font-size:13u;color:#6f5a52}
+.montant .choisir{margin-top:8u;display:inline-block;background:linear-gradient(180deg,#e1b2a4 0%,#cb9483 100%);color:#2b1d18;font-weight:700;font-size:12.5u;padding:7u 14u;border-radius:5u}
+.autre-montant{text-align:center;margin-top:16u;font-size:13.5u;color:#4a3830}
+.autre-montant a{color:#a8685e;font-weight:700}
+.etapes-cadeau{display:grid;grid-template-columns:repeat(3,1fr);gap:14u;max-width:600u;margin:22u auto 0}
+.etapes-cadeau div{text-align:center}
+.etapes-cadeau span{display:inline-flex;width:30u;height:30u;border-radius:50%;background:#f1ddd3;color:#a8685e;font-weight:800;align-items:center;justify-content:center;font-size:15u}
+.etapes-cadeau p{margin:8u 0 0;font-size:13u;line-height:1.5;color:#4a3830}
+@media (max-width:1024px){.grille-montants,.etapes-cadeau{grid-template-columns:1fr;max-width:420px;gap:16px}.montant{padding:24px 14px 18px}.montant .prix{font-size:56px}.montant .desc{font-size:16px}.montant .choisir{font-size:15px;padding:10px 20px}.autre-montant{font-size:16px;margin-top:20px}.etapes-cadeau{margin-top:28px}.etapes-cadeau span{width:36px;height:36px;font-size:18px}.etapes-cadeau p{font-size:16px}}
