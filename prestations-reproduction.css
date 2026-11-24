@@ -216,3 +216,9 @@ h1,h2,h3,p{margin:0;font-weight:400}
  .c-fet .bulle h3 br,.c-eco .bulle h3 br,.c-fin .bulle h3 br,.c-pro .bulle h3 br{display:inline}
  .c-fet .bulle h3 br:after,.c-eco .bulle h3 br:after,.c-fin .bulle h3 br:after,.c-pro .bulle h3 br:after{content:" "}
 }
+/* couleurs adoucies */
+.sig{background:linear-gradient(160deg,#f3d9c6,#e6bfa6)!important;border:2px solid #b98a5e!important;color:#4a1f26!important;box-shadow:0 3px 10px #6c1d2726,inset 0 0 0 1px #fff4ea99!important}
+.sig h3,.sig .prix{color:#6c1d27!important}
+.sig .ligne svg{color:#6c1d27!important}
+.sig .or{filter:none!important;opacity:.9!important}
+.pinceau{background:linear-gradient(95deg,#a04050,#8a2e3d)!important}

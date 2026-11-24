@@ -236,6 +236,10 @@ details.q .r{padding:0 40px 16px 108px;font-size:16.5px;line-height:21px;font-we
 .bq-cartes{grid-template-columns:520px 1fr!important;background:#d9b99a}
 .bq-cartes>img{height:231px!important;align-self:center;object-fit:cover!important}
 .bq-cartes{min-height:300px}
+
+.ap-band{margin-top:12px}
+.ap-exp{background:linear-gradient(100deg,#ecd3bd,#f4e2d2);margin-top:8px;padding-top:14px}
+@media(max-width:760px){.ap-exp{margin-top:4px;padding-top:4px}}
 /* ===== MOBILE : même gabarit compact que l'accueil ===== */
 @media(max-width:760px){
  body{background:#fcf4ed;-webkit-text-stroke:.1px currentColor}
