@@ -2,7 +2,7 @@
  'use strict';
  const burger=document.querySelector('.burger'),nav=document.querySelector('.mainnav');
  if(burger&&nav){burger.addEventListener('click',()=>{const expanded=burger.getAttribute('aria-expanded')==='true';burger.setAttribute('aria-expanded',String(!expanded));nav.classList.toggle('open',!expanded)});nav.addEventListener('click',e=>{if(e.target.closest('a')){nav.classList.remove('open');burger.setAttribute('aria-expanded','false')}})}
- const photos=(window.NORELIAS_GALLERY||[]).slice(0,5),stage=document.querySelector('#gallery-tiles'),dots=document.querySelector('.gallery-dots');
+ const photos=(window.NORELIAS_GALLERY||[]).slice(0,12),stage=document.querySelector('#gallery-tiles'),dots=document.querySelector('.gallery-dots');
  const modal=document.querySelector('.lightbox'),modalImg=document.querySelector('.lightbox-image');let cursor=2,modalIndex=0;
  const sizesDesktop=[{x:-422,y:19,w:164,h:133,rot:-4,z:1},{x:-267,y:10,w:148,h:143,rot:-2,z:2},{x:-130,y:0,w:260,h:169,rot:0,z:4},{x:125,y:11,w:146,h:144,rot:3,z:3},{x:260,y:19,w:165,h:137,rot:4,z:1}];
  // Cards are dynamically assembled from separate <img> elements.
