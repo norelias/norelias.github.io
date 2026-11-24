@@ -70,7 +70,7 @@
     <div class="navigation-etapes"><button type="button" class="bouton contour" data-precedent>←</button><button type="button" class="bouton" data-suivant>Suivant →</button></div>
   </fieldset>
   <fieldset class="etape" hidden style="border:0;padding:0;margin:0"><legend class="sr-only">Étape 3 : paiement</legend>
-    <div class="champ"><label class="sr-only" for="forfait">Forfait</label><select id="forfait" name="forfait" required><option value="">Choisir un forfait</option><option value="essentiel">Essentiel · 200 $</option><option value="signature">Signature · 300 $</option><option value="complete">Complète · 450 $</option><option value="noel">Mini-séance de Noël · 95 $</option><option value="ecole">Garderie / École · 35 $ par enfant</option><option value="finissants">Finissants · 175 $</option><option value="bal">Bal de promos · 150 $</option><option value="personnalise">Forfait personnalisé · dépôt de 100 $</option></select></div>
+    <div class="champ"><label class="sr-only" for="forfait">Forfait</label><select id="forfait" name="forfait" required><option value="">Choisir un forfait</option><option value="essentiel">Essentiel · 200 $</option><option value="signature">Signature · 300 $</option><option value="complete">Complète · 450 $</option><option value="noel">Mini-séance de Noël · 95 $</option><option value="ecole">Garderie / École · 300 $ par séance</option><option value="finissants">Finissants · 175 $</option><option value="bal">Bal de promos · 150 $</option><option value="personnalise">Forfait personnalisé · dépôt de 100 $</option></select></div>
     <div class="recap"><dl><dt>Séance</dt><dd id="recap-seance"></dd><dt>Date</dt><dd id="recap-date"></dd></dl><dl class="recap-prix" hidden><dt>Forfait</dt><dd id="recap-forfait"></dd><dt>Total</dt><dd id="recap-total"></dd><dt>À payer maintenant</dt><dd id="recap-acompte"></dd></dl></div>
     <div id="zone-paiement" hidden>
       <div class="choix-paiement">
@@ -120,7 +120,7 @@
   <nav class="legal" aria-label="Informations légales"><a href="../politique-reservation/">Politique de réservation</a><a href="../politique-reservation/">Politique d'annulation</a><a href="../faq/#paiement">Modalités de paiement</a><a href="../faq/#livraison">Livraison et retours (boutique)</a><a href="../confidentialite/">Confidentialité</a><span>© 2026 Norélias Photography. Tous droits réservés.</span></nav>
  </footer>
 </div>
-<script src="../script.js?v=20261124p"></script>
+<script src="../script.js?v=20261124q"></script>
 <script>(function(){var b=document.querySelector('.burger'),n=document.querySelector('.mainnav');if(!b||!n)return;b.addEventListener('click',function(){var o=b.getAttribute('aria-expanded')==='true';b.setAttribute('aria-expanded',String(!o));n.classList.toggle('open',!o)});n.addEventListener('click',function(e){if(e.target.closest('a')){n.classList.remove('open');b.setAttribute('aria-expanded','false')}})})();</script>
 <script src="/stats.js" defer></script>
 </body>

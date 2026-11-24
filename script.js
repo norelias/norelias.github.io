@@ -199,7 +199,7 @@
     signature: { nom: 'Signature', prix: 300, acompte: 150 },
     complete: { nom: 'Complète', prix: 450, acompte: 225 },
     noel: { nom: 'Mini-séance de Noël', prix: 95, acompte: 95 },
-    ecole: { nom: 'Garderie / École', prix: 35, parEnfant: true, minimum: 10 },
+    ecole: { nom: 'Garderie / École', prix: 300, acompte: 150 },
     finissants: { nom: 'Finissants', prix: 175, acompte: 87.5 },
     bal: { nom: 'Bal de promos', prix: 150, parPersonneEnPlus: 25, inclus: 2 },
     personnalise: { nom: 'Forfait personnalisé', prix: null, acompte: 100 }
@@ -239,7 +239,7 @@
     document.getElementById('champ-ecole').hidden = !avecEcole; ecole.required = avecEcole;
     document.getElementById('champ-groupes').hidden = dedie !== 'ecole'; groupes.required = dedie === 'ecole';
     ecole.placeholder = dedie === 'bal' ? "Nom de l'école *" : "Nom de l'école ou de la garderie *";
-    if (dedie === 'ecole') { pers.placeholder = "Nombre total d'élèves ou d'enfants (minimum 10) *"; pers.min = 10; pers.max = 2000; }
+    if (dedie === 'ecole') { pers.placeholder = "Nombre total d'élèves ou d'enfants *"; pers.min = 1; pers.max = 2000; }
     else if (dedie === 'bal') { pers.placeholder = 'Nombre de personnes sur les photos *'; pers.min = 1; pers.max = 40; }
     else { pers.placeholder = 'Nombre de personnes *'; pers.min = 1; pers.max = 15; }
     majCalcul();
@@ -382,7 +382,7 @@
   form.elements.personnes.addEventListener('input', majCalcul);
 
   function argent(n) { return n.toLocaleString('fr-CA', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }) + ' $'; }
-  // Total et acompte réels (garderie / école : 35 $ par enfant, minimum 10)
+  // Total et acompte réels (garderie / école : prix fixe de 300 $ par séance)
   function montants(cle) {
     var f = FORFAITS[cle];
     if (!f) return null;
