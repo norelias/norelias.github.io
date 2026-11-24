@@ -315,3 +315,11 @@ details.q .r{padding:0 40px 16px 108px;font-size:16.5px;line-height:21px;font-we
 .rs-card[hidden]{display:none!important}
 
 .note-pourriels{background:#fff3ea;border:1px solid #e3c3ae;border-radius:12px;padding:10px 14px;margin:12px auto;max-width:560px;color:#6c1d27;font-size:.95em;line-height:1.4}
+/* Boutique : choix de format (calendriers, packs) */
+.legacy .ps-vars{display:grid;gap:8px}
+.legacy .pp-var{display:flex;align-items:center;gap:10px;border:1.5px solid #dcc3b8;border-radius:12px;padding:10px 14px;background:#fffaf7;cursor:pointer}
+.legacy .pp-var.on{border-color:#5c2f2b;background:#f7ece6}
+.legacy .pp-var input{margin:0;flex:none}
+.legacy .pp-var span{display:flex;justify-content:space-between;align-items:center;gap:12px;flex:1;min-width:0}
+.legacy .pp-var b{font-weight:700;line-height:1.25}
+.legacy .pp-var em{font-style:normal;font-weight:800;color:#5a1f24;white-space:nowrap}

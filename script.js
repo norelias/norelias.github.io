@@ -952,8 +952,8 @@
     L.innerHTML = a.map(function (x, i) {
       var p = PR[x.code] || { nom: x.code, v: {} }, v = p.v[x.variante] || ['', 0];
       return '<article class="pn-art" data-i="' + i + '"><img src="' + esc(x.apercu) + '" alt=""><div class="pn-inf"><b>' + esc(p.nom) + '</b><span>' + esc(v[0]) + '</span>' +
-        (x.texte ? '<small>Texte : « ' + esc(x.texte) + ' »</small>' : '') +
-        '<div class="pn-act"><a class="lien" href="' + racine + 'boutique/' + esc(x.code) + '/?modifier=' + esc(x.id) + '">Modifier</a><button type="button" class="lien" data-suppr="' + i + '">Retirer</button></div></div>' +
+        (x.texte ? '<small>Texte : « ' + esc(x.texte) + ' »</small>' : '') + (x.precisions ? '<small>' + esc(x.precisions) + '</small>' : '') +
+        '<div class="pn-act">' + (x.sans ? '' : '<a class="lien" href="' + racine + 'boutique/' + esc(x.code) + '/?modifier=' + esc(x.id) + '">Modifier</a>') + '<button type="button" class="lien" data-suppr="' + i + '">Retirer</button></div></div>' +
         '<div class="pn-qte"><button type="button" data-q="-1" aria-label="Moins">&minus;</button><b>' + (Number(x.quantite) || 1) + '</b><button type="button" data-q="1" aria-label="Plus">+</button></div>' +
         '<div class="pn-prix">' + fmt(v[1] * (Number(x.quantite) || 1)) + '</div></article>';
     }).join('');
@@ -1030,7 +1030,7 @@
     if (!d.prenom || !d.nom || !d.courriel || !d.telephone || !d.adresse || !d.ville || !d.province) return erreur('Remplissez tous les champs obligatoires (*).');
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.courriel)) return erreur('Courriel invalide.');
     if (!cpOk(d.province, d.code_postal)) return erreur('Vérifiez votre code postal : il doit correspondre à la province (ex. : E3N 2S1).');
-    d.action = 'commander'; d.piege = f.piege.value; d.cadeau = f.cadeau.value === 'oui'; d.dest_nom = f.dest_nom.value; var PL = { haut: 'en haut', milieu: 'au milieu', bas: 'en bas' }, SZ = { petit: 'petite', moyen: 'moyenne', grand: 'grande' }, ajouts = a.map(function (x, i) { var c = {}; try { c = JSON.parse(x.cadrage || '{}'); } catch (e) {} return x.texte ? 'Article ' + (i + 1) + ' : texte placé ' + (PL[c.tp] || 'en bas') + ', taille ' + (SZ[c.ts] || 'moyenne') + (x.position === 'derriere' ? ', côté derrière' : '') : ''; }).filter(Boolean).join(' | '); d.note = (f.note.value + (ajouts ? '\n[' + ajouts + ']' : '')).slice(0, 1000);
+    d.action = 'commander'; d.piege = f.piege.value; d.cadeau = f.cadeau.value === 'oui'; d.dest_nom = f.dest_nom.value; var PL = { haut: 'en haut', milieu: 'au milieu', bas: 'en bas' }, SZ = { petit: 'petite', moyen: 'moyenne', grand: 'grande' }, ajouts = a.map(function (x, i) { var c = {}; if (x.sans) return x.precisions ? 'Article ' + (i + 1) + ' : ' + x.precisions : ''; try { c = JSON.parse(x.cadrage || '{}'); } catch (e) {} return x.texte ? 'Article ' + (i + 1) + ' : texte placé ' + (PL[c.tp] || 'en bas') + ', taille ' + (SZ[c.ts] || 'moyenne') + (x.position === 'derriere' ? ', côté derrière' : '') : ''; }).filter(Boolean).join(' | '); d.note = (f.note.value + (ajouts ? '\n[' + ajouts + ']' : '')).slice(0, 1000);
     d.lignes = a.map(function (x) { return { produit: x.code, variante: x.variante, quantite: x.quantite, texte: x.texte, police: x.police, couleur: x.couleur, position: x.position, cadrage: x.cadrage, photo: x.photo }; });
     if (d.cadeau && f.dest_adresse.value.trim()) {
       d.dest_adresse = f.dest_adresse.value.trim(); d.dest_ville = f.dest_ville.value.trim(); d.dest_province = f.dest_province.value; d.dest_code_postal = f.dest_code_postal.value.trim();
