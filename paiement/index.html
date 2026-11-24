@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="object-src 'none'; base-uri 'self'; form-action 'self' https://checkout.stripe.com">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paiement · Norélias Photography</title>
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="theme-color" content="#3d2622">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="prefetch" href="../style.css?v=1795487980">
+<link rel="stylesheet" href="../legacy.css?v=20261124f">
+<link rel="stylesheet" href="../pages-reproduction.css?v=20261124f">
+<script>(function(){function z(){document.documentElement.style.setProperty('--z',(innerWidth<=760?1:Math.max(1,Math.min(1.25,innerWidth*0.62/1024))))}z();addEventListener('resize',z)})()</script>
+<link rel="stylesheet" href="../entete.css?v=20261124m">
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<div class="page">
+ <header class="masthead">
+  <button class="burger" type="button" aria-label="Ouvrir le menu" aria-controls="mainnav" aria-expanded="false"><span></span><span></span><span></span></button>
+  <a class="brand" href="../" aria-label="Norélias Photography — accueil"><img src="../images/logo-accueil.png" alt="Norélias Photography"></a>
+  <nav id="mainnav" class="mainnav" aria-label="Navigation principale"><a href="../">Accueil</a><a href="../a-propos/">À propos</a><a href="../prestations/">Prestations &amp; Tarifs</a><a href="../boutique/">Boutique</a><a href="../reservation/">Réservation</a><a href="../faq/">FAQ</a></nav>
+  <a href="../reservation/" class="btn btn-nav"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="24" height="22" rx="3"/><path d="M4 14h24M10 3v9M22 3v9M10 20h3M17 20h3"/></svg><span>Réserver une séance</span></a>
+  <a class="panier-lien" href="../panier/" aria-label="Mon panier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11h10.2L20 8H6.5"/><circle cx="9" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/></svg><span class="panier-n" hidden>0</span></a>
+ </header>
+</div>
+<main id="contenu" class="legacy"><img class="lg-deco lg-l" src="../images/d-feuillage.png" alt="" aria-hidden="true"><img class="lg-deco lg-r" src="../images/d-feuillage.png" alt="" aria-hidden="true">
+<section class="opage"><div class="interieur texte-legal">
+<div class="titre-page"><h1>Paiement <span class="coeur"><svg viewBox="190 172 30 34" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M203.6 186.2C201.2 179 196 174.6 193.4 177.6C190.6 181.4 194.5 189.5 202 203.8C206.5 195.5 216.6 186.8 216.8 179C216.9 174.4 209.6 173.6 203.6 186.2"/></svg></span></h1></div>
+<p style="text-align:center;max-width:520px;margin:0 auto 18px;position:relative;z-index:2">Cette page sert à régler le solde de votre séance ou un montant convenu avec moi. Le paiement par carte est sécurisé par Stripe.</p>
+<form id="f-paiement" class="pp-form" style="max-width:480px;margin:0 auto" novalidate>
+  <div class="champ"><label for="prenom">Prénom *</label><input id="prenom" name="prenom" autocomplete="given-name" required></div>
+  <div class="champ"><label for="nom">Nom *</label><input id="nom" name="nom" autocomplete="family-name" required></div>
+  <div class="champ"><label for="courriel">Courriel *</label><input id="courriel" name="courriel" type="email" autocomplete="email" required></div>
+  <div class="champ"><label for="raison">Pour quoi ce paiement ? *</label><select id="raison" name="raison"><option>Solde de ma séance</option><option>Photos supplémentaires</option><option>Commande spéciale</option><option>Autre montant convenu</option></select></div>
+  <div class="champ"><label for="montant">Montant à payer ($) *</label><input id="montant" name="montant" type="number" inputmode="decimal" min="5" max="3000" step="0.01" placeholder="Ex. : 150" required></div>
+  <div class="champ"><label for="note">Un petit mot (facultatif)</label><textarea id="note" name="note" rows="3" maxlength="300"></textarea></div>
+  <div style="position:absolute;left:-9999px" aria-hidden="true"><input name="piege" tabindex="-1" autocomplete="off"></div>
+  <p id="msg-pai" role="alert" style="color:#8a2433;font-weight:600;min-height:20px;text-align:center"></p>
+  <button type="submit" class="pp-payer" id="b-pai">Payer par carte</button>
+  <p style="text-align:center;font-size:.9em;margin-top:10px">Un reçu vous sera envoyé par courriel. Une question ? <a href="mailto:bonjour@norelias.ca">bonjour@norelias.ca</a> · 506-787-0667</p>
+</form>
+<script>
+(function(){
+  var f=document.getElementById('f-paiement'),msg=document.getElementById('msg-pai'),b=document.getElementById('b-pai');
+  var URL_S='https://evoivwqcxohfwaxlumvj.supabase.co/functions/v1/norelias-stripe';
+  if(/[?&]annule=1/.test(location.search))msg.textContent='Le paiement a été annulé. Vous pouvez réessayer quand vous le souhaitez.';
+  f.addEventListener('submit',function(e){
+    e.preventDefault();msg.textContent='';
+    var m=parseFloat(String(f.montant.value).replace(',','.'));
+    if(!f.prenom.value.trim()||!f.nom.value.trim()||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.courriel.value.trim())){msg.textContent='Vérifiez votre nom et votre courriel.';return}
+    if(!(m>=5&&m<=3000)){msg.textContent='Entrez un montant entre 5 $ et 3 000 $.';return}
+    b.disabled=true;b.textContent='Un instant…';
+    fetch(URL_S,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'payer',piege:f.piege.value,prenom:f.prenom.value,nom:f.nom.value,courriel:f.courriel.value,raison:f.raison.value,montant:m,note:f.note.value})})
+    .then(function(r){return r.json()}).then(function(j){
+      if(j&&j.ok&&j.paiement){try{sessionStorage.setItem('norelias_merci',f.prenom.value.trim().split(/\s+/)[0])}catch(x){};location.href=j.paiement;return}
+      msg.textContent=(j&&j.erreur)||'Le paiement n\'est pas disponible pour le moment. Écrivez-moi à bonjour@norelias.ca.';b.disabled=false;b.textContent='Payer par carte';
+    }).catch(function(){msg.textContent='Connexion impossible. Réessayez dans un instant.';b.disabled=false;b.textContent='Payer par carte'});
+  });
+})();
+</script>
+</div></section>
+</main>
+<div class="page">
+  <section class="cta"><div class="cta-bande"></div><div class="cta-cam"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="10" width="26" height="19" rx="3"/><circle cx="16" cy="19" r="6"/><path d="M13.6 18.2c.8-1.4 2.4-.7 2.4.5 0-1.2 1.6-1.9 2.4-.5.6 1.2-.7 2.3-2.4 3.3-1.7-1-3-2.1-2.4-3.3z"/><path d="M9 10l3-5h8l3 5"/></svg></div><h2>Prêt(e) à créer vos souvenirs ? <img src="../images/d-coeur-noel.png" alt=""></h2><a class="btn btn-cream" href="../reservation/"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="24" height="22" rx="3"/><path d="M4 14h24M10 3v9M22 3v9M10 20h3M17 20h3"/></svg>Réserver ma séance <span class="fl">→</span></a></section>
+ <footer class="pied"><a class="pied-logo" href="../"><img src="../images/logo-accueil.png" alt="Norélias Photography"></a>
+  <span class="pi p-loc"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 30S6 19 6 12a10 10 0 0 1 20 0c0 7-10 18-10 18z"/><circle cx="16" cy="12" r="3"/></svg> Campbellton et environs</span>
+  <a class="pi p-mail" href="mailto:bonjour@norelias.ca"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="26" height="20" rx="2"/><path d="M3 10l13 10 13-10"/></svg> bonjour@norelias.ca</a>
+  <a class="pi p-tel" href="tel:+15067870667"><svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M7 4l5 2 2 6-3 3c2 4 4 6 8 8l3-3 6 2 2 5c0 3-2 4-5 4C14 30 2 18 3 7c0-2 2-4 4-3z"/></svg> 506-787-0667</a>
+  <div class="social"><a aria-label="Facebook" href="https://www.facebook.com/people/Norelia-Photography/61596525041862/">f</a><a aria-label="Instagram" href="https://www.instagram.com/norelias_photography/"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="24" height="24" rx="8"/><circle cx="16" cy="16" r="5.500"/><circle cx="23.500" cy="8.500" r="1" fill="currentColor"/></svg></a><a aria-label="TikTok" href="https://www.tiktok.com/">♪</a></div>
+  <nav class="legal" aria-label="Informations légales"><a href="../politique-reservation/">Politique de réservation</a><a href="../politique-reservation/">Politique d'annulation</a><a href="../faq/#paiement">Modalités de paiement</a><a href="../faq/#livraison">Livraison et retours (boutique)</a><a href="../confidentialite/">Confidentialité</a><span>© 2026 Norélias Photography. Tous droits réservés.</span></nav>
+ </footer>
+</div>
+<script>(function(){var b=document.querySelector('.burger'),n=document.querySelector('.mainnav');if(!b||!n)return;b.addEventListener('click',function(){var o=b.getAttribute('aria-expanded')==='true';b.setAttribute('aria-expanded',String(!o));n.classList.toggle('open',!o)});n.addEventListener('click',function(e){if(e.target.closest('a')){n.classList.remove('open');b.setAttribute('aria-expanded','false')}})})();</script>
+
+<script src="../config.js?v=1795487980"></script>
+<script src="../script.js?v=20261124q"></script>
+<script src="/promo.js?v=1" defer></script>
+</body>
+</html>

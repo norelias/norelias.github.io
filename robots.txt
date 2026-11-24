@@ -2,5 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /confirmer/
 Disallow: /stats/
+Disallow: /paiement/
+Disallow: /merci-personnel/
 Disallow: /courriel/
 Sitemap: https://norelias.ca/sitemap.xml

@@ -2,7 +2,7 @@
 (function () {
   var t = Date.now();
   if (t < Date.UTC(2026, 10, 24, 4, 0, 0) || t > Date.UTC(2026, 11, 1, 3, 59, 59)) return;
-  if (/\/(stats|confirmer|paiement|merci)\//.test(location.pathname)) return;
+  if (/\/(stats|confirmer|paiement|merci-personnel)\//.test(location.pathname)) return;
   var racine = (document.currentScript && document.currentScript.src) ? document.currentScript.src.replace(/promo\.js.*$/, '') : '/';
   var st = document.createElement('style');
   st.textContent = '.bf-bandeau{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;background:linear-gradient(180deg,#7a2433,#5c1823);color:#fff;font:600 14px/1.3 Georgia,"Times New Roman",serif;text-align:center;padding:9px 12px;position:relative;z-index:50}' +
