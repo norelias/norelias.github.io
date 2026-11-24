@@ -2,6 +2,9 @@
 <html lang="fr-CA">
 <head>
 <meta charset="utf-8">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="object-src 'none'; base-uri 'self'; form-action 'self' https://checkout.stripe.com">
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Réservation d’une séance photo | Norélias Photography</title>
 <meta name="description" content="Réservez votre séance photo à Campbellton, N.-B. : choisissez la prestation, la date et payez votre acompte en ligne (carte ou Interac).">
@@ -77,7 +80,7 @@
       <div id="boite-interac" class="boite-interac" hidden>Envoyez <strong class="montant-interac"></strong> par virement Interac à <strong class="courriel-interac">bonjour@norelias.ca</strong>, avec votre nom en message.<br>Si votre banque demande une question de sécurité : question <strong>Norelias</strong>, réponse <strong>Photography</strong>.<br><strong>Important :</strong> vous recevrez votre courriel de confirmation seulement une fois le virement reçu. Sans virement dans les 24 h, la réservation est annulée automatiquement et la plage horaire est libérée.</div>
     </div>
     <p id="note-perso" class="aide" hidden>Forfait personnalisé : le dépôt de 100 $ est déduit du total. Je vous envoie ensuite votre proposition sur mesure.</p>
-    <label class="case case-politiques"><input type="checkbox" name="politiques" required> <span>J'accepte la <a href="../politique-reservation/" target="_blank">politique de réservation</a> et la <a href="../confidentialite/" target="_blank">politique de confidentialité</a></span></label>
+    <label class="case case-politiques"><input type="checkbox" name="politiques" required> <span>J'accepte la <a href="../politique-reservation/" target="_blank" rel="noopener">politique de réservation</a> et la <a href="../confidentialite/" target="_blank">politique de confidentialité</a></span></label>
     <div class="navigation-etapes"><button type="button" class="bouton contour" data-precedent>←</button><button type="submit" class="bouton" id="bouton-confirmer">Confirmer et payer</button></div>
   </fieldset>
   <div class="etape centre" hidden>
@@ -119,5 +122,6 @@
 </div>
 <script src="../script.js?v=20261124p"></script>
 <script>(function(){var b=document.querySelector('.burger'),n=document.querySelector('.mainnav');if(!b||!n)return;b.addEventListener('click',function(){var o=b.getAttribute('aria-expanded')==='true';b.setAttribute('aria-expanded',String(!o));n.classList.toggle('open',!o)});n.addEventListener('click',function(e){if(e.target.closest('a')){n.classList.remove('open');b.setAttribute('aria-expanded','false')}})})();</script>
+<script src="/stats.js" defer></script>
 </body>
 </html>

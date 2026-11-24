@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="theme-color" content="#5c2f2b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Visites">
+<link rel="apple-touch-icon" href="icone.png">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Visites · Norélias Photography</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#ead9cf;color:#2b1d18;font-family:Georgia,'Times New Roman',serif}
+.wrap{max-width:900px;margin:0 auto;padding:16px 14px 60px}
+h1{font-weight:normal;font-size:26px;color:#5c2f2b;margin:6px 0 2px}
+.sous{color:#7a645b;font-family:Arial,Helvetica,sans-serif;font-size:13px;margin-bottom:14px}
+.carte{background:#f7ece6;border:1px solid #e3cbbf;border-radius:14px;padding:14px 16px;margin-bottom:14px}
+.carte h2{font-weight:normal;font-size:19px;color:#8a4f48;margin:0 0 8px}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kpi div{background:#fffaf7;border:1px solid #e3cbbf;border-radius:12px;padding:10px;text-align:center}
+.kpi b{display:block;font-size:26px;color:#5c2f2b}
+.kpi span{font:12px Arial,Helvetica,sans-serif;color:#7a645b}
+.barre{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+button,select,input{font:14px Arial,Helvetica,sans-serif}
+button{border:1px solid #cb9483;background:#fffaf7;color:#5c2f2b;border-radius:8px;padding:8px 12px;cursor:pointer}
+button.on,button.pri{background:#cb9483;color:#2b1d18;font-weight:bold}
+input[type=password]{width:100%;padding:11px;border:1px solid #cb9483;border-radius:8px;margin:10px 0}
+.visite{border-top:1px solid #f0e2da;padding:11px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px}
+.visite:first-of-type{border-top:0}
+.visite .qui{font-weight:bold;font-size:15px;color:#2b1d18}
+.visite .meta{color:#7a645b;font-size:13px;margin-top:2px}
+.visite .pages{margin-top:6px;display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.pg{background:#fffaf7;border:1px solid #e3cbbf;border-radius:999px;padding:3px 10px;font-size:12.5px}
+.fl{color:#a98374}
+.ligne{display:flex;align-items:center;gap:8px;font:14px Arial,Helvetica,sans-serif;margin:6px 0}
+.ligne .n{width:42%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ligne .b{flex:1;background:#f0e2da;border-radius:6px;height:12px;overflow:hidden}
+.ligne .b i{display:block;height:100%;background:linear-gradient(90deg,#e1b2a4,#cb9483)}
+.ligne .v{width:34px;text-align:right;color:#7a645b}
+.deux{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:700px){.deux{grid-template-columns:1fr}}
+.msg{font:13px Arial,Helvetica,sans-serif;color:#8a4f48;min-height:18px;margin:6px 0}
+.vide{color:#7a645b;font:14px Arial,Helvetica,sans-serif;padding:8px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div id="entree" class="carte" style="max-width:420px;margin:60px auto">
+  <h1>Visites du site</h1>
+  <div class="sous">Norélias Photography · accès privé</div>
+  <input id="code" type="password" placeholder="Code d'accès" autocomplete="current-password">
+  <label style="font:13px Arial;color:#7a645b"><input id="souvenir" type="checkbox" checked> Se souvenir sur cet appareil</label>
+  <div class="msg" id="msg0"></div>
+  <button class="pri" id="ok" style="width:100%">Entrer</button>
+</div>
+
+<div id="appli" hidden>
+  <h1>Visites du site</h1>
+  <div class="sous" id="maj"></div>
+  <div class="barre" id="periodes">
+    <button data-j="1">24 h</button><button data-j="7" class="on">7 jours</button><button data-j="30">30 jours</button><button data-j="90">90 jours</button>
+    <button id="rafraichir" style="margin-left:auto">Actualiser</button>
+  </div>
+  <div class="carte"><div class="kpi">
+    <div><b id="k-vis">0</b><span>visites</span></div>
+    <div><b id="k-pag">0</b><span>pages vues</span></div>
+    <div><b id="k-dur">0</b><span>durée moyenne</span></div>
+  </div></div>
+  <div class="carte"><h2>Qui est venu</h2><div id="liste"></div></div>
+  <div class="deux">
+    <div class="carte"><h2>Pages les plus vues</h2><div id="top-pages"></div></div>
+    <div class="carte"><h2>Villes</h2><div id="top-villes"></div></div>
+    <div class="carte"><h2>Appareils</h2><div id="top-app"></div></div>
+    <div class="carte"><h2>Provenance</h2><div id="top-ref"></div></div>
+  </div>
+  <div class="carte">
+    <h2>Ne pas me compter</h2>
+    <div class="sous" style="margin-bottom:8px">Vos propres visites ne sont pas enregistrées.</div>
+    <div class="barre">
+      <button id="moi-app">Exclure cet appareil</button>
+      <button id="moi-reseau">Exclure ce réseau (Wi-Fi)</button>
+    </div>
+    <div class="msg" id="msg1"></div>
+  </div>
+  <div class="barre"><button id="sortir">Se déconnecter</button></div>
+</div>
+</div>
+<script>
+(function(){
+  var URL_STATS="https://evoivwqcxohfwaxlumvj.supabase.co/functions/v1/norelias-stats";
+  var $=function(i){return document.getElementById(i)};
+  var code="",jours=7,donnees=[],reseauExclu=false;
+  var PAGES={"/":"Accueil","/a-propos/":"À propos","/prestations/":"Prestations & Tarifs","/boutique/":"Boutique","/reservation/":"Réservation","/faq/":"FAQ","/panier/":"Panier","/cartes-cadeaux/":"Cartes-cadeaux","/politique-reservation/":"Politique de réservation","/confidentialite/":"Confidentialité"};
+  function nomPage(p){if(PAGES[p])return PAGES[p];var m=/^\/boutique\/([^\/]+)/.exec(p);return m?"Boutique · "+m[1]:p}
+  function esc(t){return String(t==null?"":t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+  function api(o){o.code=code;return fetch(URL_STATS,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(o)}).then(function(r){return r.json()})}
+  function duree(s){s=Math.round(s);if(s<5)return "quelques secondes";if(s<60)return s+" s";var m=Math.floor(s/60),r=s%60;if(m<60)return m+" min"+(r&&m<10?" "+r+" s":"");return Math.floor(m/60)+" h "+(m%60)+" min"}
+  var fmtJour=new Intl.DateTimeFormat("fr-CA",{timeZone:"America/Moncton",day:"numeric",month:"long"});
+  var fmtHeure=new Intl.DateTimeFormat("fr-CA",{timeZone:"America/Moncton",hour:"numeric",minute:"2-digit"});
+  function quand(d){return fmtJour.format(d)+" à "+fmtHeure.format(d).replace(":"," h ").replace(/\s+/g," ").trim()}
+  function lieu(v){var l=v.ville||"";if(v.region&&v.pays==="Canada"&&l)l+=" ("+v.region+")";else if(v.pays&&l)l+=", "+v.pays;return l||v.pays||"Lieu inconnu"}
+  function barres(el,paires,max){
+    var m=paires.length?paires[0][1]:1;
+    $(el).innerHTML=paires.slice(0,max||8).map(function(p){return '<div class="ligne"><span class="n">'+esc(p[0])+'</span><span class="b"><i style="width:'+Math.max(4,p[1]/m*100)+'%"></i></span><span class="v">'+p[1]+'</span></div>'}).join("")||'<div class="vide">Rien pour l\'instant.</div>';
+  }
+  function compter(arr,f){var o={};arr.forEach(function(x){var k=f(x);if(k)o[k]=(o[k]||0)+1});return Object.keys(o).map(function(k){return [k,o[k]]}).sort(function(a,b){return b[1]-a[1]})}
+  function dessiner(){
+    var sess={};
+    donnees.forEach(function(v){var s=sess[v.session]||(sess[v.session]={id:v.session,vues:[]});s.vues.push(v)});
+    var liste=Object.keys(sess).map(function(k){var s=sess[k];s.vues.sort(function(a,b){return new Date(a.debut)-new Date(b.debut)});s.debut=new Date(s.vues[0].debut);s.total=s.vues.reduce(function(t,v){return t+(v.secondes||0)},0);return s}).sort(function(a,b){return b.debut-a.debut});
+    $("k-vis").textContent=liste.length;
+    $("k-pag").textContent=donnees.length;
+    $("k-dur").textContent=liste.length?duree(liste.reduce(function(t,s){return t+s.total},0)/liste.length):"—";
+    $("liste").innerHTML=liste.length?liste.slice(0,60).map(function(s){
+      var v=s.vues[0];
+      var pages=s.vues.map(function(x){return '<span class="pg">'+esc(nomPage(x.page))+' · '+esc(duree(x.secondes||0))+'</span>'}).join('<span class="fl">→</span>');
+      return '<div class="visite"><div class="qui">'+esc(lieu(v))+'</div><div class="meta">'+esc(quand(s.debut))+' · '+esc(duree(s.total))+' · '+esc(v.appareil||"")+' · '+esc(v.navigateur||"")+(v.referent?' · via '+esc(v.referent):'')+'</div><div class="pages">'+pages+'</div></div>';
+    }).join(""):'<div class="vide">Aucune visite pour cette période.</div>';
+    barres("top-pages",compter(donnees,function(v){return nomPage(v.page)}));
+    barres("top-villes",compter(liste.map(function(s){return s.vues[0]}),function(v){return lieu(v)}));
+    barres("top-app",compter(liste.map(function(s){return s.vues[0]}),function(v){return v.appareil}));
+    barres("top-ref",compter(liste.map(function(s){return s.vues[0]}),function(v){return v.referent||"Direct / inconnu"}));
+    $("moi-reseau").textContent=reseauExclu?"Recompter ce réseau (Wi-Fi)":"Exclure ce réseau (Wi-Fi)";
+    $("moi-app").textContent=localStorage.getItem("norelias_moi")==="1"?"Recompter cet appareil":"Exclure cet appareil";
+  }
+  function charger(){
+    $("maj").textContent="Chargement…";
+    return api({action:"liste",jours:jours}).then(function(j){
+      if(!j.ok){throw new Error(j.erreur||"Erreur")}
+      donnees=j.visites||[];reseauExclu=!!j.reseau_exclu;
+      $("maj").textContent="Mis à jour à "+fmtHeure.format(new Date()).replace(":"," h ")+" · heure de l'Atlantique";
+      dessiner();
+    });
+  }
+  function entrer(c,sauver){
+    code=c;$("msg0").textContent="";
+    charger().then(function(){
+      if(sauver)try{localStorage.setItem("norelias_stats_code",c)}catch(e){}
+      $("entree").hidden=true;$("appli").hidden=false;
+    }).catch(function(e){code="";try{localStorage.removeItem("norelias_stats_code")}catch(x){};$("msg0").textContent=e.message==="Failed to fetch"?"Connexion impossible.":"Code incorrect."});
+  }
+  $("ok").onclick=function(){entrer($("code").value.trim(),$("souvenir").checked)};
+  $("code").onkeydown=function(e){if(e.key==="Enter")$("ok").click()};
+  $("periodes").onclick=function(e){var b=e.target.closest("button[data-j]");if(!b)return;jours=+b.dataset.j;[].forEach.call($("periodes").querySelectorAll("[data-j]"),function(x){x.classList.toggle("on",x===b)});charger()};
+  $("rafraichir").onclick=charger;
+  $("sortir").onclick=function(){try{localStorage.removeItem("norelias_stats_code")}catch(e){};location.reload()};
+  $("moi-app").onclick=function(){var on=localStorage.getItem("norelias_moi")==="1";if(on)localStorage.removeItem("norelias_moi");else localStorage.setItem("norelias_moi","1");$("msg1").textContent=on?"Cet appareil est de nouveau compté.":"Cet appareil n'est plus compté.";dessiner()};
+  $("moi-reseau").onclick=function(){api({action:reseauExclu?"retirer_exclusion":"exclure_ici",libelle:"Mon réseau"}).then(function(j){if(j.ok){reseauExclu=!reseauExclu;$("msg1").textContent=reseauExclu?"Ce réseau n'est plus compté (ses visites passées ont été retirées).":"Ce réseau est de nouveau compté.";charger()}})};
+  try{var c=localStorage.getItem("norelias_stats_code");if(c)entrer(c,true)}catch(e){}
+})();
+</script>
+</body>
+</html>

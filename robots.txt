@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /confirmer/
+Disallow: /stats/
 Disallow: /courriel/
 Sitemap: https://norelias.ca/sitemap.xml

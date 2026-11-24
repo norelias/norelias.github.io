@@ -2,6 +2,9 @@
 <html lang="fr-CA">
 <head>
 <meta charset="utf-8">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="object-src 'none'; base-uri 'self'; form-action 'self' https://checkout.stripe.com">
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Boutique et cartes-cadeaux | Norélias Photography</title>
 <meta name="description" content="Tasses, verres isothermes, porte-clés, ornements de Noël photo et cartes-cadeaux personnalisés par Norélias Photography, Campbellton N.-B.">
@@ -59,5 +62,6 @@
  </footer>
 </div>
 <script>(function(){var b=document.querySelector('.burger'),n=document.querySelector('.mainnav');if(!b||!n)return;b.addEventListener('click',function(){var o=b.getAttribute('aria-expanded')==='true';b.setAttribute('aria-expanded',String(!o));n.classList.toggle('open',!o)});n.addEventListener('click',function(e){if(e.target.closest('a')){n.classList.remove('open');b.setAttribute('aria-expanded','false')}})})();</script>
+<script src="/stats.js" defer></script>
 </body>
 </html>
