@@ -544,7 +544,7 @@
   var qp = new URLSearchParams(location.search);
   if (qp.get('paye') === '1') {
     document.getElementById('fin-carte').hidden = false;
-    document.getElementById('fin-carte').innerHTML = '<p><strong>Paiement reçu, merci !</strong> Vous recevrez un courriel de confirmation avec tous les détails.</p>';
+    document.getElementById('fin-carte').innerHTML = '<p><strong>Paiement reçu, merci !</strong> Vous recevrez un courriel de confirmation avec tous les détails.</p><p class="note-pourriels"><strong>Important :</strong> vérifiez vos courriels <strong>indésirables (pourriels)</strong>, au cas où ma confirmation s’y glisserait, et ajoutez <strong>bonjour@norelias.ca</strong> à vos contacts.</p>';
     afficher(3);
   }
 })();
@@ -595,7 +595,7 @@
   });
   Array.prototype.forEach.call(document.querySelectorAll('.coeur-fav'), function (h) { h.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); h.classList.toggle('on'); }); });
   var q0 = location.search, m0 = $('msg-boutique');
-  if (m0 && /merci=1/.test(q0)) { if (window.NBQ) window.NBQ.vider(); m0.textContent = 'Merci ! Votre paiement est reçu. Un courriel de confirmation vous attend.'; m0.hidden = false; }
+  if (m0 && /merci=1/.test(q0)) { if (window.NBQ) window.NBQ.vider(); m0.textContent = 'Merci ! Votre paiement est reçu. Un courriel de confirmation vous attend. Pensez à vérifier vos courriels indésirables (pourriels) et ajoutez bonjour@norelias.ca à vos contacts.'; m0.hidden = false; }
   else if (m0 && /annule=1/.test(q0)) { m0.textContent = "Le paiement a été annulé. Votre commande n'a pas été complétée."; m0.hidden = false; }
 
   var f = $('form-produit');

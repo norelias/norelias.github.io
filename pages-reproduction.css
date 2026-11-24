@@ -313,3 +313,5 @@ details.q .r{padding:0 40px 16px 108px;font-size:16.5px;line-height:21px;font-we
 }
 @media(max-width:760px){.q-grid{display:block}}
 .rs-card[hidden]{display:none!important}
+
+.note-pourriels{background:#fff3ea;border:1px solid #e3c3ae;border-radius:12px;padding:10px 14px;margin:12px auto;max-width:560px;color:#6c1d27;font-size:.95em;line-height:1.4}

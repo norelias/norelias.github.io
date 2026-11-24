@@ -1059,3 +1059,5 @@
 .legacy .opage{position:relative;z-index:1}
 .legacy .opage>.interieur>h1:after{content:"";display:inline-block;width:32px;height:34px;margin-left:10px;vertical-align:-2px;background:url(images/d-coeur-portfolio.png) center/contain no-repeat}
 @media(max-width:760px){.lg-deco{display:none}.legacy .opage>.interieur>h1:after{width:20px;height:22px}}
+
+.note-pourriels{background:#fff3ea;border:1px solid #e3c3ae;border-radius:12px;padding:10px 14px;margin:12px auto;max-width:560px;color:#6c1d27;font-size:.95em;line-height:1.4}
