@@ -143,6 +143,10 @@ input[type=password]{width:100%;padding:11px;border:1px solid #cb9483;border-rad
       $("entree").hidden=true;$("appli").hidden=false;
     }).catch(function(e){code="";try{localStorage.removeItem("norelias_stats_code")}catch(x){};$("msg0").textContent=e.message==="Failed to fetch"?"Connexion impossible.":"Code incorrect."});
   }
+  var derniereMaj=Date.now();
+  var _ch=charger;charger=function(){derniereMaj=Date.now();return _ch()};
+  setInterval(function(){if(code)charger().catch(function(){})},3600000);
+  document.addEventListener("visibilitychange",function(){if(!document.hidden&&code&&Date.now()-derniereMaj>3600000)charger().catch(function(){})});
   $("ok").onclick=function(){entrer($("code").value.trim(),$("souvenir").checked)};
   $("code").onkeydown=function(e){if(e.key==="Enter")$("ok").click()};
   $("periodes").onclick=function(e){var b=e.target.closest("button[data-j]");if(!b)return;jours=+b.dataset.j;[].forEach.call($("periodes").querySelectorAll("[data-j]"),function(x){x.classList.toggle("on",x===b)});charger()};
