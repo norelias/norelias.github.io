@@ -241,3 +241,17 @@ html,body{overflow-x:hidden;background:#fcf4ed}
 body{-webkit-text-stroke:.22px currentColor}.section-title,h1,h2,.sname,.quote{-webkit-text-stroke:0}
 
 body{font-size-adjust:.46}
+
+/* Portfolio un peu plus grand, univers plus compact (titre inchangé) */
+.portfolio{height:262px}.gallery{height:188px}.gallery-viewport{height:188px}.gallery-arrow{top:78px}
+.univers{height:132px}.services{margin-top:4px}.service-item{height:72px}.service-item:not(:last-child):after{height:66px}.service-item svg{height:33px;width:33px}.service-item .sname{margin-top:2px}
+.gallery-dots{gap:7px}.gallery-dots button{width:9px;height:9px}
+@media(max-width:760px){
+ .portfolio{height:auto}.gallery{height:76px}.gallery-viewport{height:76px}.gallery-arrow{top:28px}.gallery-dots{gap:3px}.gallery-dots button{width:5px;height:5px}
+ .univers{height:auto;padding:3px 6px 0}.service-item{height:auto}.service-item svg{width:19px;height:19px}.service-item .sname{font-size:9px}.service-item small{font-size:6px;line-height:6.6px}.service-item:nth-child(n+6){margin-top:0}
+}
+@media(max-width:760px){
+ .services{max-width:300px;margin:0 auto}
+ .service-item svg{width:15px;height:15px}.service-item .sname{font-size:7.6px;line-height:8px;margin-top:1px}.service-item small{font-size:5px;line-height:5.6px;margin-top:0}
+ .service-item{padding:0 0 1px}.service-item:after{top:2px;bottom:2px}
+}
