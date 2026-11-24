@@ -915,13 +915,13 @@
       clearTimeout(t); var q = rue.value.trim(); if (q.length < 4) return fermer();
       t = setTimeout(function () {
         if (ctl && ctl.abort) ctl.abort(); ctl = window.AbortController ? new AbortController() : null;
-        fetch('https://photon.komoot.io/api/?limit=10&lang=fr&bbox=-141.1,41.6,-52.5,83.2&q=' + encodeURIComponent(q), ctl ? { signal: ctl.signal } : {})
+        fetch('https://photon.komoot.io/api/?limit=15&lang=fr&lat=47.8&lon=-66.5&bbox=-141.1,41.6,-52.5,83.2&q=' + encodeURIComponent(q), ctl ? { signal: ctl.signal } : {})
           .then(function (r) { return r.json(); })
           .then(function (j) {
             var vus = {}; items = [];
             (j.features || []).forEach(function (ft) {
               var pr = ft.properties || {}; if (pr.countrycode !== 'CA') return;
-              var r = ((pr.housenumber ? pr.housenumber + ' ' : '') + (pr.street || '')).trim(); if (!r) return;
+              var nt = (q.match(/^(\d+[A-Za-z]?(?:-\d+)?)\s+\S/) || [])[1], r = (((pr.housenumber || nt) ? (pr.housenumber || nt) + ' ' : '') + (pr.street || (pr.type === 'street' ? pr.name : '') || '')).trim(); if (!(pr.street || pr.type === 'street')) return;
               var a = { rue: r, ville: pr.city || pr.town || pr.village || pr.municipality || pr.locality || pr.district || pr.county || '', prov: provDe(pr.state), cp: (pr.postcode || '').toUpperCase() };
               var cle = a.rue + '|' + a.ville + '|' + a.prov; if (vus[cle] || !a.prov) return; vus[cle] = 1; items.push(a);
             });
