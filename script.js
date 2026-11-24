@@ -317,7 +317,7 @@
     document.querySelector('.erreur-cal').hidden = true;
     remplirHeures(d);
     dessiner();
-    if (!garderOuvert) { if (typeof courante === 'number' && courante > 0) { afficher(0); } try { champHeure.focus({ preventScroll: true }); } catch (e) {} }
+    if (!garderOuvert) { try { champHeure.focus({ preventScroll: true }); } catch (e) {} }
   }
   if (boutonCal) {
     boutonCal.addEventListener('click', function () { cal.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
@@ -411,6 +411,7 @@
       if (act) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
     });
     document.querySelector('.bas-resa').hidden = i === 3;
+    var cd = document.querySelector('.rs-card.dispo'); if (cd) cd.hidden = i > 0;
     if (i === 2) preparerPaiement();
     form.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }

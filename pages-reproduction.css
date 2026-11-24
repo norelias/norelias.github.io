@@ -312,3 +312,4 @@ details.q .r{padding:0 40px 16px 108px;font-size:16.5px;line-height:21px;font-we
  .pol-row:last-of-type{grid-column:1/-1}
 }
 @media(max-width:760px){.q-grid{display:block}}
+.rs-card[hidden]{display:none!important}
