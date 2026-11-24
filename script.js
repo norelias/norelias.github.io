@@ -300,7 +300,7 @@
   var champHeure = form.elements.heure, boutonCal = document.getElementById('ouvrir-cal');
   function ouvrirCal(ouvert) {
     if (!cal) return;
-    cal.hidden = !ouvert; boutonCal.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
+    cal.hidden = false; boutonCal.setAttribute('aria-expanded', 'true');
   }
   function remplirHeures(d) {
     champHeure.innerHTML = '<option value="">Heure souhaitée</option>';
@@ -317,10 +317,10 @@
     document.querySelector('.erreur-cal').hidden = true;
     remplirHeures(d);
     dessiner();
-    if (!garderOuvert) { ouvrirCal(false); champHeure.focus(); }
+    if (!garderOuvert) { if (typeof courante === 'number' && courante > 0) { afficher(0); } try { champHeure.focus({ preventScroll: true }); } catch (e) {} }
   }
   if (boutonCal) {
-    boutonCal.addEventListener('click', function () { ouvrirCal(cal.hidden); });
+    boutonCal.addEventListener('click', function () { cal.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
     document.addEventListener('click', function (e) { if (!e.target.closest('.champ-date')) ouvrirCal(false); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') ouvrirCal(false); });
   }
