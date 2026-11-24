@@ -260,3 +260,6 @@ h1,h2,h3,p{margin:0;font-weight:400}
  .mob-cta span{font:400 24px/1 Allura,cursive}
  .mob-cta a{background:linear-gradient(#fffcf6,#f6e2d3);color:#4a2127;border-radius:22px;padding:8px 18px;font:700 14px 'Times New Roman',serif;text-decoration:none}
 }
+
+/* Dernière rangée : 3 cartes (doublon Portraits professionnels retiré) */
+.c-fet{left:14px;width:325px}.c-eco{left:349px;width:325px}.c-fin{left:684px;width:326px}
