@@ -538,7 +538,7 @@
   var CODE = f.getAttribute('data-code'), LIV = Number(f.getAttribute('data-livraison'));
   var img = null, photoData = null, vue = 0, nomFichier = '', tailleFichier = '', idModif = null;
   var cad = { z: 1, x: 0, y: 0 };
-  var txt = { t: '', police: 'Dancing Script', couleur: '#ffffff', pos: 'devant', place: 'bas' };
+  var txt = { t: '', police: 'Dancing Script', couleur: '#ffffff', pos: 'devant', place: 'bas', taille: 'moyen' };
   var cvA = $('pp-apercu'), qte = $('pp-qte'), fi = $('pp-photo');
   function radios() { return f.querySelectorAll('input[name=variante]'); }
   function variante() { var r = f.querySelector('input[name=variante]:checked'); return r ? r.value : Object.keys(P.v)[0]; }
@@ -550,7 +550,7 @@
   function ecrire(c, x, y, maxw) {
     if (!txt.t) return;
     c.save(); c.textAlign = 'center'; c.textBaseline = 'middle';
-    var px = 36, pol = function () { c.font = px + 'px "' + txt.police + '", cursive'; }; pol();
+    var px = ({ petit: 26, moyen: 36, grand: 50 })[txt.taille] || 36, pol = function () { c.font = px + 'px "' + txt.police + '", cursive'; }; pol();
     var w = c.measureText(txt.t).width; if (w > maxw) { px = Math.max(10, Math.floor(px * maxw / w)); pol(); }
     var h = txt.couleur.replace('#', ''), lum = (parseInt(h.substr(0, 2), 16) * .3 + parseInt(h.substr(2, 2), 16) * .59 + parseInt(h.substr(4, 2), 16) * .11);
     c.shadowColor = lum > 150 ? 'rgba(0,0,0,.5)' : 'rgba(255,255,255,.55)'; c.shadowBlur = 5; c.shadowOffsetY = 1;
@@ -762,6 +762,7 @@
   tIn.addEventListener('input', function () { txt.t = this.value; $('pp-compte').textContent = this.value.length + ' / 50'; tOpts.hidden = !this.value.trim(); chargerPolice(); if (CODE === 'portecles' && this.value.trim()) vue = txt.pos === 'derriere' ? 1 : 0; maj(); });
   Array.prototype.forEach.call(f.querySelectorAll('[data-police]'), function (b) { b.addEventListener('click', function () { txt.police = b.getAttribute('data-police'); Array.prototype.forEach.call(f.querySelectorAll('[data-police]'), function (x) { x.classList.toggle('on', x === b); }); chargerPolice(); maj(); }); });
   Array.prototype.forEach.call(f.querySelectorAll('[data-couleur]'), function (b) { b.addEventListener('click', function () { txt.couleur = b.getAttribute('data-couleur'); Array.prototype.forEach.call(f.querySelectorAll('[data-couleur]'), function (x) { x.classList.toggle('on', x === b); }); maj(); }); });
+  Array.prototype.forEach.call(f.querySelectorAll('input[name=taille]'), function (r) { r.addEventListener('change', function () { txt.taille = r.value; maj(); }); });
   Array.prototype.forEach.call(f.querySelectorAll('input[name=placement]'), function (r) { r.addEventListener('change', function () { txt.place = r.value; maj(); }); });
   Array.prototype.forEach.call(f.querySelectorAll('input[name=position]'), function (r) { r.addEventListener('change', function () { txt.pos = r.value; if (CODE === 'portecles') { vue = r.value === 'derriere' ? 1 : 0; if (r.value === 'derriere' && txt.couleur === '#ffffff') { var sw = f.querySelectorAll('[data-couleur]')[1]; if (sw) sw.click(); } } if (CODE === 'tasse' || CODE === 'isotherme') { var bb = BASES[cleBase(variante())], k0 = 0; if (r.value === 'derriere' && bb) bb.vues.forEach(function (q, j) { if (q.dos && !k0) k0 = j; }); vue = r.value === 'derriere' ? k0 : 0; } maj(); }); });
   Array.prototype.forEach.call(f.querySelectorAll('[data-couleur]'), function (b) { if (b.getAttribute('data-couleur') === txt.couleur) b.classList.add('on'); });
@@ -827,11 +828,11 @@
     var ex = window.NBQ.lire().filter(function (x) { return x.id === q0; })[0];
     if (ex && ex.src) {
       idModif = ex.id; var r = f.querySelector('input[name=variante][value="' + ex.variante + '"]'); if (r) r.checked = true;
-      qte.value = ex.quantite; cad = ex.cad || cad; zm.value = cad.z; txt.t = ex.texte || ''; txt.police = ex.police || txt.police; txt.couleur = ex.couleur || txt.couleur; txt.pos = ex.position || 'devant'; txt.place = (ex.cad && ex.cad.tp) || 'bas';
+      qte.value = ex.quantite; cad = ex.cad || cad; zm.value = cad.z; txt.t = ex.texte || ''; txt.police = ex.police || txt.police; txt.couleur = ex.couleur || txt.couleur; txt.pos = ex.position || 'devant'; txt.place = (ex.cad && ex.cad.tp) || 'bas'; txt.taille = (ex.cad && ex.cad.ts) || 'moyen';
       tIn.value = txt.t; $('pp-compte').textContent = txt.t.length + ' / 50'; tOpts.hidden = !txt.t;
       Array.prototype.forEach.call(f.querySelectorAll('[data-police]'), function (x) { x.classList.toggle('on', x.getAttribute('data-police') === txt.police); });
       Array.prototype.forEach.call(f.querySelectorAll('[data-couleur]'), function (x) { x.classList.toggle('on', x.getAttribute('data-couleur') === txt.couleur); });
-      var rp = f.querySelector('input[name=position][value="' + txt.pos + '"]'); if (rp) rp.checked = true; var rq = f.querySelector('input[name=placement][value="' + txt.place + '"]'); if (rq) rq.checked = true;
+      var rp = f.querySelector('input[name=position][value="' + txt.pos + '"]'); if (rp) rp.checked = true; var rq = f.querySelector('input[name=placement][value="' + txt.place + '"]'); if (rq) rq.checked = true; var rz = f.querySelector('input[name=taille][value="' + txt.taille + '"]'); if (rz) rz.checked = true;
       src = ex.src; var im3 = new Image(); im3.onload = function () { afficherPhoto(im3, ex.nom || 'photo.jpg', ex.taille || ''); chargerPolice(); }; im3.src = src;
       $('pp-ajouter').firstChild.nextSibling.textContent = 'Enregistrer les changements';
     }
@@ -841,7 +842,7 @@
     var cle = cleBase(variante()), b = BASES[cle], keep = vue; vue = 0;
     var ap = document.createElement('canvas'); dessiner(ap, cle, img, { vue: b.vues[0], ech: echelle(), w: 360 }); vue = keep;
     var item = { id: idModif || ('i' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6)), code: CODE, variante: variante(), quantite: Number(qte.value) || 1,
-      texte: txt.t.trim(), police: txt.t.trim() ? txt.police : '', couleur: txt.t.trim() ? txt.couleur : '', position: txt.t.trim() ? txt.pos : '', cad: Object.assign({}, cad, { tp: txt.place }), cadrage: JSON.stringify(Object.assign({}, cad, { tp: txt.place })),
+      texte: txt.t.trim(), police: txt.t.trim() ? txt.police : '', couleur: txt.t.trim() ? txt.couleur : '', position: txt.t.trim() ? txt.pos : '', cad: Object.assign({}, cad, { tp: txt.place, ts: txt.taille }), cadrage: JSON.stringify(Object.assign({}, cad, { tp: txt.place, ts: txt.taille })),
       photo: exporter(), src: src, nom: nomFichier, taille: tailleFichier, apercu: ap.toDataURL('image/jpeg', .8) };
     var a = window.NBQ.lire(), i = a.map(function (x) { return x.id; }).indexOf(item.id);
     if (i > -1) a[i] = item; else a.push(item);
@@ -950,7 +951,7 @@
     if (!d.prenom || !d.nom || !d.courriel || !d.telephone || !d.adresse || !d.ville || !d.province) return erreur('Remplissez tous les champs obligatoires (*).');
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.courriel)) return erreur('Courriel invalide.');
     if (!cpOk(d.province, d.code_postal)) return erreur('Vérifiez votre code postal : il doit correspondre à la province (ex. : E3N 2S1).');
-    d.action = 'commander'; d.piege = f.piege.value; d.cadeau = f.cadeau.value === 'oui'; d.dest_nom = f.dest_nom.value; var PL = { haut: 'en haut', milieu: 'au milieu', bas: 'en bas' }, ajouts = a.map(function (x, i) { var c = {}; try { c = JSON.parse(x.cadrage || '{}'); } catch (e) {} return x.texte ? 'Article ' + (i + 1) + ' : texte placé ' + (PL[c.tp] || 'en bas') + (x.position === 'derriere' ? ', côté derrière' : '') : ''; }).filter(Boolean).join(' | '); d.note = (f.note.value + (ajouts ? '\n[' + ajouts + ']' : '')).slice(0, 1000);
+    d.action = 'commander'; d.piege = f.piege.value; d.cadeau = f.cadeau.value === 'oui'; d.dest_nom = f.dest_nom.value; var PL = { haut: 'en haut', milieu: 'au milieu', bas: 'en bas' }, SZ = { petit: 'petite', moyen: 'moyenne', grand: 'grande' }, ajouts = a.map(function (x, i) { var c = {}; try { c = JSON.parse(x.cadrage || '{}'); } catch (e) {} return x.texte ? 'Article ' + (i + 1) + ' : texte placé ' + (PL[c.tp] || 'en bas') + ', taille ' + (SZ[c.ts] || 'moyenne') + (x.position === 'derriere' ? ', côté derrière' : '') : ''; }).filter(Boolean).join(' | '); d.note = (f.note.value + (ajouts ? '\n[' + ajouts + ']' : '')).slice(0, 1000);
     d.lignes = a.map(function (x) { return { produit: x.code, variante: x.variante, quantite: x.quantite, texte: x.texte, police: x.police, couleur: x.couleur, position: x.position, cadrage: x.cadrage, photo: x.photo }; });
     if (d.cadeau && f.dest_adresse.value.trim()) {
       d.dest_adresse = f.dest_adresse.value.trim(); d.dest_ville = f.dest_ville.value.trim(); d.dest_province = f.dest_province.value; d.dest_code_postal = f.dest_code_postal.value.trim();
