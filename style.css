@@ -962,3 +962,85 @@ main>.page:last-child{flex:1 0 auto}
   .v2-pret{flex-direction:column;gap:8px;padding:20px 16px;text-align:center}.v2-pret .script{font-size:36px}.v2-pret-ico{width:44px;height:44px}
   .pm-bas a,.pm-bas span{padding:0 7px}
 }
+
+/* ===== Accueil : fidélité à la maquette (en-tête, décors, proportions) ===== */
+body.accueil-v2{background:linear-gradient(180deg,#fbf2ec 0,#f7e9e1 40%,#f9efe8 100%)}
+.accueil-v2 .entete{background:rgba(251,243,238,.97);box-shadow:0 2px 12px rgba(92,47,43,.08)}
+.accueil-v2 .entete .barre{max-width:1480px;height:86px;gap:22px;padding:0 34px}
+.accueil-v2 .logo img{height:70px;width:auto}
+.accueil-v2 .nav{margin:0 auto 0 4px;padding-left:26px;border-left:1px solid #d9c2b6}
+.accueil-v2 .menu{gap:8px}
+.accueil-v2 .menu>li>a{font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;font-weight:600;padding:7px 15px;border:0;border-radius:22px;color:var(--noel)}
+.accueil-v2 .menu>li>a[aria-current=page]{background:#7a2a33;color:#fff}
+.accueil-v2 .menu>li>a:hover{background:#f0dcd2}
+.accueil-v2 .menu>li>a[aria-current=page]:hover{background:#7a2a33}
+.accueil-v2 .a-sous>a::after{content:"";width:6px;height:6px;border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;transform:rotate(45deg);margin:-3px 0 0 6px}
+.accueil-v2 .sous-menu{left:0;min-width:190px;border-radius:12px;padding:8px 0}
+.accueil-v2 .sous-menu a{font-family:'Nunito',sans-serif;font-size:14px;padding:7px 16px;border-radius:0}
+.accueil-v2 .entete .reseaux{display:none}
+.btn-entete{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(180deg,#7d2d36,#62232b);color:#fff;border-radius:34px;padding:12px 26px;font-family:'Cormorant Garamond',Georgia,serif;font-size:19px;font-weight:600;text-decoration:none;box-shadow:0 3px 8px rgba(98,35,43,.3);margin-left:10px;white-space:nowrap;border-left:0}
+.btn-entete i{width:22px;height:22px;display:inline-flex}.btn-entete i svg{width:100%;height:100%}
+.accueil-v2 .panier-lien{margin-left:4px;color:var(--noel)}
+@media (min-width:1025px){.sauf-bouton{display:none}}
+@media (max-width:1180px) and (min-width:1025px){.accueil-v2 .menu>li>a{font-size:16px;padding:7px 10px}.btn-entete{padding:11px 18px;font-size:17px}.accueil-v2 .entete .barre{gap:12px;padding:0 20px}.accueil-v2 .nav{padding-left:14px}}
+@media (max-width:1024px){.btn-entete{display:none}.accueil-v2 .entete .barre{height:76px;padding:0 18px}.accueil-v2 .logo img{height:58px}.accueil-v2 .nav{border:0;padding:14px 22px 20px;top:76px}.accueil-v2 .menu{flex-direction:column;align-items:flex-start}.accueil-v2 .menu>li>a{font-size:20px}.accueil-v2 .a-sous .sous-menu{display:none!important}}
+
+/* bannière pleine largeur */
+.v2-hero{max-width:none;margin:0;min-height:clamp(300px,25.5vw,400px)}
+.v2-hero-texte{padding:34px 20px 34px max(46px,5vw)}
+.v2-hero h1{font-size:clamp(54px,5.4vw,78px);line-height:1}
+.v2-feuille{left:-34px;top:30px;width:clamp(96px,9vw,140px)}
+.v2-hero-photo img{-webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.65) 14%,#000 34%);mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.65) 14%,#000 34%)}
+.bouton{display:inline-flex;align-items:center;gap:10px}
+.v2-boutons .bouton:not(.clair){background:linear-gradient(180deg,#7d2d36,#62232b);color:#fff;border:0;box-shadow:0 3px 8px rgba(98,35,43,.3);font-size:16px;padding:13px 26px;border-radius:32px}
+.v2-boutons .bouton.clair{font-size:16px;padding:12px 26px;border-radius:32px;background:rgba(255,255,255,.55)}
+.v2-boutons .bouton .fleche{font-size:18px}
+
+/* Magie de Noël */
+.v2-noel{position:relative;width:calc(100% - 3.4vw);max-width:none;margin:16px auto 0;border-radius:24px;min-height:178px}
+.v2-flocon{position:absolute;right:24px;top:16px;width:46px;height:46px;color:#f0c9bd;opacity:.9}.v2-flocon svg{width:100%;height:100%}
+.v2-noel-droite{padding-top:44px}
+.v2-noel h2{font-size:clamp(46px,4.4vw,64px)}
+.v2-pin-orn{width:210px;height:auto;margin:6px auto 0;color:#e9c9be;display:block}
+
+/* souvenirs */
+.v2-souvenirs{max-width:none;margin:0;padding:22px max(28px,3.2vw) 8px;position:relative;grid-template-columns:minmax(0,35%) minmax(0,1fr)}
+.v2-souvenirs img.v2-fleurs{position:absolute;right:max(10px,2vw);top:0;width:clamp(90px,9vw,130px);height:auto;opacity:.85;aspect-ratio:auto;border:0;box-shadow:none;border-radius:0}
+.v2-souvenirs h2{font-size:clamp(44px,4.2vw,60px)}
+.v2-souv-texte{padding-right:12%}
+.v2-souv-bas{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+.v2-souv-bas .separateur{width:140px;height:28px;color:#8a4f48}
+.bouton.beige{border:1.5px solid #d4b4a4}
+
+/* titres avec filets */
+.v2-titre{display:flex;align-items:center;justify-content:center;gap:22px;font-size:clamp(38px,3.8vw,54px);margin-bottom:6px}
+.v2-titre::before,.v2-titre::after{content:"";height:1px;background:linear-gradient(90deg,transparent,#a98374);flex:0 1 220px}
+.v2-titre::after{transform:scaleX(-1)}
+.v2-univers{max-width:none;margin:0;padding:14px max(20px,2.4vw) 6px;background:linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0));border-top:1px solid #ead8cd}
+.v2-icones i{width:48px;height:48px}.v2-icones b{font-size:18px}.v2-icones a{padding:10px 6px}
+.v2-portfolio{max-width:none;margin:0;padding:10px max(14px,2vw) 0}
+.v2-boutique{max-width:none;margin:8px 0 0;padding:16px max(30px,4vw);grid-template-columns:minmax(0,34%) minmax(0,1fr);background:rgba(255,255,255,.35)}
+.v2-prods{gap:18px}.v2-prod img{aspect-ratio:16/10}
+.v2-retours{max-width:none;margin:0;padding:14px max(30px,4vw) 14px;background:#f3e3da;border-top:1px solid #ead8cd}
+.v2-tem{background:rgba(255,255,255,.55)}
+.v2-pret{margin-top:0;padding:20px 24px}
+.pied-mini{padding:14px max(24px,4vw) 12px}
+.pm-haut{justify-content:space-between;max-width:none;gap:10px 18px}
+.pm-logo img{height:56px}
+.pm-bas{justify-content:flex-start;max-width:none}
+.pm-bas span{margin-left:auto;border-left:0}
+@media (max-width:720px){
+  .v2-titre{gap:10px}.v2-titre::before,.v2-titre::after{flex:0 1 40px}
+  .v2-hero{min-height:0}.v2-hero-texte{padding:2px 22px 18px}.v2-feuille{display:none}
+  .v2-noel{width:calc(100% - 24px)}.v2-noel-droite{padding-top:12px}.v2-flocon{width:34px;height:34px;right:14px;top:10px}
+  .v2-souvenirs{padding:20px 20px 8px}.v2-souv-texte{padding-right:0}.v2-souv-bas{justify-content:center}.v2-souvenirs img.v2-fleurs{display:none}
+  .v2-boutique{padding:16px 18px}.v2-retours{padding:12px 16px 10px}.pied-mini{padding:12px 16px 10px}.pm-haut{justify-content:center}.pm-bas{justify-content:center}.pm-bas span{margin-left:0}
+}
+@media (max-width:720px){
+  .v2-boutique{grid-template-columns:1fr!important;gap:12px;text-align:center;justify-items:center}
+  .v2-prods{grid-template-columns:1fr 1fr 1fr;gap:8px;width:100%}
+  .v2-prod b,.v2-prod span{font-size:12px}
+  .v2-souvenirs{grid-template-columns:1fr!important;gap:14px;text-align:center}
+  .v2-souvenirs img{width:100%;max-width:none}
+  .v2-icones{grid-template-columns:repeat(5,1fr)}
+}
