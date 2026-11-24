@@ -374,16 +374,27 @@
   function majCalcul() {
     var zone = document.getElementById('calcul-prix'); if (!zone) return;
     var cle = form.elements.forfait.value;
-    if ((cle !== 'ecole' && cle !== 'bal') || !form.elements.personnes.value) { zone.hidden = true; return; }
+    if (!cle || (!promoActive() && ((cle !== 'ecole' && cle !== 'bal') || !form.elements.personnes.value))) { zone.hidden = true; return; }
+    if (cle === 'bal' && !form.elements.personnes.value) { zone.hidden = true; return; }
     var m = montants(cle);
     zone.hidden = false;
     zone.textContent = 'Total : ' + argent(m.total) + (m.detail ? ' (' + m.detail + ')' : '') + ' · Acompte : ' + argent(m.acompte);
   }
   form.elements.personnes.addEventListener('input', majCalcul);
+  form.elements.forfait.addEventListener('change', majCalcul);
 
   function argent(n) { return n.toLocaleString('fr-CA', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }) + ' $'; }
   // Total et acompte réels (garderie / école : prix fixe de 300 $ par séance)
+  // Black Friday : 30 % de rabais sur toutes les séances du 24 au 30 novembre 2026 (heure de l'Atlantique)
+  function promoActive() { var t = Date.now(); return t >= Date.UTC(2026, 10, 24, 4, 0, 0) && t <= Date.UTC(2026, 11, 1, 3, 59, 59); }
   function montants(cle) {
+    var b = montantsBase(cle);
+    if (!b || !promoActive() || b.total == null) return b;
+    var total = Math.round(b.total * 70) / 100;
+    var ac = cle === 'noel' ? total : Math.round(total * 50) / 100;
+    return { total: total, acompte: ac, detail: 'Black Friday −30 % : prix régulier ' + argent(b.total), promo: true };
+  }
+  function montantsBase(cle) {
     var f = FORFAITS[cle];
     if (!f) return null;
     if (f.parEnfant) {
