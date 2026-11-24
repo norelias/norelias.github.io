@@ -22,3 +22,7 @@
  document.addEventListener('keydown',e=>{if(modal?.getAttribute('aria-hidden')==='false'){if(e.key==='Escape')closeModal();if(e.key==='ArrowLeft')modalStep(-1);if(e.key==='ArrowRight')modalStep(1)}});
  window.addEventListener('resize',()=>{render()},{passive:true});render();
 })();
+(()=>{const l=document.querySelector('.review-list');if(!l)return;let pause=false;
+ l.addEventListener('mouseenter',()=>pause=true);l.addEventListener('mouseleave',()=>pause=false);l.addEventListener('touchstart',()=>pause=true,{passive:true});
+ setInterval(()=>{if(pause||document.hidden)return;const c=l.querySelector('.review-card');if(!c)return;const w=c.getBoundingClientRect().width/(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--z'))||1)+13;
+  const max=l.scrollWidth-l.clientWidth;l.scrollTo({left:l.scrollLeft>=max-4?0:l.scrollLeft+c.offsetWidth+13,behavior:'smooth'})},4500)})();
