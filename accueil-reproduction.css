@@ -167,3 +167,6 @@ button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer;font-fami
 .christmas-right li strong{font-size:1.2em}
 @media(max-width:760px){.masthead{grid-template-columns:45px minmax(0,1fr) 39px 30px!important}.panier-lien{grid-column:4;grid-row:1;margin:0}}
 .review-card{padding-left:34px;padding-right:16px;text-align:left}.review-card .stars,.review-card .review-name{text-align:center}
+
+/* Grands écrans : la page s'étire sur toute la largeur de l'écran */
+@media(min-width:1025px){.page{zoom:var(--z,1)}}
