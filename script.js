@@ -36,10 +36,11 @@
     });
   });
 
-  /* ---------- Portfolio : photo en grand, glisser ou flèches ---------- */
-  var figs = Array.prototype.slice.call(document.querySelectorAll('.galerie figure'));
-  if (figs.length) {
-    var vis = document.createElement('div');
+  /* ---------- Portfolio : deux rangées, photo centrale, visionneuse ---------- */
+  var vis = null, vImg, vLeg, vListe = [], vPos = 0, vRetour = null, vFin = null;
+  function visionneuse() {
+    if (vis) return;
+    vis = document.createElement('div');
     vis.className = 'visionneuse'; vis.hidden = true;
     vis.setAttribute('role', 'dialog'); vis.setAttribute('aria-modal', 'true'); vis.setAttribute('aria-label', 'Photo en grand');
     vis.innerHTML = '<button type="button" class="v-fermer" aria-label="Fermer">×</button>' +
@@ -47,46 +48,111 @@
       '<img alt=""><p class="v-legende"></p>' +
       '<button type="button" class="v-suiv" aria-label="Photo suivante">›</button>';
     document.body.appendChild(vis);
-    var vImg = vis.querySelector('img'), vLeg = vis.querySelector('.v-legende'), liste = [], pos = 0, retour = null;
-    function montrer(i) {
-      pos = (i + liste.length) % liste.length;
-      var im = liste[pos].querySelector('img');
-      vImg.src = im.currentSrc || im.src; vImg.alt = im.alt;
-      vLeg.textContent = im.alt + '  ·  ' + (pos + 1) + ' / ' + liste.length;
-    }
-    function ouvrir(fig) {
-      liste = figs.filter(function (f) { return !f.hidden; });
-      retour = document.activeElement;
-      vis.hidden = false; document.body.style.overflow = 'hidden';
-      montrer(liste.indexOf(fig));
-      vis.querySelector('.v-fermer').focus();
-    }
-    function fermer() { vis.hidden = true; document.body.style.overflow = ''; if (retour) retour.focus(); }
-    figs.forEach(function (fig) {
-      fig.tabIndex = 0; fig.setAttribute('role', 'button');
-      fig.setAttribute('aria-label', 'Agrandir : ' + (fig.querySelector('img') || {}).alt);
-      fig.addEventListener('click', function () { ouvrir(fig); });
-      fig.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ouvrir(fig); } });
-    });
-    vis.querySelector('.v-prec').addEventListener('click', function (e) { e.stopPropagation(); montrer(pos - 1); });
-    vis.querySelector('.v-suiv').addEventListener('click', function (e) { e.stopPropagation(); montrer(pos + 1); });
-    vis.querySelector('.v-fermer').addEventListener('click', fermer);
-    vis.addEventListener('click', function (e) { if (e.target === vis) fermer(); });
+    vImg = vis.querySelector('img'); vLeg = vis.querySelector('.v-legende');
+    vis.querySelector('.v-prec').addEventListener('click', function (e) { e.stopPropagation(); vMontrer(vPos - 1); });
+    vis.querySelector('.v-suiv').addEventListener('click', function (e) { e.stopPropagation(); vMontrer(vPos + 1); });
+    vis.querySelector('.v-fermer').addEventListener('click', vFermer);
+    vis.addEventListener('click', function (e) { if (e.target === vis) vFermer(); });
     document.addEventListener('keydown', function (e) {
       if (vis.hidden) return;
-      if (e.key === 'Escape') fermer();
-      else if (e.key === 'ArrowLeft') montrer(pos - 1);
-      else if (e.key === 'ArrowRight') montrer(pos + 1);
+      if (e.key === 'Escape') vFermer();
+      else if (e.key === 'ArrowLeft') vMontrer(vPos - 1);
+      else if (e.key === 'ArrowRight') vMontrer(vPos + 1);
+      else if (e.key === 'Tab') { var bt = vis.querySelectorAll('button'), p = Array.prototype.indexOf.call(bt, document.activeElement); e.preventDefault(); bt[(p + (e.shiftKey ? -1 : 1) + bt.length) % bt.length].focus(); }
     });
     var x0 = null, y0 = null;
     vis.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
     vis.addEventListener('touchend', function (e) {
       if (x0 === null) return;
       var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
-      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) montrer(pos + (dx < 0 ? 1 : -1));
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) vMontrer(vPos + (dx < 0 ? 1 : -1));
       x0 = null;
     });
   }
+  function vMontrer(i) {
+    vPos = (i + vListe.length) % vListe.length;
+    var im = vListe[vPos].querySelector('img');
+    vImg.src = im.getAttribute('src') || im.getAttribute('data-src'); vImg.alt = im.alt;
+    vLeg.textContent = im.alt + '  ·  ' + (vPos + 1) + ' / ' + vListe.length;
+  }
+  function vOuvrir(liste, i, fin) {
+    visionneuse(); vListe = liste; vFin = fin; vRetour = document.activeElement;
+    vis.hidden = false; document.body.style.overflow = 'hidden'; vMontrer(i); vis.querySelector('.v-fermer').focus();
+  }
+  function vFermer() {
+    vis.hidden = true; document.body.style.overflow = '';
+    if (vFin) vFin(vPos); else if (vRetour) vRetour.focus();
+  }
+
+  var reduit = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function rang(el) {
+    var scene = el.querySelector('.rp-scene'), cards = Array.prototype.slice.call(scene.querySelectorAll('.rp-c')), n = cards.length;
+    var pts = el.querySelector('.rp-points'), a = 0, W = 0, cw = 0, ch = 0, VIS = 3, X = [], S = [1, .86, .75, .66, .6], prev = [];
+    var NP = Math.min(7, n), dots = [];
+    for (var j = 0; j < NP; j++) (function (j) {
+      var b = document.createElement('button'); b.type = 'button';
+      b.setAttribute('aria-label', 'Aller aux photos ' + (Math.floor(j * n / NP) + 1) + ' à ' + Math.floor((j + 1) * n / NP));
+      b.addEventListener('click', function () { aller(Math.floor(j * n / NP)); }); pts.insertBefore(b, null); dots.push(b);
+    })(j);
+    function charger(c) { var im = c.querySelector('img'); if (!im.getAttribute('src') && im.getAttribute('data-src')) im.src = im.getAttribute('data-src'); }
+    function mesurer() {
+      W = scene.clientWidth; var mob = W < 640; VIS = mob ? 1 : 3;
+      var ov = .26, ext;
+      X = [0]; for (var k = 1; k <= 4; k++) X.push(X[k - 1] + ((S[k - 1] + S[k]) / 2 - ov));
+      ext = X[VIS] + S[VIS] / 2;
+      cw = mob ? Math.min(W * .64, 300) : Math.min(440, (W / 2 - 52) / ext);
+      ch = cw / 1.4;
+      scene.style.height = Math.round(ch * 1.1 + 56) + 'px';
+      cards.forEach(function (c) { c.style.width = cw + 'px'; c.style.height = ch + 'px'; c.style.marginLeft = (-cw / 2) + 'px'; c.style.marginTop = (-ch / 2 - 10) + 'px'; });
+    }
+    function placer() {
+      cards.forEach(function (c, i) {
+        var d = ((i - a) % n + n) % n; if (d > n / 2) d -= n;
+        var m = Math.abs(d), sg = d < 0 ? -1 : 1, kk = Math.min(m, 4), vu = m <= VIS;
+        var x = sg * X[kk] * cw, sc = S[kk] * (m === 0 ? 1.04 : 1), y = m === 0 ? 0 : (m % 2 ? 3 : -3) * (m === 1 ? 1.4 : 1) + 4, rot = m === 0 ? 0 : sg * (m === 1 ? 2.2 : 3.2);
+        if (prev[i] !== undefined && Math.abs(d - prev[i]) > n / 2 + .5) { c.style.transition = 'none'; void c.offsetWidth; c.style.transitionDuration = ''; setTimeout(function (cc) { cc.style.transition = ''; }, 30, c); }
+        prev[i] = d;
+        c.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y + 'px,0) rotate(' + rot + 'deg) scale(' + sc.toFixed(3) + ')';
+        c.style.zIndex = String(20 - m);
+        c.classList.toggle('cache', !vu); c.classList.toggle('centre-rp', m === 0);
+        c.setAttribute('role', 'button'); c.setAttribute('aria-hidden', vu ? 'false' : 'true'); c.tabIndex = vu ? 0 : -1;
+        var al = c.querySelector('img').alt; c.setAttribute('aria-label', (m === 0 ? 'Agrandir : ' : 'Afficher : ') + al);
+        if (m <= VIS + 2) charger(c);
+      });
+      var act = Math.min(NP - 1, Math.floor(a * NP / n)); dots.forEach(function (b, k) { b.setAttribute('aria-current', k === act ? 'true' : 'false'); });
+    }
+    function aller(i) { a = ((i % n) + n) % n; placer(); }
+    el.querySelector('.rp-prec').addEventListener('click', function () { aller(a - 1); });
+    el.querySelector('.rp-suiv').addEventListener('click', function () { aller(a + 1); });
+    cards.forEach(function (c, i) {
+      c.addEventListener('click', function () {
+        if (scene._glisse) return;
+        if (i === a) vOuvrir(cards, i, function (p) { aller(p); cards[p].focus(); });
+        else aller(i);
+      });
+      c.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); c.click(); } });
+    });
+    scene.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); aller(a - 1); } else if (e.key === 'ArrowRight') { e.preventDefault(); aller(a + 1); }
+    });
+    /* glisser avec le doigt ou la souris */
+    var dep = null;
+    scene.addEventListener('pointerdown', function (e) { dep = { x: e.clientX, y: e.clientY, t: Date.now() }; scene._glisse = false; });
+    scene.addEventListener('pointermove', function (e) { if (dep && Math.abs(e.clientX - dep.x) > 10 && Math.abs(e.clientX - dep.x) > Math.abs(e.clientY - dep.y)) scene._glisse = true; });
+    function fin(e) {
+      if (!dep) return; var dx = e.clientX - dep.x, v = Math.abs(dx) / Math.max(1, Date.now() - dep.t); dep = null;
+      if (scene._glisse && Math.abs(dx) > 35) aller(a + (dx < 0 ? 1 : -1) * (v > 1.2 && Math.abs(dx) > 160 ? 2 : 1));
+      setTimeout(function () { scene._glisse = false; }, 60);
+    }
+    scene.addEventListener('pointerup', fin); scene.addEventListener('pointercancel', function () { dep = null; scene._glisse = false; });
+    scene.addEventListener('dragstart', function (e) { e.preventDefault(); });
+    mesurer(); placer();
+    var tm; window.addEventListener('resize', function () { clearTimeout(tm); tm = setTimeout(function () { mesurer(); placer(); }, 80); });
+    /* les autres photos se chargent peu à peu */
+    var q = 0; (function suite() { while (q < n && cards[q].querySelector('img').getAttribute('src')) q++; if (q >= n) return; charger(cards[q]); q++; setTimeout(suite, reduit ? 120 : 350); })();
+    if (window.ResizeObserver) new ResizeObserver(function () { if (scene.clientWidth !== W) { mesurer(); placer(); } }).observe(scene);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.rang-port'), rang);
 
   /* ---------- Envoi de courriel (EmailJS ou application courriel) ---------- */
   function emailjsPret(modele) {
