@@ -783,7 +783,7 @@ main>.page:last-child{flex:1 0 auto}
 .pp-ajust button:not(.lien){width:calc(34 * var(--u));height:calc(34 * var(--u));border-radius:50%;border:1px solid #dcc9be;background:#fff;color:var(--brun);font-size:calc(18 * var(--u));cursor:pointer;line-height:1}
 .pp-ajust input[type=range]{flex:1;min-width:calc(100 * var(--u));accent-color:#8a3a34}
 .pp-ajust small{flex-basis:100%;color:var(--gris);font-size:calc(12.5 * var(--u))}
-#pp-apercu{touch-action:pan-y;cursor:grab}
+#pp-apercu{touch-action:none;cursor:grab}.pp-ajust .fleches{display:inline-flex;gap:calc(4 * var(--u))}
 .pp-texte-opts{margin:calc(10 * var(--u)) 0 0;padding:calc(12 * var(--u)) calc(14 * var(--u));background:#fffaf7;border:1px solid #ecdcd2;border-radius:calc(10 * var(--u));display:grid;gap:calc(10 * var(--u))}
 .pp-texte-opts[hidden]{display:none}
 .pp-texte-opts .rang{display:flex;align-items:center;flex-wrap:wrap;gap:calc(8 * var(--u))}
