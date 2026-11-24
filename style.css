@@ -834,3 +834,131 @@ main>.page:last-child{flex:1 0 auto}
 .rp-orn{color:#8a4f48;display:inline-flex}.rp-orn .coeur{width:30px;height:30px;display:inline-flex}.rp-orn svg{width:100%;height:100%}
 @media (max-width:640px){.portfolio-rangs{width:100vw;margin-left:calc(50% - 50vw)}.rp-fl{width:38px;height:38px;font-size:26px;top:calc(50% - 19px);background:rgba(106,47,40,.82)}.rp-points::before,.rp-points::after{width:24px}.rp-c{border-width:2px;border-radius:11px}}
 @media (prefers-reduced-motion:reduce){.rp-c{transition:none!important}}
+
+/* ================= Accueil (nouvelle organisation) ================= */
+.v2-hero,.v2-souvenirs,.v2-univers,.v2-portfolio,.v2-boutique,.v2-retours{max-width:1240px;margin-left:auto;margin-right:auto;width:100%}
+.v2-noel{max-width:1240px;margin-left:auto;margin-right:auto}
+.v2-pret,.pied-mini{width:100%}
+.v2-souvenirs img,.v2-prod img{height:auto}
+.v2-hero h1 .script{display:inline!important}
+.v2-boutons .bouton{white-space:nowrap}
+.script{font-family:'Great Vibes','Sacramento',cursive;font-weight:400}
+.v2-titre{text-align:center;font-size:44px;margin:0 0 10px;color:var(--brun);line-height:1.1}
+.v2-titre .script,.v2-hero h1 .script,.v2-noel h2 .script,.v2-souvenirs h2 .script,.v2-boutique h2 .script{font-size:1em}
+.v2-titre .coeur,.v2-hero h1 .coeur,.v2-noel h2 .coeur,.v2-souvenirs h2 .coeur,.v2-boutique h2 .coeur{display:inline-block;width:.55em;height:.6em;vertical-align:.1em;color:var(--rose-fonce)}
+.v2-titre .coeur svg,.v2-hero h1 .coeur svg,.v2-noel h2 .coeur svg,.v2-souvenirs h2 .coeur svg,.v2-boutique h2 .coeur svg{width:100%;height:100%}
+.bouton.clair{background:transparent;color:var(--noel);border:1.5px solid var(--noel);box-shadow:none}
+.bouton.beige{background:linear-gradient(180deg,#ecd5c8,#dcb8a6);color:var(--brun)}
+
+/* bannière */
+.v2-hero{position:relative;display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);align-items:center;min-height:310px;overflow:hidden;background:var(--creme)}
+.v2-feuille{position:absolute;left:-38px;top:26px;width:104px;height:auto;opacity:.9;transform:rotate(-10deg);pointer-events:none}
+.v2-hero-texte{position:relative;z-index:2;padding:30px 20px 30px 56px}
+.v2-hero h1{font-size:62px;line-height:1.02;margin:0 0 14px;font-family:'Great Vibes',cursive;font-weight:400;color:var(--noel)}
+.v2-hero h1 .script{display:block;max-width:520px}
+.v2-hero p{margin:0 0 20px;font-size:18px;line-height:1.5;max-width:470px;color:var(--brun-2);font-weight:600}
+.v2-boutons{display:flex;flex-wrap:wrap;gap:12px}
+.v2-hero-photo{position:relative;height:100%;min-height:310px}
+.v2-hero-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 40%;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 28%);mask-image:linear-gradient(90deg,transparent 0,#000 28%)}
+
+/* Magie de Noël */
+.v2-noel{display:grid;grid-template-columns:minmax(220px,31%) minmax(0,1fr) minmax(220px,30%);align-items:stretch;background:linear-gradient(90deg,#5c2f2b,#6f2a33 55%,#5c2f2b);color:#fff;border-radius:22px;overflow:hidden;margin-top:14px;box-shadow:0 8px 22px rgba(92,47,43,.28);width:calc(100% - 32px)}
+.v2-noel>img{width:100%;height:100%;min-height:170px;object-fit:cover;object-position:50% 25%;-webkit-mask-image:linear-gradient(90deg,#000 80%,transparent);mask-image:linear-gradient(90deg,#000 80%,transparent)}
+.v2-noel-centre{padding:22px 10px;display:flex;flex-direction:column;justify-content:center;text-align:center}
+.v2-noel h2{color:#fbeee8;font-size:54px;line-height:1.05}
+.v2-noel h2 .coeur{color:#f0c9bd}
+.v2-noel-sous{margin:6px 0 2px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24px;color:#f6dfd6}
+.v2-noel-petit{margin:0;font-size:14px;color:#e9c9be;letter-spacing:.03em}
+.v2-noel-droite{padding:20px 28px 20px 30px;display:flex;flex-direction:column;justify-content:center;gap:12px;border-left:1px solid rgba(255,255,255,.28)}
+.v2-noel-droite ul{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.v2-noel-droite li{display:flex;align-items:center;gap:12px;font-size:17px;font-weight:700}
+.v2-noel-droite li i{width:26px;height:26px;display:inline-flex;color:#f0c9bd;flex:none}.v2-noel-droite li i svg{width:100%;height:100%}
+.v2-noel-droite strong{font-size:22px}
+.bouton.blanc{background:#fff;color:var(--noel);box-shadow:0 3px 8px rgba(0,0,0,.18)}
+
+/* Des souvenirs authentiques */
+.v2-souvenirs{display:grid;grid-template-columns:minmax(0,38%) minmax(0,1fr);gap:34px;align-items:center;padding:26px 32px 12px}
+.v2-souvenirs img{width:100%;aspect-ratio:1000/560;object-fit:cover;object-position:50% 40%;border-radius:20px;box-shadow:0 6px 16px rgba(58,42,36,.2);border:3px solid #fff}
+.v2-souvenirs h2{font-size:52px;margin:0 0 8px}
+.v2-souvenirs p{margin:0 0 14px;font-size:17px;line-height:1.5;max-width:560px}
+
+/* univers */
+.v2-univers{padding:14px 20px 6px}
+.v2-icones{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:repeat(10,minmax(0,1fr))}
+.v2-icones li{border-left:1px solid #d9c2b6;text-align:center}.v2-icones li:first-child{border-left:0}
+.v2-icones a{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 5px;text-decoration:none;color:var(--noel);height:100%;transition:transform .2s}
+.v2-icones a:hover,.v2-icones a:focus-visible{transform:translateY(-3px)}
+.v2-icones i{width:42px;height:42px;display:inline-flex;color:var(--noel)}.v2-icones i svg{width:100%;height:100%}
+.v2-icones b{font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.1;font-weight:600}
+.v2-icones small{font-size:11.5px;line-height:1.2;color:var(--gris);font-weight:600}
+.v2-aussi{text-align:center;font-size:13px;margin:6px 0 0;color:var(--gris)}
+
+/* portfolio */
+.v2-portfolio{padding:8px 0 0}
+.v2-lien-port{text-align:center;margin:0 0 4px;font-size:14px}
+
+/* boutique */
+.v2-boutique{display:grid;grid-template-columns:minmax(0,38%) minmax(0,1fr);gap:26px;align-items:center;padding:14px 28px;border-top:1px solid #ead8cd;border-bottom:1px solid #ead8cd;margin-top:6px}
+.v2-bout-texte{display:flex;gap:18px;align-items:center}
+.v2-cadeau{width:64px;height:64px;color:var(--noel);flex:none;display:inline-flex}.v2-cadeau svg{width:100%;height:100%}
+.v2-boutique h2{font-size:46px;margin:0 0 4px}
+.v2-boutique p{margin:0 0 12px;font-size:16px}
+.v2-prods{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.v2-prod{display:block;text-decoration:none;color:var(--brun);text-align:center}
+.v2-prod img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:14px;border:3px solid #fff;box-shadow:0 4px 12px rgba(58,42,36,.2)}
+.v2-prod span{display:block;margin-top:6px;font-weight:700;font-size:14px}
+
+/* témoignages */
+.v2-retours{padding:14px 28px 10px}
+.v2-tems{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:6px}
+.v2-tem{margin:0;position:relative;background:#fbf2ec;border:1px solid #ead8cd;border-radius:14px;padding:12px 16px 12px;box-shadow:0 3px 10px rgba(58,42,36,.1);text-align:center;display:flex;flex-direction:column;gap:4px}
+.v2-tem .guillemet{position:absolute;left:12px;top:-2px;font-family:Georgia,serif;font-size:42px;color:var(--rose-fonce);line-height:1}
+.v2-tem blockquote{margin:0;font-size:13.5px;line-height:1.45;font-weight:600;flex:1}
+.v2-tem .etoiles{color:#6f2a33;letter-spacing:2px;font-size:16px}
+.v2-tem figcaption{font-weight:700;font-size:13.5px;color:var(--noel)}
+
+/* bandeau */
+.v2-pret{display:flex;align-items:center;justify-content:center;gap:26px;background:linear-gradient(90deg,#5c2f2b,#6f2a33 50%,#5c2f2b);color:#fff;padding:18px 24px;margin-top:10px}
+.v2-pret .script{font-size:44px;margin:0;color:#f6dfd6;line-height:1}
+.v2-pret-ico{width:60px;height:60px;color:#f0c9bd;display:inline-flex}.v2-pret-ico svg{width:100%;height:100%}
+
+/* petit pied de page */
+.pied-mini{background:#fbf2ec;border-top:1px solid #ead8cd;padding:12px 20px 10px;font-size:12.5px;color:var(--noel)}
+.pm-haut{max-width:1240px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 22px}
+.pm-logo img{height:44px;width:auto}
+.pm-i{display:inline-flex;align-items:center;gap:6px;color:var(--noel);text-decoration:none;font-weight:700;font-size:13px}
+.pm-i i{width:16px;height:16px;display:inline-flex}.pm-i i svg{width:100%;height:100%}
+.pied-mini .reseaux{display:flex;gap:8px}
+.pied-mini .reseaux a{width:26px;height:26px;border-radius:6px;background:var(--noel);color:#fff;display:inline-flex;align-items:center;justify-content:center}
+.pied-mini .reseaux svg,.pied-mini .reseaux img{width:15px;height:15px}
+.pm-bas{max-width:1240px;margin:8px auto 0;display:flex;flex-wrap:wrap;justify-content:center;gap:3px 0;font-size:11.5px;color:var(--gris)}
+.pm-bas a,.pm-bas span{padding:0 10px;border-left:1px solid #d9c2b6;line-height:1.3}.pm-bas a:first-child{border-left:0}
+.pm-bas a{color:var(--noel);text-decoration:none}.pm-bas a:hover{text-decoration:underline}
+
+@media (max-width:980px){
+  .v2-hero h1{font-size:50px}.v2-hero-texte{padding-left:36px}
+  .v2-noel{grid-template-columns:minmax(180px,34%) minmax(0,1fr)}.v2-noel-droite{grid-column:1/-1;border-left:0;border-top:1px solid rgba(255,255,255,.28);flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .v2-noel-droite ul{display:flex;gap:18px;flex-wrap:wrap}
+  .v2-icones{grid-template-columns:repeat(5,minmax(0,1fr))}.v2-icones li:nth-child(5n+1){border-left:0}
+}
+@media (max-width:720px){
+  .v2-titre{font-size:34px;text-wrap:balance}
+  .v2-hero{grid-template-columns:1fr;min-height:0}
+  .v2-hero-photo{order:-1;min-height:0;height:190px}
+  .v2-hero-photo img{-webkit-mask-image:linear-gradient(180deg,#000 70%,transparent);mask-image:linear-gradient(180deg,#000 70%,transparent);object-position:70% 40%}
+  .v2-hero-texte{padding:2px 22px 18px;text-align:center}
+  .v2-hero h1{font-size:40px}.v2-hero h1 .script{max-width:none}.v2-hero p{font-size:16px;margin-left:auto;margin-right:auto}
+  .v2-boutons{justify-content:center}
+  .v2-feuille{display:none}
+  .v2-noel{grid-template-columns:1fr;width:calc(100% - 24px)}
+  .v2-noel>img{height:150px;min-height:0;-webkit-mask-image:linear-gradient(180deg,#000 75%,transparent);mask-image:linear-gradient(180deg,#000 75%,transparent)}
+  .v2-noel h2{font-size:44px}.v2-noel-centre{padding:6px 12px 8px}
+  .v2-noel-droite{padding:12px 16px 18px;justify-content:center}.v2-noel-droite ul{justify-content:center}
+  .v2-souvenirs{grid-template-columns:1fr;gap:12px;padding:20px 20px 8px;text-align:center}.v2-souvenirs h2{font-size:42px}.v2-souvenirs p{font-size:15.5px;margin-left:auto;margin-right:auto}
+  .v2-icones b{font-size:12px;letter-spacing:-.02em;overflow-wrap:anywhere;hyphens:auto}.v2-icones small{display:none}.v2-icones i{width:34px;height:34px}.v2-icones a{padding:8px 2px}
+  .v2-boutique{grid-template-columns:1fr;gap:14px;padding:16px 18px}.v2-bout-texte{justify-content:center;text-align:left}.v2-boutique h2{font-size:38px}
+  .v2-prods{gap:8px}.v2-prod span{font-size:12px}
+  .v2-retours{padding:12px 16px 8px}.v2-tems{grid-template-columns:1fr;gap:10px}
+  .v2-pret{flex-direction:column;gap:8px;padding:20px 16px;text-align:center}.v2-pret .script{font-size:36px}.v2-pret-ico{width:44px;height:44px}
+  .pm-bas a,.pm-bas span{padding:0 7px}
+}

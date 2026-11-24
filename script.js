@@ -88,7 +88,7 @@
   function rang(el) {
     var scene = el.querySelector('.rp-scene'), cards = Array.prototype.slice.call(scene.querySelectorAll('.rp-c')), n = cards.length;
     var pts = el.querySelector('.rp-points'), a = 0, W = 0, cw = 0, ch = 0, VIS = 3, X = [], S = [1, .86, .75, .66, .6], prev = [];
-    var NP = Math.min(7, n), dots = [];
+    var NP = Math.min(Number(el.getAttribute('data-points')) || 7, n), dots = [];
     for (var j = 0; j < NP; j++) (function (j) {
       var b = document.createElement('button'); b.type = 'button';
       b.setAttribute('aria-label', 'Aller aux photos ' + (Math.floor(j * n / NP) + 1) + ' à ' + Math.floor((j + 1) * n / NP));
