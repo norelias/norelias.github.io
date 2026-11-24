@@ -1126,3 +1126,17 @@ body.accueil-v2{background:linear-gradient(180deg,#fbf2ec 0,#f7e9e1 40%,#f9efe8 
 .v2-souvenirs img.v2-coeur-ligne{width:clamp(80px,10vw,130px)!important}
 .v2-hero-texte{padding-left:max(90px,9.2vw)!important}
 .v2-souvenirs{align-items:center}
+
+/* ===== grands écrans : proportions de la maquette, contenu centré ===== */
+.accueil-v2 .logo img{mix-blend-mode:normal}
+@media (min-width:1300px){
+  .v2-hero{max-width:1360px;margin-left:auto;margin-right:auto;min-height:330px}
+  .v2-noel{max-width:1300px;min-height:190px}
+  .v2-souvenirs{max-width:1360px;margin-left:auto;margin-right:auto}
+  .v2-univers,.v2-portfolio,.v2-boutique,.v2-retours{padding-left:max(30px,calc((100vw - 1300px)/2));padding-right:max(30px,calc((100vw - 1300px)/2))}
+  .pied-mini{padding-left:max(24px,calc((100vw - 1300px)/2));padding-right:max(24px,calc((100vw - 1300px)/2))}
+  .v2-pret{padding-left:calc((100vw - 1300px)/2);padding-right:calc((100vw - 1300px)/2)}
+  .v2-hero h1{font-size:68px}.v2-noel h2,.v2-noel h2 .script{font-size:64px}
+  .v2-souvenirs h2,.v2-souvenirs h2 .script{font-size:58px}.v2-titre{font-size:54px}
+}
+.v2-hero{background:transparent!important}.v2-hero-photo img{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 30%),linear-gradient(270deg,transparent 0,#000 6%);-webkit-mask-composite:source-in;mask-composite:intersect}
