@@ -675,7 +675,14 @@
     if (v.miroir) { c.translate(W, 0); c.scale(-1, 1); }
     c.drawImage(vb.img, 0, 0);
     c.restore();
-    if (!im || v.verso) return;
+    if (v.verso) {
+      if (b.flat && txt.t && txt.pos === 'derriere') {
+        var gp = b.flat, vx0 = 1e9, vy0 = 1e9, vx1 = 0, vy1 = 0; gp.forEach(function (q) { vx0 = Math.min(vx0, q[0]); vy0 = Math.min(vy0, q[1]); vx1 = Math.max(vx1, q[0]); vy1 = Math.max(vy1, q[1]); });
+        c.save(); vueT(); ecrire(c, (vx0 + vx1) / 2, ty(vy0, vy1 - vy0, 38), (vx1 - vx0) * .8); c.restore();
+      }
+      return;
+    }
+    if (!im) return;
     c.save(); vueT();
     if (vb.zone) {
       var z = vb.zone.poly ? { x: vb.zone.x, y: vb.zone.y, w: vb.zone.w, h: vb.zone.h + vb.zone.w * .07, r: 0, multiplier: 1, poly: vb.zone.poly } : vb.zone, zx = v.miroir ? W - z.x - z.w : z.x, m = v.miroir ? -1 : 1;
@@ -699,7 +706,7 @@
     } else if (b.flat) {
       var fp = b.flat, bx0 = 1e9, by0 = 1e9, bx1 = 0, by1 = 0; fp.forEach(function (q) { bx0 = Math.min(bx0, q[0]); by0 = Math.min(by0, q[1]); bx1 = Math.max(bx1, q[0]); by1 = Math.max(by1, q[1]); });
       c.save(); c.beginPath(); fp.forEach(function (q, i) { if (i) c.lineTo(q[0], q[1]); else c.moveTo(q[0], q[1]); }); c.closePath(); c.clip();
-      cover(c, im, bx0, by0, bx1 - bx0, by1 - by0); if (txt.t) ecrire(c, (bx0 + bx1) / 2, ty(by0, by1 - by0, 38), (bx1 - bx0) * .8);
+      cover(c, im, bx0, by0, bx1 - bx0, by1 - by0); if (txt.t && txt.pos !== 'derriere') ecrire(c, (bx0 + bx1) / 2, ty(by0, by1 - by0, 38), (bx1 - bx0) * .8);
       c.globalCompositeOperation = 'multiply'; c.drawImage(vb.img, 0, 0); c.globalCompositeOperation = 'source-over'; c.restore();
     } else if (b.rond) {
       var q = b.rond; c.save(); c.beginPath(); c.arc(q.x, q.y, q.r, 0, 7); c.clip(); cover(c, im, q.x - q.r, q.y - q.r, q.r * 2, q.r * 2); ecrire(c, q.x, ty(q.y - q.r, q.r * 2, 30), q.r * 1.45);
@@ -752,11 +759,11 @@
   /* ---- texte : police, couleur, devant / derrière ---- */
   var tIn = $('pp-texte'), tOpts = $('pp-texte-opts');
   function chargerPolice() { if (document.fonts && document.fonts.load) document.fonts.load('40px "' + txt.police + '"').then(function () { maj(); }); }
-  tIn.addEventListener('input', function () { txt.t = this.value; $('pp-compte').textContent = this.value.length + ' / 50'; tOpts.hidden = !this.value.trim(); chargerPolice(); maj(); });
+  tIn.addEventListener('input', function () { txt.t = this.value; $('pp-compte').textContent = this.value.length + ' / 50'; tOpts.hidden = !this.value.trim(); chargerPolice(); if (CODE === 'portecles' && this.value.trim()) vue = txt.pos === 'derriere' ? 1 : 0; maj(); });
   Array.prototype.forEach.call(f.querySelectorAll('[data-police]'), function (b) { b.addEventListener('click', function () { txt.police = b.getAttribute('data-police'); Array.prototype.forEach.call(f.querySelectorAll('[data-police]'), function (x) { x.classList.toggle('on', x === b); }); chargerPolice(); maj(); }); });
   Array.prototype.forEach.call(f.querySelectorAll('[data-couleur]'), function (b) { b.addEventListener('click', function () { txt.couleur = b.getAttribute('data-couleur'); Array.prototype.forEach.call(f.querySelectorAll('[data-couleur]'), function (x) { x.classList.toggle('on', x === b); }); maj(); }); });
   Array.prototype.forEach.call(f.querySelectorAll('input[name=placement]'), function (r) { r.addEventListener('change', function () { txt.place = r.value; maj(); }); });
-  Array.prototype.forEach.call(f.querySelectorAll('input[name=position]'), function (r) { r.addEventListener('change', function () { txt.pos = r.value; if (CODE === 'tasse' || CODE === 'isotherme') { var bb = BASES[cleBase(variante())], k0 = 0; if (r.value === 'derriere' && bb) bb.vues.forEach(function (q, j) { if (q.dos && !k0) k0 = j; }); vue = r.value === 'derriere' ? k0 : 0; } maj(); }); });
+  Array.prototype.forEach.call(f.querySelectorAll('input[name=position]'), function (r) { r.addEventListener('change', function () { txt.pos = r.value; if (CODE === 'portecles') { vue = r.value === 'derriere' ? 1 : 0; if (r.value === 'derriere' && txt.couleur === '#ffffff') { var sw = f.querySelectorAll('[data-couleur]')[1]; if (sw) sw.click(); } } if (CODE === 'tasse' || CODE === 'isotherme') { var bb = BASES[cleBase(variante())], k0 = 0; if (r.value === 'derriere' && bb) bb.vues.forEach(function (q, j) { if (q.dos && !k0) k0 = j; }); vue = r.value === 'derriere' ? k0 : 0; } maj(); }); });
   Array.prototype.forEach.call(f.querySelectorAll('[data-couleur]'), function (b) { if (b.getAttribute('data-couleur') === txt.couleur) b.classList.add('on'); });
 
   /* ---- cadrage de la photo : zoom et déplacement ---- */
