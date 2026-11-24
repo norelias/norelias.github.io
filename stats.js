@@ -7,6 +7,7 @@
   if (/[?&]stats=off/.test(q)) ecrire("norelias_moi", "1");
   if (/[?&]stats=on/.test(q)) { try { localStorage.removeItem("norelias_moi"); } catch (e) {} }
   if (lire("norelias_moi") === "1") return;
+  if (navigator.webdriver || /bot|crawl|spider|slurp|headless|preview|lighthouse|pingdom|monitor/i.test(navigator.userAgent || "")) return;
   if (/^(localhost|127\.)/.test(location.hostname) || location.protocol === "file:") return;
   function id() { var a = new Uint8Array(12); (window.crypto || {}).getRandomValues ? crypto.getRandomValues(a) : a.forEach(function (_, i) { a[i] = Math.random() * 256; }); return Array.prototype.map.call(a, function (x) { return ("0" + x.toString(16)).slice(-2); }).join(""); }
   var vid = lire("norelias_vid") || id(); ecrire("norelias_vid", vid);
