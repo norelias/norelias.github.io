@@ -9,8 +9,8 @@ button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer;font-fami
 /* Header: real links/text, not a baked screenshot */
 .masthead{height:66px;display:flex;align-items:center;gap:18px;padding:0 22px 0 49px;background:#fbf4ee;border-bottom:1px solid #eddad1;position:relative;z-index:10}
 .brand{width:267px;flex:0 0 267px}.brand img{width:252px;height:61px;object-fit:contain;mix-blend-mode:multiply}
-.mainnav{border-left:1px solid #a68278;display:flex;align-items:center;gap:7px;padding-left:20px;white-space:nowrap;flex:1 1 auto}
-.mainnav a{font:15px/1.1 'Times New Roman',Times,serif;padding:9px 10px;white-space:nowrap}.mainnav .current{background:#6c1d27;color:white;border-radius:19px;box-shadow:0 2px 5px #64222b33;padding:8px 16px}.mainnav .down{font-size:11px}
+.mainnav{border-left:1px solid #a68278;display:flex;align-items:center;gap:4px;padding-left:16px;white-space:nowrap;flex:1 1 auto}
+.mainnav a{font:15px/1.1 'Times New Roman',Times,serif;padding:9px 6px;white-space:nowrap}.mainnav .current{background:#6c1d27;color:white;border-radius:19px;box-shadow:0 2px 5px #64222b33;padding:8px 14px}.mainnav .down{font-size:11px}
 .btn{border:0;display:inline-flex;align-items:center;justify-content:center;gap:9px;white-space:nowrap;font:15px/1.1 'Times New Roman',Times,serif;transition:filter .2s,transform .2s,box-shadow .2s}
 .btn:focus-visible,.gallery-arrow:focus-visible,.gallery-tiles button:focus-visible,.mainnav a:focus-visible{outline:3px solid #e2a963;outline-offset:2px}.btn:hover,.gallery-arrow:hover{filter:brightness(1.08);transform:translateY(-1px)}
 .btn-primary,.btn-nav{background:linear-gradient(#872d38,#651722);color:#fff7ee;box-shadow:0 4px 8px #54202b30;border-radius:25px}
@@ -156,9 +156,9 @@ button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer;font-fami
 @media(min-width:761px){
  .masthead{padding-left:45px;gap:7px}
  .brand{width:260px;flex-basis:260px}
- .mainnav{padding-left:16px;gap:2px;min-width:0}
- .mainnav a{font-size:14px;padding:8px 7px}
- .mainnav .current{padding:8px 13px}
+ .mainnav{padding-left:16px;gap:1px;min-width:0}
+ .mainnav a{font-size:14px;padding:8px 4px}
+ .mainnav .current{padding:8px 11px}
  .btn-nav{flex-basis:187px;min-width:187px;margin-left:auto}
  .decor-heart-hero{position:absolute;left:348px;top:57px}
  .christmas h2{transform:scaleX(.88);transform-origin:center center}
@@ -255,3 +255,4 @@ body{font-size-adjust:.46}
  .service-item svg{width:15px;height:15px}.service-item .sname{font-size:7.6px;line-height:8px;margin-top:1px}.service-item small{font-size:5px;line-height:5.6px;margin-top:0}
  .service-item{padding:0 0 1px}.service-item:after{top:2px;bottom:2px}
 }
+@media(min-width:761px) and (max-width:940px){.mainnav{padding-left:8px}.mainnav a{font-size:12px;padding:7px 4px}.mainnav .current{padding:7px 9px}.btn-nav{display:none}}
