@@ -8,7 +8,7 @@
  // Cards are dynamically assembled from separate <img> elements.
  // Desktop shows five overlapping photos, mobile shows a center and two partial glimpses.
  function render(){if(!stage)return;stage.textContent='';let mobile=window.innerWidth<=760;
-  const specs=mobile?[{x:-173,y:26,w:125,h:119,rot:-4,z:1},{x:-137,y:17,w:117,h:135,rot:-2,z:2},{x:-112,y:2,w:224,h:158,rot:0,z:4},{x:52,y:17,w:117,h:135,rot:3,z:2},{x:105,y:26,w:125,h:119,rot:4,z:1}]:sizesDesktop;
+  const specs=mobile?[{x:-160,y:6,w:68,h:52,rot:-4,z:1},{x:-108,y:3,w:68,h:56,rot:-2,z:2},{x:-46,y:0,w:92,h:60,rot:0,z:4},{x:40,y:3,w:68,h:56,rot:3,z:3},{x:92,y:6,w:68,h:52,rot:4,z:1}]:sizesDesktop;
   specs.forEach((spec,j)=>{const offset=j-2,index=(cursor+offset+photos.length)%photos.length;const p=photos[index];const b=document.createElement('button');b.type='button';b.className='photo-card'+(j===2?' center':'');b.setAttribute('aria-label',(j===2?'Agrandir ':'Afficher ')+p.alt);b.style.cssText=`width:${spec.w}px;height:${spec.h}px;left:calc(50% + ${spec.x}px);top:${spec.y}px;z-index:${spec.z};transform:rotate(${spec.rot}deg);`;const img=document.createElement('img');img.src=p.src;img.alt=p.alt;img.decoding='async';b.append(img);b.addEventListener('click',()=>{if(offset){cursor=index;render()}else openModal(index)});stage.append(b)});
   if(dots){dots.textContent='';for(let j=0;j<5;j++){const b=document.createElement('button');b.type='button';if(j===(cursor-2+5)%5)b.className='active';b.setAttribute('aria-label','Aller à la photo '+(j+1));b.addEventListener('click',()=>{cursor=j;render()});dots.append(b)}}
  }
