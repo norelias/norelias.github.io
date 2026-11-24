@@ -202,6 +202,7 @@ main{background:var(--creme)}
 .speciale .montant small{font-size:calc(13 * var(--u))}
 .speciale p{margin:calc(3 * var(--u)) 0 0;font-size:calc(11.5 * var(--u));color:#5b4740;line-height:1.35}
 .extras{display:grid;grid-template-columns:1fr 1fr;gap:calc(15 * var(--u));margin-top:calc(10 * var(--u))}
+.extras-haut{grid-template-columns:1fr;margin:0 0 calc(22 * var(--u))}
 .extra{border-radius:calc(12 * var(--u));padding:0 calc(16 * var(--u)) 0 0;overflow:hidden;display:flex;align-items:center;gap:calc(12 * var(--u));text-decoration:none;min-height:calc(64 * var(--u));transition:transform .25s,box-shadow .25s;box-shadow:var(--ombre)}
 .extra>div:nth-child(2){flex:1}
 .photo-extra{align-self:stretch;width:calc(78 * var(--u));flex:none;background-size:cover;background-position:center}
