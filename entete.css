@@ -28,3 +28,4 @@
 .mob-masthead .panier-lien{grid-column:4;grid-row:1;margin:0;display:inline-flex;color:#3a2420}.mob-masthead .panier-lien svg{width:22px;height:22px}
 .mob .mob-nav{top:46px}
 }
+@media(max-width:760px){.mob-masthead .brand{position:static!important;height:42px!important;left:auto!important;top:auto!important;transform:none!important}.mob-masthead .brand img{object-position:50% 50%!important}}
