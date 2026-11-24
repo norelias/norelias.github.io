@@ -1,4 +1,9 @@
 /* Fichier généré à partir de style.src.css — ne pas modifier directement */
+@font-face{font-family:'Great Vibes';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/great-vibes-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/cormorant-garamond-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/cormorant-garamond-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/cormorant-garamond-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500;font-display:swap;src:url(fonts/cormorant-garamond-latin-500-italic.woff2) format('woff2')}
 /* Norélias Photography — feuille de style SOURCE.
    Les mesures en « u » suivent la maquette (calc(1 * var(--u)) = 1 pixel de la maquette de 728 px de large).
    Après modification, lancez : python3 outils/construire.py  (qui génère style.css) */
@@ -1044,3 +1049,57 @@ body.accueil-v2{background:linear-gradient(180deg,#fbf2ec 0,#f7e9e1 40%,#f9efe8 
   .v2-souvenirs img{width:100%;max-width:none}
   .v2-icones{grid-template-columns:repeat(5,1fr)}
 }
+
+/* ===== Accueil : typographie et décors identiques à la maquette ===== */
+.accueil-v2 main,.accueil-v2 .entete,.accueil-v2 .pied-mini{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;color:#3a2420}
+.accueil-v2 .menu>li>a{font-size:17px;font-weight:600;padding:6px 13px}
+.accueil-v2 .menu>li>a[aria-current=page]{background:#7a2a33}
+.accueil-v2 .logo img{height:64px;mix-blend-mode:multiply}
+.accueil-v2 .script,.accueil-v2 h1,.accueil-v2 h2{font-family:'Great Vibes','Pinyon Script',cursive;font-weight:400;color:#6b2a2f;letter-spacing:0}
+.v2-titre{font-size:clamp(40px,4vw,56px)}
+.v2-titre::before,.v2-titre::after{flex:0 1 190px;background:linear-gradient(90deg,transparent,#b08a7c)}
+.accueil-v2 .coeur{color:#8a3a40}
+/* bannière : photo pleine largeur, texte par-dessus */
+.v2-hero{display:block;min-height:clamp(300px,24vw,370px)}
+.v2-hero-photo{position:absolute;inset:0}
+.v2-hero-photo img{object-position:75% 40%;-webkit-mask-image:none;mask-image:none}
+.v2-hero::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,#faf0ea 0,rgba(250,240,234,.92) 28%,rgba(250,240,234,0) 58%)}
+.v2-hero-texte{position:relative;z-index:2;max-width:640px;padding:30px 20px 30px max(46px,5.5vw)}
+.v2-hero h1{font-size:clamp(54px,5.2vw,76px);line-height:1.02;margin:0 0 12px;color:#6b2a2f}
+.v2-hero h1 .script{font-size:1em;color:#6b2a2f}
+.v2-hero p{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,1.55vw,22px);font-weight:600;color:#3a2420;line-height:1.35;max-width:460px}
+.accueil-v2 .bouton{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:19px;height:auto}
+.v2-boutons .bouton{font-size:19px;padding:11px 26px}
+.accueil-v2 .v2-boutique .bouton{background:linear-gradient(180deg,#7d2d36,#62232b);color:#fff;border-radius:32px;padding:11px 30px;font-size:19px;box-shadow:0 3px 8px rgba(98,35,43,.3)}
+.accueil-v2 .bouton.beige{background:linear-gradient(180deg,#ecd0c3,#dcb7a7);color:#3a2420;border-radius:30px;padding:10px 28px;border:1px solid #d1ad9e}
+.accueil-v2 .bouton.blanc{background:#fff6f2;color:#5c1f27;border-radius:34px;font-size:20px;padding:12px 30px}
+/* Noël */
+.v2-noel{background:linear-gradient(90deg,#7a2630,#5e1a24);color:#fbeee8}
+.v2-noel h2,.v2-noel h2 .script{color:#fdf1ec;font-size:clamp(50px,4.6vw,68px)}
+.v2-noel-sous{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,1.8vw,26px);color:#f6dfd6;font-weight:500}
+.v2-noel-petit{font-size:16px;color:#e9c9be}
+.v2-noel-droite li{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600}
+.v2-noel-droite strong{font-size:24px}
+/* souvenirs */
+.v2-souvenirs h2,.v2-souvenirs h2 .script{font-size:clamp(46px,4.4vw,64px);color:#6b2a2f}
+.v2-souvenirs p{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,1.5vw,21px);font-weight:600;line-height:1.35;color:#3a2420;max-width:520px;margin:6px 0 14px}
+.v2-boutique h2,.v2-boutique h2 .script{font-size:clamp(42px,3.6vw,54px);color:#6b2a2f}
+.v2-boutique p{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;line-height:1.3}
+.v2-icones b{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700}
+.v2-icones small{font-family:'Cormorant Garamond',serif;font-size:13.5px;font-weight:600;color:#4a3630}
+.v2-aussi,.v2-lien-port a{font-family:'Cormorant Garamond',serif;font-size:16px}
+.v2-prod span{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700}
+.v2-tem blockquote{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;line-height:1.28;color:#3a2420}
+.v2-tem figcaption{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600}
+.v2-tem .etoiles{color:#6b1f2a}
+.v2-pret p,.v2-pret p.script{font-family:'Great Vibes',cursive;color:#fbeee8;font-size:clamp(38px,3.6vw,52px)}
+.pied-mini,.pied-mini a,.pm-i{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:16px;color:#3a2420}
+.pm-bas a,.pm-bas span{font-size:15px}
+@media (max-width:720px){
+  .v2-hero::before{background:linear-gradient(180deg,rgba(250,240,234,0) 0,#faf0ea 100%)}
+  .v2-hero{display:flex;flex-direction:column}.v2-hero-photo{position:relative;height:210px;inset:auto}
+  .v2-hero-photo img{object-position:70% 30%}.v2-hero::before{display:none}
+  .v2-titre{font-size:36px}
+}
+@media (min-width:721px){.v2-hero{min-height:clamp(330px,29vw,430px)}.v2-hero-photo img{object-position:80% 72%}}
+@media (max-width:720px){.v2-hero-photo{width:100%;align-self:stretch}.v2-hero-photo img{width:100%}.v2-hero-texte{max-width:none}}
