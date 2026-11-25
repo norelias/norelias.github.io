@@ -2,7 +2,7 @@
 @font-face{font-family:Allura;src:url('fonts/allura-latin-400-normal.woff2') format('woff2');font-display:swap}
 @font-face{font-family:GreatVibes;src:url('fonts/great-vibes-latin-400-normal.woff2') format('woff2');font-display:swap}
 @font-face{font-family:Cormorant;src:url('fonts/cormorant-garamond-latin-500-normal.woff2') format('woff2');font-display:swap}
-:root{--deep:#4e3128;--wine:#4e3128;--cream:#f7ede4;--ink:#291514;--taupe:#c8a49a;--light:#f7ede4}
+:root{--deep:#4e3128;--wine:#4e3128;--cream:#f7ede4;--ink:#4e3128;--taupe:#c8a49a;--light:#f7ede4}
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth}body{margin:0;background:#f7ede4;color:var(--ink);font-family:CG,'Times New Roman',Times,serif;-webkit-font-smoothing:antialiased}
 button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer;font-family:inherit}a{color:inherit;text-decoration:none}img{display:block;max-width:100%}svg{width:1.25em;height:1.25em;flex:0 0 auto}.skip{position:absolute;left:-999px;top:0}.skip:focus{left:5px;top:5px;background:#fff;z-index:1000}.page{width:100%;max-width:1024px;margin:0 auto;background:var(--cream);overflow:hidden;box-shadow:0 0 30px #43251a0c}
@@ -17,7 +17,7 @@ button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer;font-fami
 .btn-nav{flex:0 0 187px;height:38px;font:13px 'Times New Roman',Times,serif;gap:7px}.btn-nav svg{width:19px;height:19px}
 .btn-secondary{color:#4e3128;border:1.4px solid #4f2228;border-radius:22px;background:#fff7efde}
 .btn-cream{color:#452127;background:linear-gradient(#fffcf6,#f9e4d7);border-radius:24px;box-shadow:0 3px 5px #2d0a1128}
-.btn-sand{color:#331918;background:linear-gradient(#edd4c5,#e3bfae);border-radius:26px;box-shadow:0 3px 7px #7e413120}
+.btn-sand{color:#4e3128;background:linear-gradient(#edd4c5,#e3bfae);border-radius:26px;box-shadow:0 3px 7px #7e413120}
 .next{font-family:Arial,sans-serif;font-size:21px;line-height:.6;margin-left:8px;font-weight:300}.burger{display:none}
 /* HERO y=66 to 300 */
 .hero{height:233px;position:relative;overflow:hidden;background:linear-gradient(90deg,#f7ede4 0%,#f7ede4 54%,#e5bb93)}
