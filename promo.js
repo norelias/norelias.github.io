@@ -6,9 +6,9 @@
   if (!/^\/(boutique\/?)?(index\.html)?$/.test(location.pathname)) return;
   var racine = (document.currentScript && document.currentScript.src) ? document.currentScript.src.replace(/promo\.js.*$/, '') : '/';
   var st = document.createElement('style');
-  st.textContent = '.bf-rond{position:fixed;right:14px;bottom:86px;z-index:60;width:78px;height:78px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;color:#f6e7dc;background:linear-gradient(160deg,#7b5a4c,#4f372e);border:2px solid #ecc478;box-shadow:0 4px 14px rgba(43,29,24,.35);font-family:Georgia,"Times New Roman",serif;line-height:1;text-align:center;transition:transform .2s}' +
+  st.textContent = '.bf-rond{position:fixed;right:14px;top:78px;z-index:60;width:78px;height:78px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;color:#f6e7dc;background:linear-gradient(160deg,#9a2434,#6a1624);border:2px solid #ecc478;box-shadow:0 4px 14px rgba(60,15,22,.4);font-family:Georgia,"Times New Roman",serif;line-height:1;text-align:center;transition:transform .2s}' +
     '.bf-rond:hover{transform:scale(1.06)}.bf-rond b{font-size:22px;font-weight:700;letter-spacing:-.5px}.bf-rond span{font-size:9.5px;letter-spacing:.6px;text-transform:uppercase;margin-top:3px;color:#ecc478}' +
-    '@media(max-width:600px){.bf-rond{width:64px;height:64px;right:10px;bottom:76px}.bf-rond b{font-size:18px}.bf-rond span{font-size:8px}}';
+    '@media(max-width:600px){.bf-rond{width:64px;height:64px;right:8px;top:56px}.bf-rond b{font-size:18px}.bf-rond span{font-size:8px}}';
   document.head.appendChild(st);
   var a = document.createElement('a');
   a.className = 'bf-rond'; a.href = racine + 'reservation/';

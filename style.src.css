@@ -5,7 +5,7 @@
   --u:clamp(1px, calc(100vw / 728), 1.1px);
   --creme:#f7ece6; --creme-2:#fbf4ef; --blanc:#fffaf7;
   --brun:#2b1d18; --brun-2:#4a3630; --gris:#6f5a52;
-  --rose-fonce:#8a4f48; --noel:#5c2f2b; --noel-rouge:#6b7a5e; --or:#ecc478; --signature:#8c6450;
+  --rose-fonce:#8a4f48; --noel:#5c2f2b; --noel-rouge:#8c1c26; --or:#ecc478; --signature:#8c6450;
   --ombre:0 3u 10u rgba(58,42,36,.16);
 }
 *{box-sizing:border-box}
