@@ -10,7 +10,7 @@
   st.textContent =
     '.bf-emb{position:absolute;left:66%;top:-1px;transform:translateX(-50%);z-index:3;display:block;height:232px;filter:drop-shadow(0 4px 10px rgba(80,30,20,.22))}' +
     '.bf-emb img{display:block;height:100%;width:auto}' +
-    '@media(max-width:760px){.bf-emb{left:66%;top:2px;height:124px}}';
+    '@media(max-width:760px){.bf-emb{left:65%;top:0;height:98px}}';
   document.head.appendChild(st);
   var a = document.createElement('a');
   a.className = 'bf-emb'; a.href = racine + 'reservation/';

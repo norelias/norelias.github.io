@@ -126,7 +126,7 @@ button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer;font-fami
  .hero{height:142px;display:block;position:relative;overflow:hidden;background:#f7ede4}
  .hero-photo{position:absolute;right:0;top:0;width:62%;height:142px;order:0}.hero-photo:after{display:block;background:linear-gradient(90deg,#f7ede4 0%,#fcf4edcc 14%,#fcf4ed00 42%)}.hero-photo img{object-position:70% 30%}
  .decor-hero{display:block;z-index:2;top:8px;left:-2px;width:34px;height:70px;opacity:.95}
- .hero-copy{position:absolute;z-index:3;left:0;top:0;width:68%;text-align:left;padding:5px 0 0 56px;margin:0;border:0;background:none;box-shadow:none;border-radius:0}
+ .hero-copy{position:absolute;z-index:3;left:0;top:0;width:68%;text-align:left;padding:5px 0 0 42px;margin:0;border:0;background:none;box-shadow:none;border-radius:0}
  .hero h1{font-size:25px;line-height:1;white-space:nowrap;margin:0 0 5px;margin-left:-0px;text-align:left}.hero h1 br{display:block}.decor-heart-hero{width:16px;height:16px;top:auto;left:auto;position:relative;display:inline-block;vertical-align:-2px}
  .hero p{font-size:9.2px;line-height:11.5px;margin:0 0 6px;max-width:150px;letter-spacing:-.1px}.hero p br{display:none}
  .hero-actions{display:flex;flex-direction:column;gap:4px;align-items:flex-start}.hero-actions .btn,.hero-actions .btn-primary,.hero-actions .btn-secondary{width:150px;min-height:21px;height:21px;font-size:9.5px;padding:0 8px;gap:4px}.hero-actions .btn svg{width:11px;height:11px}
