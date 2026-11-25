@@ -27,11 +27,11 @@
 .legacy .opage-largeur{max-width:calc(728 * var(--u));margin:0 auto}
 .legacy main{background:var(--creme)}
 .legacy .entete{box-shadow:0 2px 14px rgba(58,42,36,.08)}
-.legacy .bouton{display:inline-flex;align-items:center;justify-content:center;gap:calc(12 * var(--u));background:linear-gradient(180deg,#e1b2a4 0%,#cb9483 100%);color:#4e3128;font-family:'Nunito',sans-serif;font-weight:600;font-size:calc(14.5 * var(--u));text-decoration:none;padding:0 calc(22 * var(--u));height:calc(32 * var(--u));border-radius:calc(5 * var(--u));border:0;box-shadow:0 calc(2 * var(--u)) calc(6 * var(--u)) rgba(150,90,75,.3);cursor:pointer;transition:filter .2s}
+.legacy .bouton{display:inline-flex;align-items:center;justify-content:center;gap:calc(12 * var(--u));background:#4e3128;color:#f7ede4;font-family:'Nunito',sans-serif;font-weight:600;font-size:calc(14.5 * var(--u));text-decoration:none;padding:0 calc(22 * var(--u));height:calc(32 * var(--u));border-radius:calc(5 * var(--u));border:0;box-shadow:0 calc(2 * var(--u)) calc(6 * var(--u)) rgba(150,90,75,.3);cursor:pointer;transition:filter .2s}
 .legacy .bouton:hover{filter:brightness(1.06)}
 .legacy .bouton .fleche{font-size:1.25em;line-height:1;margin-top:calc(-2 * var(--u))}
 .legacy .bouton.blanc{background:#fff;color:var(--noel);border-radius:999px;box-shadow:none;height:calc(37 * var(--u));padding:0 calc(16 * var(--u));font-size:calc(12.5 * var(--u));font-weight:600}
-.legacy .bouton.contour{background:transparent;border:1.5px solid #cb9483;box-shadow:none}
+.legacy .bouton.contour{background:transparent;border:1.5px solid #4e3128;box-shadow:none}
 .legacy .bouton[disabled]{opacity:.45;cursor:not-allowed}
 .legacy .entete{position:sticky;top:0;z-index:50;background:#f7ede4}
 .legacy .entete .barre{max-width:calc(728 * var(--u));margin:0 auto;height:calc(80 * var(--u));display:flex;align-items:center;padding:0 calc(20 * var(--u));gap:calc(10 * var(--u))}
@@ -424,7 +424,7 @@
 .legacy .etapes li .num{font-size:13px}}
 .legacy .barre-reserver{display:none}
 @media (max-width:1024px){.legacy body.avec-barre{padding-bottom:64px}
-.legacy .barre-reserver{display:flex;align-items:center;justify-content:center;position:fixed;left:0;right:0;bottom:0;z-index:40;height:56px;background:linear-gradient(180deg,#e1b2a4 0%,#cb9483 100%);color:#4e3128;font-family:'Nunito',sans-serif;font-weight:700;font-size:16px;text-decoration:none;box-shadow:0 -3px 12px rgba(58,42,36,.28);padding-bottom:env(safe-area-inset-bottom)}}
+.legacy .barre-reserver{display:flex;align-items:center;justify-content:center;position:fixed;left:0;right:0;bottom:0;z-index:40;height:56px;background:#4e3128;color:#f7ede4;font-family:'Nunito',sans-serif;font-weight:700;font-size:16px;text-decoration:none;box-shadow:0 -3px 12px rgba(58,42,36,.28);padding-bottom:env(safe-area-inset-bottom)}}
 .legacy .temoignages{background:#f7ede4;padding:calc(30 * var(--u)) 0 calc(34 * var(--u))}
 .legacy .temoignages .interieur{max-width:calc(728 * var(--u));margin:0 auto;padding:0 calc(20 * var(--u))}
 .legacy .carrousel{position:relative;margin-top:calc(18 * var(--u));padding:0 calc(22 * var(--u))}
@@ -477,7 +477,7 @@
 .legacy .mt-cadeau:hover{transform:translateY(-3px);box-shadow:0 calc(6 * var(--u)) calc(14 * var(--u)) rgba(150,90,75,.22)}
 .legacy .mt-cadeau .prix{font-family:'Great Vibes',cursive;font-size:calc(44 * var(--u));line-height:1;color:#4e3128}
 .legacy .mt-cadeau .desc{font-size:calc(13 * var(--u));color:#4e3128}
-.legacy .mt-cadeau .choisir{margin-top:calc(8 * var(--u));display:inline-block;background:linear-gradient(180deg,#e1b2a4 0%,#cb9483 100%);color:#4e3128;font-weight:700;font-size:calc(12.5 * var(--u));padding:calc(7 * var(--u)) calc(14 * var(--u));border-radius:calc(5 * var(--u))}
+.legacy .mt-cadeau .choisir{margin-top:calc(8 * var(--u));display:inline-block;background:#4e3128;color:#f7ede4;font-weight:700;font-size:calc(12.5 * var(--u));padding:calc(7 * var(--u)) calc(14 * var(--u));border-radius:calc(5 * var(--u))}
 .legacy .autre-montant{text-align:center;margin-top:calc(16 * var(--u));font-size:calc(13.5 * var(--u));color:#4e3128}
 .legacy .autre-montant a{color:#4e3128;font-weight:700}
 .legacy .etapes-cadeau{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(14 * var(--u));max-width:calc(600 * var(--u));margin:calc(22 * var(--u)) auto 0}

@@ -36,11 +36,11 @@ main{background:var(--creme)}
 .entete{box-shadow:0 2px 14px rgba(58,42,36,.08)}
 
 /* Bouton rosé de la maquette */
-.bouton{display:inline-flex;align-items:center;justify-content:center;gap:calc(12 * var(--u));background:linear-gradient(180deg,#e1b2a4 0%,#cb9483 100%);color:#4e3128;font-family:'Nunito',sans-serif;font-weight:600;font-size:calc(14.5 * var(--u));text-decoration:none;padding:0 calc(22 * var(--u));height:calc(32 * var(--u));border-radius:calc(5 * var(--u));border:0;box-shadow:0 calc(2 * var(--u)) calc(6 * var(--u)) rgba(150,90,75,.3);cursor:pointer;transition:filter .2s}
+.bouton{display:inline-flex;align-items:center;justify-content:center;gap:calc(12 * var(--u));background:#4e3128;color:#f7ede4;font-family:'Nunito',sans-serif;font-weight:600;font-size:calc(14.5 * var(--u));text-decoration:none;padding:0 calc(22 * var(--u));height:calc(32 * var(--u));border-radius:calc(5 * var(--u));border:0;box-shadow:0 calc(2 * var(--u)) calc(6 * var(--u)) rgba(150,90,75,.3);cursor:pointer;transition:filter .2s}
 .bouton:hover{filter:brightness(1.06)}
 .bouton .fleche{font-size:1.25em;line-height:1;margin-top:calc(-2 * var(--u))}
 .bouton.blanc{background:#fff;color:var(--noel);border-radius:999px;box-shadow:none;height:calc(37 * var(--u));padding:0 calc(16 * var(--u));font-size:calc(12.5 * var(--u));font-weight:600}
-.bouton.contour{background:transparent;border:1.5px solid #cb9483;box-shadow:none}
+.bouton.contour{background:transparent;border:1.5px solid #4e3128;box-shadow:none}
 .bouton[disabled]{opacity:.45;cursor:not-allowed}
 
 /* En-tête */
@@ -499,7 +499,7 @@ main>.page:last-child{flex:1 0 auto}
 .barre-reserver{display:none}
 @media (max-width:1024px){
   body.avec-barre{padding-bottom:64px}
-  .barre-reserver{display:flex;align-items:center;justify-content:center;position:fixed;left:0;right:0;bottom:0;z-index:40;height:56px;background:linear-gradient(180deg,#e1b2a4 0%,#cb9483 100%);color:#4e3128;font-family:'Nunito',sans-serif;font-weight:700;font-size:16px;text-decoration:none;box-shadow:0 -3px 12px rgba(58,42,36,.28);padding-bottom:env(safe-area-inset-bottom)}
+  .barre-reserver{display:flex;align-items:center;justify-content:center;position:fixed;left:0;right:0;bottom:0;z-index:40;height:56px;background:#4e3128;color:#f7ede4;font-family:'Nunito',sans-serif;font-weight:700;font-size:16px;text-decoration:none;box-shadow:0 -3px 12px rgba(58,42,36,.28);padding-bottom:env(safe-area-inset-bottom)}
 }
 
 /* ---- Témoignages ---- */
@@ -540,7 +540,7 @@ main>.page:last-child{flex:1 0 auto}
 .mt-cadeau:hover{transform:translateY(-3px);box-shadow:0 calc(6 * var(--u)) calc(14 * var(--u)) rgba(150,90,75,.22)}
 .mt-cadeau .prix{font-family:'Great Vibes',cursive;font-size:calc(44 * var(--u));line-height:1;color:#4e3128}
 .mt-cadeau .desc{font-size:calc(13 * var(--u));color:#4e3128}
-.mt-cadeau .choisir{margin-top:calc(8 * var(--u));display:inline-block;background:linear-gradient(180deg,#e1b2a4 0%,#cb9483 100%);color:#4e3128;font-weight:700;font-size:calc(12.5 * var(--u));padding:calc(7 * var(--u)) calc(14 * var(--u));border-radius:calc(5 * var(--u))}
+.mt-cadeau .choisir{margin-top:calc(8 * var(--u));display:inline-block;background:#4e3128;color:#f7ede4;font-weight:700;font-size:calc(12.5 * var(--u));padding:calc(7 * var(--u)) calc(14 * var(--u));border-radius:calc(5 * var(--u))}
 .autre-montant{text-align:center;margin-top:calc(16 * var(--u));font-size:calc(13.5 * var(--u));color:#4e3128}
 .autre-montant a{color:#4e3128;font-weight:700}
 .etapes-cadeau{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(14 * var(--u));max-width:calc(600 * var(--u));margin:calc(22 * var(--u)) auto 0}
