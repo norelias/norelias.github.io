@@ -231,7 +231,7 @@ h1,h2,h3,p{margin:0;font-weight:400}
 .nb-carte.n1{left:36px}.nb-carte.n2{left:514px}
 .nb-carte h3{font:400 30px/1 Allura,cursive;color:#6c1d27;margin:0 0 5px}
 .nb-carte p{font:600 13.4px/16px 'Times New Roman',serif;margin:0 0 7px}
-.nb-carte .nb-btn{display:inline-block;background:#7a2433;color:#fff6ee;border-radius:20px;padding:7px 20px;font:700 14px 'Times New Roman',serif;text-decoration:none}
+.nb-carte .nb-btn{display:inline-block;background:#8c6450;color:#fff6ee;border-radius:20px;padding:7px 20px;font:700 14px 'Times New Roman',serif;text-decoration:none}
 .nb-mob{display:none}
 @media(max-width:760px){
  .nb-mob{display:block;background:#fcf4ed;padding:10px 12px 14px}

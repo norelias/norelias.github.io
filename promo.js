@@ -1,33 +1,19 @@
-/* Bandeau Black Friday : −30 % sur toutes les séances, du 24 au 30 novembre 2026 (heure de l'Atlantique). */
+/* Black Friday : −30 % sur toutes les séances, du 24 au 30 novembre 2026 (heure de l'Atlantique).
+   Annonce discrète : un petit rond sur l'accueil et sur la boutique. */
 (function () {
   var t = Date.now();
   if (t < Date.UTC(2026, 10, 24, 4, 0, 0) || t > Date.UTC(2026, 11, 1, 3, 59, 59)) return;
-  if (/\/(stats|confirmer|paiement|merci-personnel)\//.test(location.pathname)) return;
+  if (!/^\/(boutique\/?)?(index\.html)?$/.test(location.pathname)) return;
   var racine = (document.currentScript && document.currentScript.src) ? document.currentScript.src.replace(/promo\.js.*$/, '') : '/';
   var st = document.createElement('style');
-  st.textContent = '.bf-bandeau{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;background:linear-gradient(180deg,#7a2433,#5c1823);color:#fff;font:600 14px/1.3 Georgia,"Times New Roman",serif;text-align:center;padding:9px 12px;position:relative;z-index:50}' +
-    '.bf-bandeau b{color:#f6d9c8}.bf-bandeau a{color:#5c1823;background:#f6d9c8;border-radius:99px;padding:4px 12px;text-decoration:none;font-size:13px;white-space:nowrap}' +
-    '@media(max-width:480px){.bf-bandeau{font-size:12.5px;padding:7px 8px;gap:6px}}';
+  st.textContent = '.bf-rond{position:fixed;right:14px;bottom:86px;z-index:60;width:78px;height:78px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;color:#f6e7dc;background:linear-gradient(160deg,#7b5a4c,#4f372e);border:2px solid #ecc478;box-shadow:0 4px 14px rgba(43,29,24,.35);font-family:Georgia,"Times New Roman",serif;line-height:1;text-align:center;transition:transform .2s}' +
+    '.bf-rond:hover{transform:scale(1.06)}.bf-rond b{font-size:22px;font-weight:700;letter-spacing:-.5px}.bf-rond span{font-size:9.5px;letter-spacing:.6px;text-transform:uppercase;margin-top:3px;color:#ecc478}' +
+    '@media(max-width:600px){.bf-rond{width:64px;height:64px;right:10px;bottom:76px}.bf-rond b{font-size:18px}.bf-rond span{font-size:8px}}';
   document.head.appendChild(st);
-  var d = document.createElement('div');
-  d.className = 'bf-bandeau';
-  d.setAttribute('role', 'note');
-  d.innerHTML = '<span><b>Black Friday</b> · −30 % sur toutes les séances jusqu\'au 30 novembre</span><a href="' + racine + 'reservation/">Réserver</a>';
-  document.body.insertBefore(d, document.body.firstChild);
-
-  /* Accueil : grand bloc Black Friday sous la première section */
-  var hero = document.querySelector('main .hero');
-  if (hero && !document.querySelector('.bf-accueil')) {
-    var st2 = document.createElement('style');
-    st2.textContent = '.bf-accueil{margin:14px auto;max-width:1040px;width:calc(100% - 24px);box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap;text-align:center;background:linear-gradient(180deg,#7a2433,#5c1823);color:#fff;border-radius:18px;padding:18px 26px;box-shadow:0 4px 16px rgba(60,20,25,.25);font-family:Georgia,"Times New Roman",serif}' +
-      '.bf-accueil .gros{font-size:56px;line-height:1;font-weight:700;color:#f6d9c8;letter-spacing:-1px}' +
-      '.bf-accueil .txt{display:flex;flex-direction:column;gap:3px;align-items:center}.bf-accueil .txt b{font-size:24px;letter-spacing:.5px}.bf-accueil .txt span{font-size:16px;color:#f3e3dc}' +
-      '.bf-accueil a{background:#f6d9c8;color:#5c1823;border-radius:99px;padding:10px 22px;font:700 15px Georgia,serif;text-decoration:none;white-space:nowrap}' +
-      '@media(max-width:600px){.bf-accueil{gap:4px 12px;padding:8px 12px;border-radius:12px;margin:8px auto}.bf-accueil .gros{font-size:34px}.bf-accueil .txt b{font-size:15px}.bf-accueil .txt span{font-size:11.5px}.bf-accueil a{padding:6px 16px;font-size:13px}}';
-    document.head.appendChild(st2);
-    var b = document.createElement('section');
-    b.className = 'bf-accueil'; b.setAttribute('aria-label', 'Promotion Black Friday');
-    b.innerHTML = '<div class="gros">−30 %</div><div class="txt"><b>BLACK FRIDAY</b><span>sur toutes mes séances photo · du 24 au 30 novembre</span></div><a href="' + racine + 'reservation/">Réserver ma séance</a>';
-    hero.parentNode.insertBefore(b, hero.nextSibling);
-  }
+  var a = document.createElement('a');
+  a.className = 'bf-rond'; a.href = racine + 'reservation/';
+  a.setAttribute('aria-label', 'Black Friday : moins 30 % sur les séances photo, du 24 au 30 novembre');
+  a.title = 'Black Friday · −30 % sur les séances photo jusqu\'au 30 novembre';
+  a.innerHTML = '<b>−30 %</b><span>Black Friday</span>';
+  document.body.appendChild(a);
 })();

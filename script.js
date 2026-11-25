@@ -374,11 +374,11 @@
   function majCalcul() {
     var zone = document.getElementById('calcul-prix'); if (!zone) return;
     var cle = form.elements.forfait.value;
-    if (!cle || (!promoActive() && ((cle !== 'ecole' && cle !== 'bal') || !form.elements.personnes.value))) { zone.hidden = true; return; }
+    if (!cle || cle === 'personnalise') { zone.hidden = true; return; }
     if (cle === 'bal' && !form.elements.personnes.value) { zone.hidden = true; return; }
     var m = montants(cle);
     zone.hidden = false;
-    zone.textContent = 'Total : ' + argent(m.total) + (m.detail ? ' (' + m.detail + ')' : '') + ' · Acompte : ' + argent(m.acompte);
+    zone.textContent = (m.detail ? m.detail + ' · ' : '') + 'Sous-total ' + argent(m.sous) + ' + TVH (15 %) ' + argent(m.taxe) + ' = Total ' + argent(m.total) + ' · Acompte : ' + argent(m.acompte);
   }
   form.elements.personnes.addEventListener('input', majCalcul);
   form.elements.forfait.addEventListener('change', majCalcul);
@@ -387,12 +387,15 @@
   // Total et acompte réels (garderie / école : prix fixe de 300 $ par séance)
   // Black Friday : 30 % de rabais sur toutes les séances du 24 au 30 novembre 2026 (heure de l'Atlantique)
   function promoActive() { var t = Date.now(); return t >= Date.UTC(2026, 10, 24, 4, 0, 0) && t <= Date.UTC(2026, 11, 1, 3, 59, 59); }
+  // Taxes : séances photo = TVH 15 % (Nouveau-Brunswick), ajoutée au total et à l'acompte
+  var TAUX_TVH = 0.15;
   function montants(cle) {
     var b = montantsBase(cle);
-    if (!b || !promoActive() || b.total == null) return b;
-    var total = Math.round(b.total * 70) / 100;
-    var ac = cle === 'noel' ? total : Math.round(total * 50) / 100;
-    return { total: total, acompte: ac, detail: 'Black Friday −30 % : prix régulier ' + argent(b.total), promo: true };
+    if (!b || b.total == null) return b;
+    var sous = b.total, detail = b.detail, promo = false;
+    if (promoActive()) { sous = Math.round(b.total * 70) / 100; detail = 'Black Friday −30 % : prix régulier ' + argent(b.total); promo = true; }
+    var taxe = Math.round(sous * TAUX_TVH * 100) / 100, total = Math.round((sous + taxe) * 100) / 100;
+    return { sous: sous, taxe: taxe, total: total, acompte: cle === 'noel' ? total : Math.round(total * 50) / 100, detail: detail, promo: promo };
   }
   function montantsBase(cle) {
     var f = FORFAITS[cle];
@@ -461,7 +464,7 @@
     document.getElementById('recap-forfait').textContent = f.nom;
     document.getElementById('recap-date').textContent = form.elements.date.value + ' · ' + form.elements.heure.value;
     var m = montants(form.elements.forfait.value);
-    document.getElementById('recap-total').textContent = estPerso ? 'Sur demande' : argent(m.total) + (m.detail ? ' (' + m.detail + ')' : '');
+    document.getElementById('recap-total').textContent = estPerso ? 'Sur demande' : argent(m.total) + ' (' + (m.detail ? m.detail + ' · ' : '') + 'sous-total ' + argent(m.sous) + ' + TVH 15 % ' + argent(m.taxe) + ')';
     var acompte = document.getElementById('recap-acompte');
     acompte.textContent = estPerso ? argent(m.acompte) + ' (dépôt déduit du total)' : (form.elements.forfait.value === 'noel' ? argent(m.acompte) + ' (paiement complet)' : argent(m.acompte) + ' (50 %)');
     document.getElementById('zone-paiement').hidden = perso;
