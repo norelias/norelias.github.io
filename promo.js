@@ -23,7 +23,7 @@
     '.bf-emb .bf-date{display:inline-flex;align-items:center;gap:7px;margin-top:-16px;position:relative;background:linear-gradient(100deg,#842834,#641620);color:#fff3ea;border-radius:99px;padding:7px 18px;font:700 14px/1 Georgia,"Times New Roman",serif;white-space:nowrap;box-shadow:0 3px 8px rgba(60,15,22,.35)}' +
     '.bf-date svg{width:15px;height:15px}' +
     '@media(max-width:760px){.bf-emb{left:64%;width:104px;top:3px}.bf-rond{width:96px;height:96px;padding:0 11px}.bf-lau{top:9px;height:72px;width:20px}.bf-lau.g{left:4px}.bf-lau.d{right:4px}' +
-    '.bf-emb .bf-t1{font-size:23px}.bf-t2{font-size:29px}.bf-t3{font-size:8px}.bf-emb .bf-date{margin-top:-9px;padding:4px 8px;font-size:8px;gap:4px}.bf-date svg{width:9px;height:9px}}';
+    '.bf-emb .bf-t1{font-size:21px}.bf-emb .bf-t2{font-size:25px}.bf-emb .bf-t3{font-size:7.5px}.bf-emb .bf-date{margin-top:-9px;padding:4px 8px;font-size:8px;gap:4px}.bf-date svg{width:9px;height:9px}}';
   document.head.appendChild(st);
   var a = document.createElement('a');
   a.className = 'bf-emb'; a.href = racine + 'reservation/';
