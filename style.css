@@ -310,7 +310,7 @@ main{background:var(--creme)}
 .cal-grille button:hover{background:#ecc9bd}
 .cal-grille button[aria-pressed="true"]{background:var(--rose-fonce);color:#fff}
 .cal-aide{font-size:calc(12 * var(--u));color:var(--gris);margin:calc(6 * var(--u)) 0 0;text-align:center}
-.erreur-cal{color:#a3362b;font-size:calc(13.5 * var(--u));font-weight:700;margin:calc(-4 * var(--u)) 0 calc(10 * var(--u))}
+.erreur-cal{color:#4e3128;font-size:calc(13.5 * var(--u));font-weight:700;margin:calc(-4 * var(--u)) 0 calc(10 * var(--u))}
 .choix-portfolio{background:#f7ede4;border-radius:calc(8 * var(--u));padding:calc(8 * var(--u)) calc(12 * var(--u));margin:calc(4 * var(--u)) 0 calc(8 * var(--u))}
 .choix-portfolio p{margin:0 0 calc(2 * var(--u));font-size:calc(13.5 * var(--u));font-weight:700}
 .choix-portfolio .case{margin:calc(4 * var(--u)) 0;justify-content:flex-start!important;font-size:calc(13.5 * var(--u))}
@@ -567,7 +567,7 @@ main>.page:last-child{flex:1 0 auto}
 .recap-boutique{display:grid;grid-template-columns:1fr auto;gap:calc(4 * var(--u)) calc(12 * var(--u));margin:calc(6 * var(--u)) 0 calc(8 * var(--u));font-size:calc(14 * var(--u))}
 .recap-boutique dd,.recap-boutique dt{margin:0}
 .recap-boutique dd{text-align:right;font-weight:700}
-#b-alerte{color:#a3362b;font-weight:700}
+#b-alerte{color:#4e3128;font-weight:700}
 @media (max-width:1024px){.form-boutique{grid-template-columns:1fr}}
 .hero-boutique{position:relative;border-radius:calc(14 * var(--u));overflow:hidden;background:linear-gradient(90deg,#f7ede4 0%,#f7ede4 38%,rgba(247,236,230,0) 70%),var(--fond) center/cover;min-height:calc(260 * var(--u));display:flex;align-items:center;margin-bottom:calc(14 * var(--u))}
 .hero-txt{padding:calc(26 * var(--u)) calc(30 * var(--u));max-width:56%}

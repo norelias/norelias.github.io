@@ -301,7 +301,7 @@ main{background:var(--creme)}
 .cal-grille button:hover{background:#ecc9bd}
 .cal-grille button[aria-pressed="true"]{background:var(--rose-fonce);color:#fff}
 .cal-aide{font-size:12u;color:var(--gris);margin:6u 0 0;text-align:center}
-.erreur-cal{color:#a3362b;font-size:13.5u;font-weight:700;margin:-4u 0 10u}
+.erreur-cal{color:#4e3128;font-size:13.5u;font-weight:700;margin:-4u 0 10u}
 .choix-portfolio{background:#f7ede4;border-radius:8u;padding:8u 12u;margin:4u 0 8u}
 .choix-portfolio p{margin:0 0 2u;font-size:13.5u;font-weight:700}
 .choix-portfolio .case{margin:4u 0;justify-content:flex-start!important;font-size:13.5u}
