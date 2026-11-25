@@ -97,7 +97,7 @@ button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer;font-fami
 .review-card p{font:12.5px/14.7px 'Times New Roman',Times,serif;margin:1px 2px 5px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
 .stars{font:19px/20px 'Times New Roman',Times,serif;color:#4e3128;letter-spacing:1.3px}.review-name{font:13.5px/16px 'Times New Roman',Times,serif}
 /* CTA AND FOOTER y=1367 to 1536 */
-.last-cta{height:70px;display:flex;align-items:center;padding:0 76px 0 91px;gap:23px;background:#6f7f62;color:#f7ede4}
+.last-cta{height:70px;display:flex;align-items:center;padding:0 76px 0 91px;gap:23px;background:#4e3128;color:#f7ede4}
 .cta-camera svg{height:59px;width:70px;stroke-width:1.2}
 .last-cta h2{font:44px/1 Allura,cursive;margin:0;white-space:nowrap;flex:1}.last-cta h2 img{display:inline-block;height:30px;width:28px;object-fit:contain;vertical-align:middle;transform:translateY(-7px)}
 .last-cta .btn{height:42px;min-width:257px;font-size:15px}.last-cta svg{width:18px;height:18px}
