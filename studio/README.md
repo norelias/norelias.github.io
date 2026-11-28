@@ -21,13 +21,14 @@ Application de photographie professionnelle (Windows et macOS) — **projet en p
 | `norelias-account` | Compte **local** : mots de passe (Argon2id), TOTP, codes de récupération, sessions, limitation, téléphones E.164, adresses de 15 pays, inscription en 4 étapes |
 | `norelias-studio` | « Mon Studio », filigrane (texte, logo, ombre, contour, répétition), exportation PNG/JPEG avec ou sans filigrane, copyright séparé, modèles |
 | `norelias-assistant` | Assistant **à règles** : explique les outils réels, propose des corrections prévisualisables, applique après confirmation du moteur, annulable |
+| `norelias-server` | Logique **serveur** : vérification du courriel (code 6 chiffres, 10 min, renvoi 60 s), CAPTCHA côté serveur, file d'envoi, 13 modèles de courriel FR/EN, SPF/DKIM/DMARC, conditions et consentement marketing, récupération — **testée avec des doubles de fournisseurs** |
 | `norelias-cli` | Binaire `norelias` : preuve de bout en bout sur de vrais fichiers PNG/JPEG |
 
 ## Construire et tester
 
 ```bash
 cd studio
-cargo test --workspace          # 229 tests : unitaires, scénarios sur images, bout en bout (binaire réel)
+cargo test --workspace          # 285 tests : unitaires, scénarios sur images, bout en bout (binaire réel)
 cargo build --release
 ./target/release/norelias academy training ex_exposure sombre.png       # photo d'entraînement libre de droits
 ./target/release/norelias analyze sombre.png --lang fr                  # diagnostic expliqué
@@ -44,7 +45,7 @@ Prérequis : Rust ≥ 1.80 (testé avec 1.97). Aucune dépendance native, aucune
 
 ## Ce qui n'existe pas encore (extension comptes/assistant/filigrane)
 
-* **Service en ligne** : vérification du courriel, récupération par courriel, synchronisation → contrat spécifié (ARCHITECTURE.md §7), **non construit**.
+* **Envoi réel de courriels, CAPTCHA réel, SPF/DKIM/DMARC publiés, serveur HTTP déployé** : la logique est écrite et testée avec des doubles ; **rien de réel n'a été joint** (pas de serveur, de compte fournisseur, de clés ni d'accès au DNS). Ce qu'il faut décider ou fournir : ARCHITECTURE.md §9.3. La synchronisation reste prévue.
 * **Autocomplétion d'adresses réelle** : le mécanisme (consentement, remplissage, hors ligne, formats de 15 pays) est testé, mais **aucun fournisseur n'est intégré** ; il reste à en choisir un.
 * **Écrans** : inscription, connexion, récupération, configuration, Mon Studio, préférences, aide, Académie, filigranes → spécifiés d'après vos maquettes (DESIGN_SYSTEM.md §5), non construits.
 * **Vidéos pédagogiques** : aucune ; **logos SVG**, **signature tracée**, **langues es/de/it/pt**, **droite-à-gauche** (interface), **assistant en langage naturel libre** : prévus.

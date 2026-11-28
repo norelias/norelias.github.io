@@ -85,3 +85,21 @@ film fixe en bas · barre d'état (zoom, dimensions, profil, progression). Panne
 * **i18n** : aucun texte dans les composants, tout par clé du catalogue ; les écrans doivent supporter un texte 40 % plus long et un miroir **droite-à-gauche** (propriétés logiques CSS : `margin-inline`, `inset-inline`) ; formats via `norelias-i18n`.
 * **Accessibilité** : chaque commande a une infobulle accessible (étiquette ARIA), navigation clavier complète, contrastes du §1.
 * **Photo au centre** : les écrans de compte et d'apprentissage sont des feuilles/volets, jamais un tableau de bord qui remplace l'espace photo.
+
+### 5.5 Vérification du courriel, anti-robot et conditions (écrans à construire)
+
+**Placement dans le parcours de la maquette.** Les 4 étapes (Compte · Studio · Expérience · Préférences) sont conservées. La **dernière** étape se termine par un bloc « Finaliser » : cases **Conditions d'utilisation** et **Politique de confidentialité** (obligatoires, **décochées**, liens vers les textes versionnés), case **marketing** (séparée, facultative, **décochée**), puis la **vérification anti-robot** et le bouton « Créer mon compte ». Vient ensuite l'écran **Vérifiez votre courriel** (état, pas une cinquième étape).
+
+**Écran « Vérifiez votre courriel »**
+* Texte : « Nous avons envoyé un code à `j***@exemple.ca` » (adresse masquée), expiration affichée (10 min).
+* Saisie : 6 cases (ou un champ unique `autocomplete="one-time-code"`, `inputmode="numeric"`), **collage** accepté (espaces/tirets ignorés), saisie au clavier complète, focus automatique, validation à la 6ᵉ chiffre.
+* « Renvoyer le code » **désactivé avec compte à rebours de 60 s** (la valeur vient du serveur : `retry_after`), message de limite horaire si atteinte.
+* « Modifier l'adresse » : champ + nouveau code ; la 3ᵉ correction affiche la limite.
+* Erreurs traduites sous le champ avec icône et libellé, annoncées au lecteur d'écran (`aria-live="polite"`) : `code.wrong`, `code.expired`, `code.too_many_attempts` (→ « Demandez un nouveau code »), `email.undeliverable` (→ « Modifier l'adresse »).
+* Tant que non vérifié : **aucune** porte d'entrée vers le logiciel connecté ; message « Vérifiez votre adresse courriel pour activer votre compte ». Le mode local (sans compte) reste disponible.
+
+**Anti-robot** : le widget du fournisseur choisi s'affiche avant « Créer mon compte » ; **jamais** une case « Je ne suis pas un robot » seule (elle n'est qu'un libellé du widget réel). Accessibilité : widget navigable au clavier et compatible lecteur d'écran ; si le fournisseur ne charge pas (réseau, bloqueur, pays) → message `captcha.unavailable` avec **solution de secours** (réessayer, autre navigateur, écrire au soutien) ; échec fermé côté serveur. Même widget pour la récupération et pour les connexions suspectes (après 2 échecs).
+
+**Préférences → Confidentialité** : historique des acceptations (version, date), case marketing modifiable à tout moment (chaque changement daté), bannière « Nouvelles conditions à accepter » si la version change.
+
+**Courriels** (13 variantes, aperçus : `norelias mail preview <dossier>`) : même palette que l'application, colonne de 600 px qui se replie sur mobile, code en grands caractères espacés (accent champagne sur surface sombre), version texte, aucune image distante. Le logo en image est volontairement absent (à héberger en HTTPS si vous le souhaitez).

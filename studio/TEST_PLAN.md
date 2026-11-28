@@ -5,7 +5,7 @@ Lancer : `cargo test --workspace` (≈ 30 s, dont Argon2 à coût réduit) ; mes
 
 ## 1. Résultats actuels (Linux x86-64, Rust 1.97, 4 cœurs)
 
-**229 tests, 0 échec** ; 2 tests de performance (ignorés par défaut).
+**285 tests, 0 échec** ; 2 tests de performance (ignorés par défaut).
 
 | Suite | Tests | Ce qui est vérifié |
 |---|---|---|
@@ -18,6 +18,7 @@ Lancer : `cargo test --workspace` (≈ 30 s, dont Argon2 à coût réduit) ; mes
 | `norelias-i18n` | 16 | Parité FR/EN des clés et des paramètres, repli de langue, nombres/monnaies/dates par langue, années bissextiles, fuseaux, unités, taxes (composées, TTC→HT) |
 | `norelias-account` | 50 | Argon2id et chiffrement (altération détectée), **vecteurs RFC 6238**, limitation, sessions, mots de passe, courriels/URL, **téléphones E.164**, codes postaux de 15 pays, porte de consentement des adresses, inscription par étapes, compte (connexion, 2FA, récupération, export sans secret, permissions 0600, suppression) |
 | `norelias-studio` | 27 | Filigrane : rendu réel de texte Unicode et de logo transparent, positions, marges, opacité 0 = invisible, rotation, ombre/contour/répétition, portrait/paysage, aperçu fidèle ; export : **case décochée = octet pour octet identique**, double version, refus d'écraser sans écriture partielle, copyright séparé, JPEG + XMP, noms hostiles, lot |
+| `norelias-server` | 54 | Codes (uniformité, TTL, essais, renvoi, HMAC), conditions (versions, historique marketing), courriels (classification HTTP, requêtes Postmark/Resend, reprises, rebonds), CAPTCHA (3 fournisseurs, échec fermé), SPF/DKIM/DMARC, 13 modèles ; **20 parcours** : inscription→activation→connexion, pré-détournement, anti-énumération, changement d'adresse, récupération, 2FA, limites par IP, suppression, persistance, garde de production, traductions |
 | `norelias-assistant` | 9 | Intentions FR/EN, outils réels seulement, **aucune lecture de la photo sans permission**, aperçu, confirmation, application, annulation/rétablissement, no-op signalé, demande contredite par la mesure |
 
 Mesures réelles (24 Mpx, mono-thread) : voir ARCHITECTURE.md §5 et §8.
@@ -29,6 +30,15 @@ Mesures réelles (24 Mpx, mono-thread) : voir ARCHITECTURE.md §5 et §8.
 * **Linux uniquement.** Aucun test Windows/macOS.
 * **Aucune interface graphique** donc aucun test visuel ni d'accessibilité.
 * L'e2e utilise un dossier de données temporaire ; aucun test d'installation.
+
+## 2 ter. Limites propres à la vérification du courriel
+
+* **Aucun test n'a envoyé de courriel réel ni vérifié un vrai CAPTCHA** : les fournisseurs sont des doubles ; les JSON de réponse des CAPTCHA sont des exemples écrits d'après la documentation rappelée.
+* Aucun test dans de vrais clients de messagerie (Gmail, Outlook, Apple Mail), ni de délivrabilité, ni de mode sombre réel.
+* DNS : validation de **syntaxe** seulement ; aucune interrogation du DNS.
+* Pas de test de charge, de concurrence (état mono-processus) ni d'intrusion.
+
+**Tests d'acceptation à exécuter avec les vrais services** : ARCHITECTURE.md §9.4.
 
 ## 2 bis. Limites propres à l'extension
 
@@ -85,6 +95,20 @@ Mesures réelles (24 Mpx, mono-thread) : voir ARCHITECTURE.md §5 et §8.
 | N-H01…N-H07 | `privacy::tests`, `record::tests::export_contains_no_secrets`, `help::tests::state_persists…` |
 
 **À ajouter (extension)** : tests de bout en bout de l'interface d'inscription (clavier, lecteur d'écran, texte long, droite-à-gauche) ; test d'intrusion de la couche d'authentification ; test d'intégration avec le fournisseur d'adresses choisi (y compris hors connexion et quotas) ; test de charge du service en ligne ; audit d'accessibilité WCAG des 9 écrans ; revue juridique.
+
+## 4 ter. Plan de la vérification du courriel (couverture)
+
+| Exigences | Tests |
+|---|---|
+| V-01…V-06 | `code::tests` (6), `journeys::code_expiry_resend…`, `address_can_be_corrected…` |
+| V-07, V-08, V-12 | `journeys::full_journey…`, `pre_hijacking…`, `email_change…`, `password_recovery_journey`, `two_factor…` |
+| V-09, V-16 | `persisted_state…`, `nothing_simulated_in_production` |
+| V-10, V-11 | `mail::tests` (6), `delivery_failures_are_handled` |
+| V-13 | `dns::tests` (5), e2e `mail_templates_preview_and_dns_plan` |
+| V-14 | `templates::tests` (8), e2e `mail_templates_preview_and_dns_plan` |
+| V-17, V-18 | `captcha::tests` (5), `captcha_*`, `suspicious_logins…` |
+| V-19…V-21 | `terms::tests` (4), `acceptance_of_terms…`, `marketing_can_be_withdrawn…` |
+| V-22 | `every_error_key_has_a_translation…` |
 
 ## 5. À ajouter
 

@@ -11,6 +11,18 @@ Extension livrée (testée, v0.1) : compte local (Argon2id, TOTP, codes de récu
 téléphones E.164, inscription en 4 étapes (logique), catalogue i18n FR/EN, registre d'aide (12 fiches, 15 curseurs, exemples avant/après), assistant à règles,
 filigrane complet et exportation avec/sans filigrane.
 
+Vérification du courriel (testée avec des doubles) : cycle de vie des codes, activation obligatoire, CAPTCHA côté serveur, file d'envoi, 13 modèles FR/EN, SPF/DKIM/DMARC (générateurs/validateurs), conditions et consentement marketing, récupération, 2FA, suppression.
+
+**Bloqué par des décisions ou accès du propriétaire** (ARCHITECTURE.md §9.3) :
+- [ ] Choisir le **fournisseur de courriels transactionnels**, ouvrir le compte, fournir la clé d'API
+- [ ] Créer le **sous-domaine d'envoi** et publier **SPF / DKIM / DMARC** (valeurs : `norelias mail dns …`), puis vérifier la délivrabilité
+- [ ] Choisir le **CAPTCHA** (Turnstile / hCaptcha / reCAPTCHA), fournir clé de site et clé secrète ; l'inscrire dans la politique de confidentialité
+- [ ] Héberger le **serveur HTTP** (HTTPS, client HTTP réel, base SQL transactionnelle, IP client fiable derrière le proxy)
+- [ ] Rédiger les **conditions d'utilisation** et la **politique de confidentialité** (revue juridique) et fournir leurs identifiants de version
+- [ ] Exécuter les **tests d'acceptation avec les services réels** (§9.4) et tester les modèles dans Gmail, Outlook, Apple Mail
+- [ ] Construire les écrans : vérification du code, CAPTCHA, conditions (DESIGN_SYSTEM.md §5.5)
+- [ ] Facturation (déclencheur des reçus) et, si voulu, infrastructure marketing conforme (désabonnement)
+
 Reste pour clore la phase 1 :
 - [ ] **Choisir et intégrer le fournisseur d'autocomplétion d'adresses** (critères : ARCHITECTURE.md §3) ; clé d'API dans le coffre de l'OS
 - [ ] **Construire le service en ligne** (contrat : ARCHITECTURE.md §7) : vérification du courriel, récupération, appareils, synchronisation chiffrée, export/suppression côté serveur

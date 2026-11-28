@@ -26,6 +26,7 @@ norelias-academy     leçons · exercices · recherche · infobulles · progress
 norelias-i18n        catalogue central FR/EN · nombres, monnaies, dates · unités · taxes · RTL
 norelias-account     mots de passe · Argon2id · TOTP · sessions · limitation · téléphone E.164 · adresses · inscription 4 étapes
 norelias-studio      « Mon Studio » · filigrane (texte, logo, ombre, contour, répétition) · exportation · modèles
+norelias-server      logique serveur : vérification du courriel, CAPTCHA, courriels, SPF/DKIM/DMARC, conditions, récupération (sans client réseau)
 norelias-cli         binaire `norelias` (E/S d'images via la crate `image`)
 ```
 
@@ -103,7 +104,7 @@ annulation, puis GPU. Machines de référence prévues : 32 Go + RTX 3060 8 Go, 
 * Réduction du bruit et netteté en 3×3 : qualité de démonstration, pas de niveau professionnel.
 * Le conseiller est calibré sur des scènes synthétiques uniquement.
 
-## 7. Contrat du service en ligne (`AuthBackend`) — **spécification, non implémentée**
+## 7. Contrat du service en ligne (`AuthBackend`) — **logique implémentée dans `norelias-server`, serveur HTTP non déployé**
 
 Le client local fonctionne sans ce service. Quand il existera, il devra offrir (TLS, limitation de débit côté serveur, journalisation minimale) :
 
@@ -129,3 +130,40 @@ Jusqu'à sa construction, `AccountRecord::email_verified` reste **faux** et l'in
 | Réduction 24 Mpx → 2048 px (moyenne d'aire) | — | 0,16 s |
 
 L'aperçu en temps réel est donc réaliste à 1000 px. Un aperçu fidèle : les tailles sont relatives au côté court, test `preview_matches_export_proportions`.
+
+## 9. Mise en production de la vérification du courriel — ce qui est fait, ce qui manque
+
+### 9.1 Fait et testé (`norelias-server`, 54 tests dont 20 parcours complets)
+Cycle de vie des codes · inscription/activation/connexion/changement d'adresse/récupération/suppression · CAPTCHA côté serveur (3 fournisseurs : requêtes, réponses, échec fermé) · file d'envoi avec reprises et rebonds · 13 modèles de courriel FR/EN · générateurs et validateurs SPF/DKIM/DMARC · conditions et consentement marketing · garde « rien de simulé en production » · limites par IP · anti-énumération · anti-pré-détournement.
+
+### 9.2 Décisions d'architecture de l'extension « vérification »
+| ADR | Décision | Justification |
+|---|---|---|
+| 023 | Codes : 6 chiffres, HMAC-SHA256 avec secret serveur, 5 essais par code, TTL 10 min, renvoi ≥ 60 s | Un code de 10⁶ valeurs n'est sûr que si les essais sont limités ; le HMAC empêche de retrouver un code depuis une base volée |
+| 024 | L'activation exige **code + jeton d'inscription** remis au client | Empêche qu'un tiers inscrive l'adresse d'autrui puis profite de son code (« pré-détournement ») |
+| 025 | CAPTCHA vérifié **avant** toute logique de compte ; **échec fermé** | Une panne du fournisseur ne doit pas ouvrir l'inscription ; message `captcha.unavailable` + soutien |
+| 026 | Interfaces `EmailSender` / `CaptchaVerifier` / `HttpTransport`, garde d'environnement | Aucun service fictif ne peut démarrer en production ; le fournisseur reste interchangeable |
+| 027 | Récupération par courriel **seul** refusée si le 2FA est actif (un code de récupération est aussi exigé) | Un accès au courriel ne doit pas contourner le deuxième facteur |
+| 028 | File d'envoi **en mémoire** : les codes ne sont jamais écrits sur disque | Un plantage coûte un renvoi, pas une fuite de codes |
+
+### 9.3 Ce qui manque pour une vérification **réelle** — et qui dépend de vous
+Rien de ceci ne peut être fait ni vérifié depuis cet environnement (pas de serveur hébergé, pas de compte chez un fournisseur, pas d'accès au DNS de norelias.ca, pas de clés).
+
+| Élément | Décision / action requise | Notes |
+|---|---|---|
+| **Fournisseur de courriels transactionnels** | Choisir et ouvrir un compte ; fournir une clé d'API (stockée comme secret du serveur, jamais dans le dépôt) | Critères : délivrabilité, hébergement des données (Canada/UE, Loi 25/RGPD), coût, gestion des rebonds, support de SPF/DKIM personnalisés. Constructeurs de requêtes prêts pour **Postmark** et **Resend** (format écrit de mémoire d'après leur documentation, **à valider par un envoi réel**) ; d'autres fournisseurs (Amazon SES, Mailgun, SendGrid…) = une fonction `build_request` à ajouter |
+| **Domaine d'envoi + DNS** | Créer un sous-domaine d'envoi (ex. `mail.norelias.ca`), publier SPF, DKIM (clé fournie par le fournisseur) et DMARC chez le gestionnaire DNS | Générer les valeurs : `norelias mail dns <domaine> --include … --selector … --key … --rua …`. Commencer DMARC en `p=none`, lire les rapports, puis `quarantine`, puis `reject`. Vérifier : `dig TXT <nom>`, outils du fournisseur, test d'envoi vers Gmail/Outlook |
+| **CAPTCHA** | Choisir Turnstile, hCaptcha ou reCAPTCHA ; créer le site ; fournir clé de site (client) et **clé secrète (serveur)** | Turnstile : sans énigme visuelle dans la plupart des cas, bonne confidentialité ; hCaptcha : confidentialité, option d'accessibilité ; reCAPTCHA : très répandu mais envoie des données à Google. **Tous transmettent l'adresse IP à un tiers : à mentionner dans la politique de confidentialité**. Chine continentale : disponibilité variable selon le fournisseur (non vérifié) |
+| **Serveur HTTP** | Héberger `norelias-server` derrière HTTPS : routes, `HttpTransport` réel (client HTTP), stockage SQL transactionnel (l'état actuel est un fichier JSON mono-processus), journaux sans secrets, sauvegardes | Le crate ne contient volontairement aucun client réseau |
+| **Textes juridiques** | Rédiger et faire relire conditions d'utilisation et politique de confidentialité ; fournir leurs identifiants de version | Le code enregistre la version et la date d'acceptation, pas le texte |
+| **Marketing** | Si des courriels marketing sont un jour envoyés : modèle, lien de désabonnement fonctionnel, adresse postale, vérification du consentement (LCAP/CASL, RGPD) | **Aucun courriel marketing n'existe ni n'est préparé** ; seule la case de consentement est gérée |
+| **Facturation** | Le modèle de reçu existe ; **aucun système de facturation** ne le déclenche | |
+| **Logo dans les courriels** | Fournir un logo hébergé en HTTPS (les images sont volontairement absentes aujourd'hui) | À peser contre le suivi d'ouverture et le blocage d'images |
+
+### 9.4 Vérification d'acceptation à faire avec les vrais services (liste)
+1. Inscription réelle → courriel reçu en < 1 min dans Gmail, Outlook, Apple Mail, une boîte professionnelle (pas dans les indésirables) ; en-têtes : `SPF=pass`, `DKIM=pass`, `DMARC=pass`.
+2. Code expiré, renvoi, mauvais code ×5, changement d'adresse : mêmes résultats que les tests.
+3. CAPTCHA : jeton valide accepté, jeton rejoué refusé, jeton d'un autre site refusé, panne simulée (clé invalide) → `captcha.unavailable`.
+4. Rebond : adresse inexistante → message `email.undeliverable` ; plainte spam / désabonnement traités.
+5. Rendu des 13 modèles dans les principaux clients (mode sombre, mobile, lecteur d'écran), FR et EN.
+6. Charge : limites par IP derrière un répartiteur (adresse IP réelle du client, en-têtes de proxy de confiance).

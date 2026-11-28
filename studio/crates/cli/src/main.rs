@@ -30,6 +30,8 @@ const USAGE: &str = "norelias <commande>
   export <image> <dossier> [--format png|jpg] [--quality 90] [--wm] [--wm-text '© {year} {holder}'] [--brand Nom] [--dual] [--copyright '© …'] [--max-side 2048]
   help show <outil> [--lang fr|en] | help export <dossier>
   assistant '<message>' [image] [--allow-photo] [--lang fr|en]
+  mail preview <dossier> [--lang fr|en]       (écrit les 13 modèles de courriel en HTML + texte pour relecture)
+  mail dns <domaine> --include <spf> --selector <s> --key <clé-publique-b64> --rua <courriel>
   privacy                                   (affiche les consentements accordés)
   tools                                     (outils réels et outils prévus)";
 
@@ -62,6 +64,7 @@ fn run(args: &[String]) -> R {
         Some("academy") => academy(args, &store),
         Some("privacy") => privacy(&store),
         Some("export") => export(args, &store),
+        Some("mail") => mail_cmd(args, &store),
         Some("help") => help_cmd(args, &store),
         Some("assistant") => assistant_cmd(args, &store),
         Some("tools") => {
@@ -262,5 +265,48 @@ fn assistant_cmd(args: &[String], store: &Store) -> R {
     let r = a.ask(msg, doc.as_ref());
     println!("{}", r.text);
     for p in &r.proposals { println!("\nProposition {} : {} → {:?}  (non appliquée : confirmation requise)", p.id, p.title, p.ops); }
+    Ok(())
+}
+
+fn mail_cmd(args: &[String], store: &Store) -> R {
+    use norelias_server::{dns::*, templates::*};
+    match args.get(1).map(String::as_str) {
+        Some("preview") => {
+            let dir = PathBuf::from(args.get(2).ok_or("dossier manquant")?);
+            let lang = lang_of(args, store);
+            std::fs::create_dir_all(&dir)?;
+            let b = Brand::default();
+            let items: Vec<(&str, Template)> = vec![
+                ("verification", Template::Verification { name: Some("Élodie".into()), code: "042917".into(), minutes: 10 }), ("bienvenue", Template::Welcome { name: Some("Élodie".into()) }),
+                ("recuperation", Template::PasswordRecovery { code: "905531".into(), minutes: 10 }),
+                ("securite-nouvel-appareil", Template::Security(SecurityEvent::NewDevice { device: "MacBook".into(), when: "28 novembre 2026".into() })),
+                ("securite-mot-de-passe", Template::Security(SecurityEvent::PasswordChanged)), ("securite-2fa-active", Template::Security(SecurityEvent::TwoFactorEnabled)),
+                ("securite-2fa-desactive", Template::Security(SecurityEvent::TwoFactorDisabled)),
+                ("securite-changement-demande", Template::Security(SecurityEvent::EmailChangeRequested { new_email: "nouvelle@exemple.ca".into() })),
+                ("securite-adresse-changee", Template::Security(SecurityEvent::EmailChanged { new_email: "nouvelle@exemple.ca".into() })),
+                ("securite-compte-existant", Template::Security(SecurityEvent::AccountExists)),
+                ("facturation", Template::Billing { invoice_no: "EXEMPLE-0001".into(), lines: vec![("Exemple de ligne".into(), 19900)], taxes: vec![("Taxe A".into(), 995)], total: 20895, currency: "CAD".into(), date: (2026, 11, 28) }),
+                ("suppression", Template::AccountDeletion { effective: (2026, 12, 28) }), ("avis-changement-adresse", Template::EmailChangeNotice { new_email_masked: mask_email("nouvelle@exemple.ca") })];
+            for (name, t) in &items {
+                let m = render(t, lang, "exemple@exemple.ca", &b);
+                std::fs::write(dir.join(format!("{name}.html")), &m.html)?;
+                std::fs::write(dir.join(format!("{name}.txt")), format!("Objet : {}\n\n{}", m.subject, m.text))?;
+            }
+            println!("{} modèles écrits dans {} (données d'exemple : aucun courriel n'est envoyé)", items.len(), dir.display());
+        }
+        Some("dns") => {
+            let plan = DomainPlan { domain: args.get(2).ok_or("domaine manquant")?.clone(), spf_includes: flag(args, "--include").map(|v| vec![v]).unwrap_or_default(),
+                dkim_selector: flag(args, "--selector").ok_or("--selector manquant")?, dkim_public_key_b64: flag(args, "--key").ok_or("--key manquant (clé publique fournie par le fournisseur d'envoi)")?,
+                dmarc_rua: flag(args, "--rua").ok_or("--rua manquant")?, dmarc_policy: DmarcPolicy::Quarantine };
+            for r in plan.records() { println!("{} {} \"{}\"", r.name, r.rtype, r.value); }
+            let mut problems = 0;
+            for r in plan.records() {
+                let issues = if r.name.starts_with("_dmarc") { validate_dmarc(&r.value) } else if r.name.contains("_domainkey") { validate_dkim(&r.value) } else { validate_spf(&r.value) };
+                for i in issues { problems += 1; eprintln!("⚠ {} : {}", i.record, i.message); }
+            }
+            println!("\n{problems} problème(s) de syntaxe. Ces enregistrements ne sont PAS publiés : créez-les chez votre gestionnaire DNS, puis vérifiez avec `dig TXT <nom>`.");
+        }
+        _ => return Err("mail preview <dossier> | mail dns <domaine> …".into()),
+    }
     Ok(())
 }

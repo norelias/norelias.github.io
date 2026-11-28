@@ -192,3 +192,22 @@ fn assistant_needs_permission_and_never_applies() {
     let (_, out, _) = run(bin(&d).args(["assistant", "supprime l'objet avec l'IA", "--lang", "fr"]));
     assert!(out.contains("prévue mais pas encore disponible"), "{out}");
 }
+
+#[test]
+fn mail_templates_preview_and_dns_plan() {
+    let d = tmpdir("mail");
+    let out = d.join("courriels");
+    let (ok, o, e) = run(bin(&d).args(["mail", "preview", out.to_str().unwrap(), "--lang", "fr"]));
+    assert!(ok, "{e}");
+    assert!(o.starts_with("13 modèles"), "{o}");
+    let html = std::fs::read_to_string(out.join("verification.html")).unwrap();
+    assert!(html.contains("042917") && html.contains("lang=\"fr\"") && !html.contains("<img"));
+    assert!(std::fs::read_to_string(out.join("facturation.txt")).unwrap().contains("208,95"));
+    let key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu1SU1LfVLPHCozMxH2Mo4lgOEePzNm0tRgeLezV6ffAt0gunVTLw7onLRnrq0/IzW7yWR7QkrmBL7jTKEn5u+qKhbwKfBstIs+bMY2Zkp18gnTxKLxoS2tFczGkPLPgizskuemMghRniWaoLcyehkd3qqGElvW/VDL5AaWTg0nLVkjRo9z+40RQzuVaE8AkAFmxZzow3x+VJYKdjykkJ0iT9wCS0DRTXu269V264Vf/3jvredZiKRkgwlL9xNAwxXFg0x/XFw005UWVRIkdgcKWTjpBP2dPwVZ4WWC+9aGVd+Gyn1o0CLelf4rEjGoXbAAEgAqeGUxrcIlbjXfbcmwIDAQAB";
+    let (ok, o, _) = run(bin(&d).args(["mail", "dns", "mail.norelias.ca", "--include", "spf.exemple.net", "--selector", "nrl1", "--key", key, "--rua", "dmarc@norelias.ca"]));
+    assert!(ok, "{o}");
+    assert!(o.contains("_dmarc.mail.norelias.ca TXT") && o.contains("nrl1._domainkey.mail.norelias.ca TXT"), "{o}");
+    assert!(o.contains("0 problème(s) de syntaxe") && o.contains("PAS publiés"), "{o}");
+    let (ok, _, e) = run(bin(&d).args(["mail", "dns", "mail.norelias.ca", "--selector", "s"]));
+    assert!(!ok && e.contains("--key"));
+}

@@ -4,7 +4,7 @@ Statuts : **prévu** · **en développement** · **intégré** (moteur réel dan
 
 > **Aucune ligne n'est « validée »** : aucune validation sur fichiers RAW réels, matériel ou utilisateurs n'a eu lieu.
 > « Testé » signifie : tests automatisés sur images **synthétiques** générées par le code, sur Linux uniquement.
-> Les preuves renvoient à des fichiers du dépôt. **229 tests** passent (`cargo test --workspace`).
+> Les preuves renvoient à des fichiers du dépôt. **285 tests** passent (`cargo test --workspace`).
 
 ## Exigences non négociables
 
@@ -22,7 +22,7 @@ Statuts : **prévu** · **en développement** · **intégré** (moteur réel dan
 | N-10 | Sauvegarde auto et récupération | en développement | Profil : écriture atomique, `.bak`, quarantaine du fichier corrompu (testé) ; projets/catalogue : prévu |
 | N-11 | Aucun bouton factice | testé (registre) | Outils `Planned` jamais décrits comme fonctionnels (`planned_tools_never_get_a_functional_description`) |
 | N-12 | Pas de dépendance commerciale imposée | testé | 104 dépendances externes, toutes permissives (LICENSES.md) |
-| N-13 | Modularité, moteur indépendant de l'UI | testé | `norelias-core` sans UI ; 9 crates |
+| N-13 | Modularité, moteur indépendant de l'UI | testé | `norelias-core` sans UI ; 10 crates |
 | N-14 | Confidentialité des photos clients | testé (partiel) | Aucun code réseau ; consentements par finalité ; hébergement de galeries : prévu |
 
 ## Module M — Personnalisation et apprentissage
@@ -85,15 +85,48 @@ Statuts : **prévu** · **en développement** · **intégré** (moteur réel dan
 | N-A07 | Saisie manuelle, adresse non reconnue, hors connexion | testé | `offline_falls_back_to_manual_entry`, `empty_and_unknown_are_never_rejected_wrongly` |
 | N-A08 | **Autocomplétion internationale des adresses** | **en développement** | Interface `AddressProvider` + porte de consentement + remplissage automatique : testés avec un fournisseur simulé **dans les tests uniquement**. **Aucun fournisseur réel n'est intégré** (choix, clé d'API et accord de confidentialité requis, ARCHITECTURE.md §3) |
 | N-A09 | Téléphone international, format E.164 | testé | crate `phonenumber` ; `normalises_to_e164`, `rejects_invalid` |
-| N-A10 | Courriel : validation de forme | testé | `emails` ; **vérification par courriel : prévu** (service en ligne) |
-| N-A11 | Récupération du mot de passe | testé (local, codes) / **prévu** (courriel) | `recovery_code_is_single_use_and_disables_2fa` |
+| N-A10 | Courriel : validation de forme | testé | `emails` ; vérification par courriel : voir V-01…V-09 |
+| N-A11 | Récupération du mot de passe | testé (codes locaux ; courriel : logique serveur, V-12) | `recovery_code_is_single_use_and_disables_2fa` |
 | N-A12 | Authentification à deux facteurs TOTP | testé | vecteurs RFC 6238 |
 | N-A13 | Gestion des sessions, révocation d'appareils | testé (local) | `session.rs` ; liste d'appareils partagée entre postes : prévu |
 | N-A14 | Limitation des tentatives | testé (local) | `limiter.rs` ; contrôle serveur : prévu |
 | N-A15 | Hachage Argon2id, secrets chiffrés au repos | testé | `crypto.rs` |
 | N-A16 | Coffre de l'OS pour les secrets | prévu | |
 | N-A17 | Mode local hors connexion après configuration | testé | aucun code réseau |
-| N-A18 | Service d'authentification en ligne | **prévu** (non construit) | contrat : ARCHITECTURE.md §7 |
+| N-A18 | Service d'authentification en ligne | **logique : testé ; serveur HTTP déployé : prévu** | `norelias-server` ; ARCHITECTURE.md §7 et §9 |
+
+### V — Vérification du courriel, anti-robot, courriels transactionnels, conditions
+
+> **Lecture obligatoire.** « Testé » = logique serveur vérifiée avec des **doubles** de fournisseurs (courriel, CAPTCHA). **Aucun courriel réel n'a été envoyé, aucun CAPTCHA réel vérifié, aucun DNS modifié** : cela exige un fournisseur, des clés et l'accès au domaine (ARCHITECTURE.md §9.3). Rien n'est « validé ».
+
+| ID | Exigence | Statut | Preuve / remarque |
+|---|---|---|---|
+| V-01 | Code numérique à 6 chiffres, aléa cryptographique | testé | `codes_are_six_digits_and_roughly_uniform` |
+| V-02 | Expiration à 10 minutes | testé | `expires_after_ten_minutes_exactly`, parcours |
+| V-03 | Renvoi après 60 secondes | testé | `code_expiry_resend_cooldown_invalidation_and_limits` |
+| V-04 | Anciens codes invalidés à chaque envoi | testé | idem |
+| V-05 | Limitation des tentatives (5/code) et des renvois (5/h/adresse) ; plafonds par IP | testé | `abuse_limits_per_ip` |
+| V-06 | Modifier l'adresse avant validation | testé (3 corrections max) | `address_can_be_corrected_before_validation` |
+| V-07 | Interdiction d'activer un compte non vérifié | testé | `full_journey_…` ; `pre_hijacking_is_blocked_by_the_signup_token` |
+| V-08 | Vérification obligatoire lors d'un changement d'adresse | testé | `email_change_requires_verification_of_the_new_address` |
+| V-09 | Codes stockés de façon sécurisée, validation côté serveur | testé (logique) | HMAC, état persisté sans secret ; **serveur déployé : prévu** |
+| V-10 | **Fournisseur de courriels transactionnels réel** | **non intégré** | interface + constructeurs Postmark/Resend (**non vérifiés contre les services réels**) ; choix, compte et clé à fournir |
+| V-11 | Gestion des erreurs de livraison | testé | reprises, rebond définitif, aucun compte fantôme |
+| V-12 | Récupération du mot de passe par courriel (code), CAPTCHA, 2FA respecté | testé (logique) | `password_recovery_journey`, `two_factor_is_optional_and_email_alone_cannot_bypass_it` |
+| V-13 | **SPF, DKIM, DMARC** | générateurs et validateurs : testé ; **publication DNS : non faite** | `dns.rs` (5 tests), CLI `mail dns` ; accès au DNS du domaine requis |
+| V-14 | Modèles : bienvenue, vérification, récupération, sécurité, facturation, suppression, avis de changement | testé (rendu, échappement, FR/EN, responsive, couleurs) | 13 variantes ; **non testés dans de vrais clients de messagerie** ; sans logo image |
+| V-15 | Déclenchement des courriels de **facturation** | **prévu** | modèle prêt ; aucun système de facturation |
+| V-16 | Aucun courriel fictif / vérification simulée en production | testé | `nothing_simulated_in_production` |
+| V-17 | **CAPTCHA réel** (Turnstile, hCaptcha ou reCAPTCHA) vérifié côté serveur | logique et 3 fournisseurs : testé avec des **réponses JSON d'exemple** ; **contre un fournisseur réel : non fait** | `captcha.rs` ; clés et choix requis ; jamais une case simulée (`ScriptedCaptcha` refusé en production) |
+| V-18 | CAPTCHA à l'inscription, à la récupération, sur connexions suspectes | testé | `captcha_is_checked_server_side_before_anything_else`, `suspicious_logins_require_a_real_captcha` |
+| V-19 | Conditions + confidentialité obligatoires ; **version et date** enregistrées | testé | `acceptance_of_terms_and_privacy_is_mandatory_and_recorded` ; **textes juridiques : à rédiger** |
+| V-20 | Consentement marketing distinct, facultatif, décoché, historique | testé | `marketing_can_be_withdrawn…` ; **envoi marketing : n'existe pas** (ni modèle ni désabonnement) |
+| V-21 | Nouvelle acceptation quand la version change | testé | idem |
+| V-22 | Messages d'erreur traduits (FR/EN) | testé | `every_error_key_has_a_translation_in_both_languages` (22 clés) |
+| V-23 | Solutions accessibles (alternative au CAPTCHA, lecteur d'écran, saisie du code au clavier/collage) | **spécifié, non construit** | DESIGN_SYSTEM.md §5.5 ; échec fermé + soutien aujourd'hui |
+| V-24 | Test complet inscription → activation → connexion → récupération | testé (20 parcours, doubles) ; **de bout en bout avec services réels : à faire** | ARCHITECTURE.md §9.4 |
+| V-25 | 2FA facultatif, sessions et appareils (serveur) | testé | `new_device_alert_and_device_management` |
+| V-26 | Suppression du compte (délai de 30 jours, courriel de confirmation) | testé (logique) | `account_deletion_has_a_grace_period…` |
 
 ### O — Niveaux · P — Apprentissage contextuel · Q — Académie
 
@@ -153,7 +186,7 @@ Statuts : **prévu** · **en développement** · **intégré** (moteur réel dan
 | ID | Fonction | Statut | Preuve / remarque |
 |---|---|---|---|
 | N-G01 | Catalogue central ; aucun texte dans les composants | testé (nouveaux modules) | `catalogs_are_in_sync` ; **anciens textes (conseiller, Académie, questionnaire) encore intégrés au code : migration prévue** |
-| N-G02 | Français et anglais | testé (catalogue) | 74 clés FR/EN |
+| N-G02 | Français et anglais | testé (catalogue) | 95 clés FR/EN |
 | N-G03 | Espagnol, allemand, italien, portugais | **prévu** | formats de nombres prêts ; **aucune traduction** |
 | N-G04 | Droite-à-gauche | en développement | détection de direction testée ; **miroir de l'interface : prévu** |
 | N-G05 | Nombres, devises, dates | testé | FR/EN (+ séparateurs es/de/it/pt) ; dates longues FR/EN seulement |

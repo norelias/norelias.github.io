@@ -42,6 +42,28 @@ destruction de clé seront nécessaires (prévu).
 (4) **aucune vérification de courriel, récupération par courriel ni synchronisation** : ces fonctions exigent le service en ligne (ARCHITECTURE.md §7) ;
 (5) l'indicateur de robustesse est une heuristique d'aide, pas une garantie ; (6) aucune revue de sécurité externe n'a eu lieu.
 
+## Vérification du courriel et anti-robot (`norelias-server`, testés avec des doubles de fournisseurs)
+
+| Garantie | Mécanisme | Test |
+|---|---|---|
+| Compte inactif tant que non vérifié | Statut `Pending` : aucune session, même avec le bon mot de passe | `full_journey_register_verify_activate_login` |
+| Code non devinable | 6 chiffres uniformes (échantillonnage par rejet), 5 essais par code puis verrouillage, TTL 10 min | `codes_are_six_digits_and_roughly_uniform`, `attempts_are_limited…` |
+| Code non récupérable depuis la base | HMAC-SHA256 lié à l'adresse, au but et au secret serveur ; jamais en clair | `code_is_never_stored_and_is_bound…`, `persisted_state_contains_no_plaintext_secrets…` |
+| Renvois contrôlés | ≥ 60 s entre deux envois, 5 par heure par adresse, ancien code invalidé | `code_expiry_resend_cooldown_invalidation_and_limits` |
+| **Pré-détournement** impossible | Activation = code **et** jeton secret du client d'inscription | `pre_hijacking_is_blocked_by_the_signup_token` |
+| Pas d'énumération | Réponses identiques (inscription, récupération, renvoi, connexion) | `no_account_enumeration` |
+| CAPTCHA réel, côté serveur, en premier | Jeton vérifié auprès du fournisseur avant toute logique ; nom d'hôte et score contrôlés ; **échec fermé** | `captcha_is_checked_server_side_before_anything_else`, `captcha_provider_outage_fails_closed…`, `real_verifier_fails_closed` |
+| Connexions suspectes | CAPTCHA exigé après 2 échecs sur le compte ou 3 depuis l'IP | `suspicious_logins_require_a_real_captcha` |
+| Changement d'adresse | Mot de passe + session + code envoyé à la **nouvelle** adresse ; ancienne adresse avertie ; sessions révoquées | `email_change_requires_verification_of_the_new_address` |
+| Récupération | CAPTCHA + code par courriel ; **avec 2FA actif, un code de récupération est aussi exigé** ; sessions révoquées ; courriel de sécurité | `password_recovery_journey`, `two_factor_is_optional_and_email_alone_cannot_bypass_it` |
+| Abus | Plafonds par IP (inscription 5/h, vérification 30/h, récupération 5/h) | `abuse_limits_per_ip` |
+| Erreurs de livraison | Transitoire : reprises avec délai croissant ; définitive : rebond signalé, aucun compte fantôme | `delivery_failures_are_handled` |
+| **Rien de simulé en production** | `Server::new` refuse courriel/CAPTCHA simulés, secret faible (< 32 octets ou nul), URL non HTTPS | `nothing_simulated_in_production` |
+| Courriels sûrs | Variables échappées, aucune image distante ni pixel de suivi, liens HTTPS, adresses masquées dans les alertes | `all_variables_are_html_escaped`, `responsive_accessible_and_private_by_construction` |
+| Conditions | Acceptations obligatoires avec version et date ; marketing distinct, décoché, historique ajouté seulement | `acceptance_of_terms_and_privacy_is_mandatory_and_recorded` |
+
+**Limites** : (1) les fournisseurs de courriel et de CAPTCHA sont des **doubles de test** — aucun test n'a joint un service réel ; les formats d'API sont écrits d'après leur documentation rappelée, non vérifiés ; (2) l'état est un fichier JSON mono-processus, pas une base transactionnelle ; (3) l'adresse IP du client dépend de la configuration du proxy (à fiabiliser) ; (4) la demande de CAPTCHA après échecs révèle faiblement qu'un compte existe (compromis assumé, limité aux comptes connus) ; (5) aucun test d'intrusion ni revue externe ; (6) la file d'envoi est en mémoire : un plantage perd les envois en attente (l'utilisateur redemande un code) ; (7) DNS non publié : SPF/DKIM/DMARC non effectifs tant qu'ils ne sont pas créés par le propriétaire du domaine.
+
 ## Protection des données personnelles (Loi 25, LPRPDE, RGPD) — état
 
 Implémenté : minimisation (seuls courriel + mot de passe requis, et seulement pour un compte), consentements par finalité et révocables,

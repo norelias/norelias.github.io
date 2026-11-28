@@ -545,6 +545,7 @@ dependencies = [
  "norelias-core",
  "norelias-i18n",
  "norelias-onboarding",
+ "norelias-server",
  "norelias-studio",
  "serde",
  "serde_json",
@@ -574,6 +575,20 @@ dependencies = [
  "norelias-core",
  "serde",
  "serde_json",
+]
+
+[[package]]
+name = "norelias-server"
+version = "0.1.0"
+dependencies = [
+ "getrandom",
+ "hmac",
+ "norelias-account",
+ "norelias-core",
+ "norelias-i18n",
+ "serde",
+ "serde_json",
+ "sha2",
 ]
 
 [[package]]

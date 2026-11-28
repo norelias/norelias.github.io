@@ -120,6 +120,23 @@ impl AccountRecord {
         self.limiter.record_success();
         Ok(())
     }
+    /// Nombre d'échecs de connexion consécutifs (sert à exiger un CAPTCHA).
+    pub fn failed_logins(&self) -> u32 { self.limiter.failures() }
+    /// Confirmation du mot de passe pour une action sensible (limitation de tentatives incluse).
+    pub fn confirm_password(&mut self, pw: &str, now: u64) -> Result<(), AccountError> { self.check_password(pw, now) }
+    /// (Serveur) Émet un nouveau jeu de codes de récupération, affiché une seule fois.
+    pub fn issue_recovery_codes(&mut self) -> Vec<String> { let codes = new_recovery_codes(); self.recovery = codes.iter().map(|c| rec_hash(c)).collect(); codes }
+    /// (Serveur) Réinitialisation après **vérification du courriel**. Refusée si le 2FA est actif : il faut alors aussi un code de
+    /// récupération (`reset_with_recovery`), pour qu'un accès au courriel seul ne contourne pas le deuxième facteur.
+    pub fn reset_password_email_verified(&mut self, new_pw: &str, now: u64) -> Result<(), AccountError> {
+        if self.totp_enabled() { return Err(AccountError::Invalid); }
+        if let Some(s) = self.limiter.blocked_for(now) { return Err(AccountError::Locked(s)); }
+        if !password::strength(new_pw, &[&self.email, &self.display_name]).acceptable { return Err(AccountError::WeakPassword); }
+        self.pw_hash = hash_password(new_pw, self.cost);
+        self.sessions.revoke_all_except(None);
+        self.limiter.record_success();
+        Ok(())
+    }
     pub fn recovery_codes_left(&self) -> usize { self.recovery.len() }
     pub fn regenerate_recovery(&mut self, pw: &str, now: u64) -> Result<Vec<String>, AccountError> {
         self.check_password(pw, now)?;
@@ -249,6 +266,16 @@ mod tests {
         let fresh = a.regenerate_recovery("Nouveau-Mot-De-Passe-99", 6).unwrap();
         assert_eq!((fresh.len(), a.recovery_codes_left()), (10, 10));
         assert!(a.reset_with_recovery(&codes[0], "Encore-Un-Autre-Mot-55z", 7).is_err(), "anciens codes invalidés");
+    }
+    #[test]
+    fn email_verified_reset_is_refused_when_two_factor_is_on() {
+        let mut a = acct();
+        assert!(a.reset_password_email_verified("Nouveau-Mot-De-Passe-99", 1).is_ok());
+        let (sb, _) = a.begin_totp("Nouveau-Mot-De-Passe-99", "N", 2).unwrap();
+        let secret = totp::base32_decode(&sb).unwrap();
+        a.confirm_totp("Nouveau-Mot-De-Passe-99", &totp::code_for_step(&secret, totp::step_at(2), 6), 2).unwrap();
+        assert_eq!(a.reset_password_email_verified("Autre-Mot-De-Passe-2026", 3), Err(AccountError::Invalid), "le courriel seul ne contourne pas le 2FA");
+        assert!(a.reset_password_email_verified("court", 4).is_err());
     }
     #[test]
     fn export_contains_no_secrets() {

@@ -145,6 +145,15 @@ Conformité visée selon les territoires (Loi 25 au Québec, LPRPDE au Canada, R
 ### Écrans à fournir (N-I01…N-I09)
 Inscription · Connexion · Récupération du compte · Configuration initiale · Profil professionnel · Préférences · Centre d'aide · Académie · Création de filigranes. Voir `DESIGN_SYSTEM.md` §5.
 
+### V — Vérification obligatoire du courriel, anti-robot, courriels transactionnels, conditions (V-01…V-24)
+* **Vérification** : code numérique à **6 chiffres** (aléa cryptographique, sans biais), **expiration 10 min**, **renvoi après 60 s**, anciens codes **invalidés** à chaque envoi, tentatives limitées (5 par code, 5 envois par heure et par adresse, plafonds par IP), **modification de l'adresse avant validation**, **compte non activable tant que le courriel n'est pas vérifié** (aucune session), vérification obligatoire aussi lors d'un **changement d'adresse**. Codes stockés **hachés avec un secret serveur** ; validation **côté serveur** uniquement.
+* **Anti-robot** : vraie vérification **côté serveur** d'un jeton Cloudflare Turnstile, hCaptcha ou Google reCAPTCHA (au choix selon confidentialité, accessibilité, compatibilité internationale) à l'inscription, à la récupération du mot de passe et pour les connexions suspectes. **Jamais** une case à cocher simulée ; échec fermé si le fournisseur est injoignable ; message traduit et solution de secours accessible.
+* **Courriels** : fournisseur transactionnel réel avec gestion des erreurs de livraison (temporaires : reprises ; définitives : rebond signalé à l'utilisateur) ; **SPF, DKIM, DMARC** sur un sous-domaine d'envoi ; modèles professionnels, responsives, multilingues, aux couleurs de Norélias : vérification, bienvenue, récupération, sécurité, facturation, suppression du compte, avis de changement d'adresse.
+* **Aucun courriel fictif ni vérification simulée en production** : le serveur refuse de démarrer avec un service simulé.
+* **Conditions** : acceptation **obligatoire** des conditions d'utilisation et de la politique de confidentialité, **version et date enregistrées**, nouvelle acceptation si la version change ; consentement **marketing distinct, facultatif, décoché par défaut**, avec historique daté et révocable.
+* **2FA facultatif**, gestion des sessions et des appareils.
+* Les textes juridiques (conditions, confidentialité) et la décision sur les fournisseurs relèvent du propriétaire du produit ; voir `ARCHITECTURE.md` §9.
+
 ## 6. Registre des exigences
 
 Statuts : **prévu → en développement → intégré → testé → validé**. Le registre exhaustif est FEATURE_MATRIX.md.
