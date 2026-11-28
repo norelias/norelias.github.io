@@ -1,0 +1,11 @@
+[package]
+name = "norelias-advisor"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+norelias-core.workspace = true
+
+[dev-dependencies]
