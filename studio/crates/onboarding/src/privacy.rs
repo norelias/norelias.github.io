@@ -17,9 +17,19 @@ pub enum Purpose {
     Telemetry,
     /// Rapports de plantage.
     CrashReports,
+    /// Saisie d'adresse envoyée à un fournisseur d'autocomplétion tiers (données personnelles).
+    AddressLookup,
+    /// Synchronisation du compte et des réglages avec un service en ligne.
+    AccountSync,
+    /// Synchronisation de la progression d'apprentissage.
+    ProgressSync,
 }
 
 impl Purpose {
+    pub const ALL: [Purpose; 8] = [Purpose::CloudAi, Purpose::ModelDownload, Purpose::GalleryHosting, Purpose::Telemetry,
+        Purpose::CrashReports, Purpose::AddressLookup, Purpose::AccountSync, Purpose::ProgressSync];
+    /// Ce but envoie-t-il des données personnelles (hors photographies) ?
+    pub fn sends_personal_data(self) -> bool { matches!(self, Purpose::AddressLookup | Purpose::AccountSync | Purpose::ProgressSync | Purpose::GalleryHosting) }
     /// Ce but implique-t-il la sortie de photographies de l'ordinateur ?
     pub fn sends_photos(self) -> bool { matches!(self, Purpose::CloudAi | Purpose::GalleryHosting) }
 }
@@ -79,7 +89,7 @@ impl ConsentLedger {
 #[cfg(test)]
 mod tests {
     use super::*;
-    const ALL: [Purpose; 5] = [Purpose::CloudAi, Purpose::ModelDownload, Purpose::GalleryHosting, Purpose::Telemetry, Purpose::CrashReports];
+    const ALL: [Purpose; 8] = Purpose::ALL;
 
     #[test]
     fn nothing_is_allowed_by_default() {

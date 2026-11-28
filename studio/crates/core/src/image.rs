@@ -91,6 +91,34 @@ impl Image {
             [acc[0] / n, acc[1] / n, acc[2] / n]
         })
     }
+    /// Rééchantillonnage à dimensions exactes par moyenne d'aire (réduction de qualité ; agrandissement bilinéaire).
+    pub fn resize(&self, nw: usize, nh: usize) -> Image {
+        let (nw, nh) = (nw.max(1), nh.max(1));
+        if (nw, nh) == (self.width, self.height) { return self.clone(); }
+        let (sx, sy) = (self.width as f32 / nw as f32, self.height as f32 / nh as f32);
+        Image::from_fn(nw, nh, |ox, oy| {
+            if sx <= 1.0 && sy <= 1.0 { return self.sample((ox as f32 + 0.5) * sx - 0.5, (oy as f32 + 0.5) * sy - 0.5); }
+            let (x0, x1, y0, y1) = (ox as f32 * sx, (ox as f32 + 1.0) * sx, oy as f32 * sy, (oy as f32 + 1.0) * sy);
+            let (mut acc, mut wsum) = ([0.0f32; 3], 0.0f32);
+            for y in y0.floor() as usize..(y1.ceil() as usize).min(self.height) {
+                let wy = (y1.min(y as f32 + 1.0) - y0.max(y as f32)).max(0.0);
+                for x in x0.floor() as usize..(x1.ceil() as usize).min(self.width) {
+                    let w = wy * (x1.min(x as f32 + 1.0) - x0.max(x as f32)).max(0.0);
+                    let p = self.get(x, y);
+                    for k in 0..3 { acc[k] += p[k] * w; }
+                    wsum += w;
+                }
+            }
+            [acc[0] / wsum, acc[1] / wsum, acc[2] / wsum]
+        })
+    }
+    /// Réduction proportionnelle pour que le plus grand côté vaille exactement `max_side` (jamais d'agrandissement).
+    pub fn fit_within(&self, max_side: usize) -> Image {
+        let m = self.width.max(self.height);
+        if max_side == 0 || m <= max_side { return self.clone(); }
+        let f = max_side as f32 / m as f32;
+        self.resize((self.width as f32 * f).round() as usize, (self.height as f32 * f).round() as usize)
+    }
     /// Rognage en pixels (borné à l'image).
     pub fn crop_px(&self, x: usize, y: usize, w: usize, h: usize) -> Image {
         let x = x.min(self.width.saturating_sub(1));
@@ -128,6 +156,17 @@ mod tests {
     fn rejects_bad_buffers() {
         assert!(matches!(Image::from_srgb8(2, 2, &[0; 5]), Err(ImageError::BadLength { .. })));
         assert_eq!(Image::from_srgb8(0, 2, &[]), Err(ImageError::EmptyImage));
+    }
+    #[test]
+    fn resize_exact_dimensions_and_mean() {
+        let img = Image::from_fn(640, 420, |x, y| [x as f32 / 640.0, y as f32 / 420.0, 0.3]);
+        let r = img.fit_within(200);
+        assert_eq!((r.width, r.height), (200, 131));
+        let m = |i: &Image| i.data.iter().sum::<f32>() / i.data.len() as f32;
+        assert!((m(&img) - m(&r)).abs() < 2e-3);
+        assert_eq!(img.fit_within(1000), img, "pas d'agrandissement");
+        let up = Image::from_fn(4, 4, |x, _| [x as f32, 0.0, 0.0]).resize(8, 8);
+        assert_eq!((up.width, up.height), (8, 8));
     }
     #[test]
     fn downscale_preserves_mean() {

@@ -14,6 +14,10 @@ norelias-core.workspace = true
 norelias-advisor.workspace = true
 norelias-onboarding.workspace = true
 norelias-academy.workspace = true
+norelias-studio.workspace = true
+norelias-assistant.workspace = true
+norelias-account.workspace = true
+norelias-i18n.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 image = { version = "0.25", default-features = false, features = ["png", "jpeg"] }

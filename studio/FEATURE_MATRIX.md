@@ -4,7 +4,7 @@ Statuts : **prévu** · **en développement** · **intégré** (moteur réel dan
 
 > **Aucune ligne n'est « validée »** : aucune validation sur fichiers RAW réels, matériel ou utilisateurs n'a eu lieu.
 > « Testé » signifie : tests automatisés sur images **synthétiques** générées par le code, sur Linux uniquement.
-> Les preuves renvoient à des fichiers du dépôt. 111 tests passent (`cargo test --workspace`).
+> Les preuves renvoient à des fichiers du dépôt. **229 tests** passent (`cargo test --workspace`).
 
 ## Exigences non négociables
 
@@ -21,8 +21,8 @@ Statuts : **prévu** · **en développement** · **intégré** (moteur réel dan
 | N-09 | Écrans haute résolution | prévu | Dépend de l'interface |
 | N-10 | Sauvegarde auto et récupération | en développement | Profil : écriture atomique, `.bak`, quarantaine du fichier corrompu (testé) ; projets/catalogue : prévu |
 | N-11 | Aucun bouton factice | testé (registre) | Outils `Planned` jamais décrits comme fonctionnels (`planned_tools_never_get_a_functional_description`) |
-| N-12 | Pas de dépendance commerciale imposée | testé | 31 dépendances, toutes permissives (LICENSES.md) |
-| N-13 | Modularité, moteur indépendant de l'UI | testé | `norelias-core` sans UI ; 5 crates |
+| N-12 | Pas de dépendance commerciale imposée | testé | 104 dépendances externes, toutes permissives (LICENSES.md) |
+| N-13 | Modularité, moteur indépendant de l'UI | testé | `norelias-core` sans UI ; 9 crates |
 | N-14 | Confidentialité des photos clients | testé (partiel) | Aucun code réseau ; consentements par finalité ; hébergement de galeries : prévu |
 
 ## Module M — Personnalisation et apprentissage
@@ -69,6 +69,109 @@ Statuts : **prévu** · **en développement** · **intégré** (moteur réel dan
 | M-29 | Consentement explicite par finalité, révocable | testé | `privacy.rs` : tout refusé par défaut |
 | M-30 | Coût annoncé avant service payant | testé (garde) | `paid_provider_requires_cost_acknowledgement` ; services eux-mêmes : prévus |
 | M-31 | Télémétrie désactivée par défaut | testé | Pas de code de télémétrie ; consentement requis |
+
+## Extension — modules N à U
+
+### N — Inscription et authentification
+
+| ID | Fonction | Statut | Preuve / remarque |
+|---|---|---|---|
+| N-A01 | Parcours en 4 étapes (Compte · Studio · Expérience · Préférences) : logique et validation par étape | testé | `signup.rs` (8 tests) ; **interface graphique : prévu** |
+| N-A02 | Seuls courriel + mot de passe obligatoires ; mode local sans compte | testé | `only_email_and_password_are_required`, `local_only_needs_no_account` |
+| N-A03 | Mot de passe : confirmation, correspondance, indicateur dynamique (5 niveaux, problèmes expliqués) | testé (logique) | `password.rs` ; bouton afficher/masquer : interface, prévu |
+| N-A04 | Photographe indépendant sans studio | testé | `independent_photographer_uses_own_name` |
+| N-A05 | Champs studio : nom, slogan, logo (chemin), site, réseaux, infos fiscales, devise, unités, fuseau, langue | testé (validation) | `studio_step_validates_only_what_is_filled` ; fuseaux : liste de 24 zones + contrôle de forme, **base complète prévue** |
+| N-A06 | Adresses selon le pays (formats, étiquettes province/État/ZIP, codes postaux, mise en forme postale) | testé — 15 pays | CA US FR GB DE ES IT PT BE CH NL AU MX BR JP ; autres pays : format générique **sans refus** |
+| N-A07 | Saisie manuelle, adresse non reconnue, hors connexion | testé | `offline_falls_back_to_manual_entry`, `empty_and_unknown_are_never_rejected_wrongly` |
+| N-A08 | **Autocomplétion internationale des adresses** | **en développement** | Interface `AddressProvider` + porte de consentement + remplissage automatique : testés avec un fournisseur simulé **dans les tests uniquement**. **Aucun fournisseur réel n'est intégré** (choix, clé d'API et accord de confidentialité requis, ARCHITECTURE.md §3) |
+| N-A09 | Téléphone international, format E.164 | testé | crate `phonenumber` ; `normalises_to_e164`, `rejects_invalid` |
+| N-A10 | Courriel : validation de forme | testé | `emails` ; **vérification par courriel : prévu** (service en ligne) |
+| N-A11 | Récupération du mot de passe | testé (local, codes) / **prévu** (courriel) | `recovery_code_is_single_use_and_disables_2fa` |
+| N-A12 | Authentification à deux facteurs TOTP | testé | vecteurs RFC 6238 |
+| N-A13 | Gestion des sessions, révocation d'appareils | testé (local) | `session.rs` ; liste d'appareils partagée entre postes : prévu |
+| N-A14 | Limitation des tentatives | testé (local) | `limiter.rs` ; contrôle serveur : prévu |
+| N-A15 | Hachage Argon2id, secrets chiffrés au repos | testé | `crypto.rs` |
+| N-A16 | Coffre de l'OS pour les secrets | prévu | |
+| N-A17 | Mode local hors connexion après configuration | testé | aucun code réseau |
+| N-A18 | Service d'authentification en ligne | **prévu** (non construit) | contrat : ARCHITECTURE.md §7 |
+
+### O — Niveaux · P — Apprentissage contextuel · Q — Académie
+
+| ID | Fonction | Statut | Preuve / remarque |
+|---|---|---|---|
+| N-B01 | Trois niveaux, modifiables, sans verrouillage | testé (modèle) | `no_mode_or_specialty_ever_removes_a_tool`, `mode_override` |
+| N-C01 | Registre central des fonctions documentées | testé | `every_available_tool_has_a_complete_card_and_nothing_else_does` |
+| N-C02 | Fiche par outil : définition, utilité, situations, méthode, erreurs, conseils (FR/EN) | testé (12 fiches) | `help.rs` ; **contenu à faire relire par des photographes** |
+| N-C03 | Documentation de **chaque curseur** du moteur | testé | `every_slider_of_the_engine_is_documented` (15 curseurs, liés aux champs réels de `Op`) |
+| N-C04 | Exemple avant/après sur la même photo | testé (10 outils) | `examples_use_the_same_photograph_and_really_differ`, `rotate_example_really_straightens_the_horizon` |
+| N-C05 | Tutoriel vidéo | **prévu — aucune vidéo n'existe** | `no_fake_media_or_links` : la fiche n'en annonce jamais |
+| N-C06 | Exercice interactif lié | testé | 7 exercices |
+| N-C07 | Raccourci clavier dans la fiche | testé (1 outil : Recadrer) | les autres outils n'ont pas de raccourci défini |
+| N-C08 | Lien vers la documentation complète | testé | pages Markdown générées, lien vérifié (`full_documentation_pages_are_generated…`) |
+| N-C09 | Actions : Essayer · En savoir plus · Fermer · Ne plus afficher · Désactiver tout · Réinitialiser | testé (logique) | `mute_disable_and_reset` ; boutons : interface, prévu |
+| N-C10 | Première utilisation adaptée au niveau, jamais d'interruption d'un expert | testé | `first_use_policy_by_level` |
+| N-C11 | Progression enregistrée localement ; synchronisation seulement avec consentement | testé (garde) | `state_persists_locally_and_sync_requires_consent` ; **transport de synchronisation : prévu** |
+| N-C12 | Bouton d'aide contextuelle et infobulles accessibles | prévu (interface) | données prêtes |
+| N-D01 | Parcours débutant / intermédiaire / expert | testé (parcours débutant→avancé par niveau et spécialité) | `path_is_progressive_and_specialised` |
+| N-D02 | Cours : bases, RAW, portrait, calques, masques, colorimétrie, IA, impression, export | **en développement** | 20 leçons (bases, retouche, spécialités) ; **RAW, calques, masques, colorimétrie, IA, impression : aucun cours** car aucun outil intégré |
+| N-D03 | Bibliothèque de photographies d'entraînement autorisées | en développement | 7 images procédurales libres de droits ; photos réelles autorisées : prévu |
+| N-D04 | Vidéos | **prévu — aucune** | |
+| N-D05 | Recherche, suivi | testé | |
+
+### R — Assistant photographique
+
+| ID | Fonction | Statut | Preuve / remarque |
+|---|---|---|---|
+| N-E01 | Explique les outils **réels** ; dit « prévu » pour les autres | testé | `explains_real_tools…`, `capabilities_list_exactly_the_registry` |
+| N-E02 | Connaît le panneau actif | testé | `active_tool` |
+| N-E03 | Lit la photo seulement avec permission | testé | `never_looks_at_the_photo_without_permission` |
+| N-E04 | Propose des corrections prévisualisables, guide pas à pas | testé | `proposal_preview_confirmation_apply_undo_redo` |
+| N-E05 | Applique après validation ; réversible ; n'annonce jamais sans confirmation du moteur | testé | `a_noop_is_reported_as_nothing_changed` |
+| N-E06 | **Compréhension du langage naturel libre** | **prévu** | v0.1 : vocabulaire fixe FR/EN par règles, aucun modèle de langage |
+
+### S — Identité professionnelle et filigranes
+
+| ID | Fonction | Statut | Preuve / remarque |
+|---|---|---|---|
+| N-F01 | Profil « Mon Studio » (stockage, nom de marque, titulaire du copyright) | testé | `profile.rs` ; écran : prévu |
+| N-F02 | Filigrane textuel : nom du studio par défaut, photographe, texte libre, copyright, année automatique | testé | `text_is_resolved_from_studio_with_placeholders` |
+| N-F03 | Logo PNG transparent | testé | `transparent_logo_keeps_its_transparency` ; **SVG : prévu** (refus explicite aujourd'hui) |
+| N-F04 | Signature manuscrite | en développement | style « Élégant » (Liberation Serif Italic) ou image importée ; **saisie/tracé à la main : prévu** |
+| N-F05 | Police, taille, couleur, opacité, rotation | testé | 2 polices embarquées (Inter, Liberation Serif Italic) ; choix d'autres polices : prévu |
+| N-F06 | Positions prédéfinies (grille 3×3) et libre, marges | testé | `every_preset_lands_where_it_says`, `margin_moves_the_mark_inward` |
+| N-F07 | Ombre, contour, répétition | testé | `shadow_outline_and_tiling_add_pixels` |
+| N-F08 | Adaptation portrait/paysage | testé | `portrait_and_landscape_overrides` |
+| N-F09 | Aperçu en temps réel | testé (moteur) | 2–14 ms à 1000 px ; fidèle à l'export ; affichage : interface, prévu |
+| N-F10 | Plusieurs modèles enregistrés | testé | `templates.rs` |
+| N-F11 | Application en lot | testé | `batch_applies_to_every_image_and_isolates_failures` |
+| N-F12 | Non destructif, facultatif ; case **« Ajouter mon filigrane »** : décochée ⇒ aucun filigrane | testé | `unchecked_box_means_no_watermark_at_all` (octet pour octet) |
+| N-F13 | Export simultané avec et sans filigrane | testé | `dual_export_makes_both_versions` |
+| N-F14 | Copyright invisible séparé du filigrane visible | testé (PNG iTXt, JPEG `.xmp` annexe) | `copyright_metadata_is_independent…` ; **XMP/EXIF intégré au JPEG : prévu** |
+
+### T — Internationalisation · U — Protection des données
+
+| ID | Fonction | Statut | Preuve / remarque |
+|---|---|---|---|
+| N-G01 | Catalogue central ; aucun texte dans les composants | testé (nouveaux modules) | `catalogs_are_in_sync` ; **anciens textes (conseiller, Académie, questionnaire) encore intégrés au code : migration prévue** |
+| N-G02 | Français et anglais | testé (catalogue) | 74 clés FR/EN |
+| N-G03 | Espagnol, allemand, italien, portugais | **prévu** | formats de nombres prêts ; **aucune traduction** |
+| N-G04 | Droite-à-gauche | en développement | détection de direction testée ; **miroir de l'interface : prévu** |
+| N-G05 | Nombres, devises, dates | testé | FR/EN (+ séparateurs es/de/it/pt) ; dates longues FR/EN seulement |
+| N-G06 | Unités métriques/impériales | testé | `units.rs` |
+| N-G07 | Taxes configurables | testé | aucun taux imposé ; préréglages Québec/Ontario **à faire valider par un comptable** |
+| N-G08 | Fuseaux horaires | en développement | forme + 24 zones courantes |
+| N-G09 | Unicode dans fichiers et profils | testé | `resize_and_unicode_names_and_hostile_names`, profils Unicode |
+| N-G10 | Contenus pédagogiques traduisibles | testé (FR/EN) | |
+| N-H01 | Consentements (8 finalités), révocables | testé | `privacy.rs` |
+| N-H02 | Export des données personnelles | testé (compte) | `export_contains_no_secrets` ; export complet du profil/studio/catalogue : à regrouper |
+| N-H03 | Suppression du compte | testé (local) | `AccountStore::delete` ; suppression côté serveur : prévu |
+| N-H04 | Politique de confidentialité, préférences de communication | **prévu** | texte juridique à rédiger et faire relire |
+| N-H05 | Minimisation | testé | seuls courriel + mot de passe requis |
+| N-H06 | Aucune photo de client pour l'entraînement sans autorisation | testé (par absence) | aucun entraînement n'existe ; case par séance : prévue |
+| N-H07 | Conformité Loi 25 / LPRPDE / RGPD | **non évaluée** | revue juridique requise |
+
+### Écrans (N-I01…N-I09)
+Inscription, connexion, récupération, configuration initiale, profil professionnel, préférences, centre d'aide, académie, création de filigranes : **spécifiés** (DESIGN_SYSTEM.md §5.3), **non construits** (aucune interface graphique).
 
 ## A — Accueil et projets · B — Bibliothèque · C — Sélection intelligente
 

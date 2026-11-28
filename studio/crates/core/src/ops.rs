@@ -46,6 +46,13 @@ impl Op {
             Op::Crop { .. } => "crop",
         }
     }
+    /// Paramètres (curseurs) de chaque opération, dans l'ordre de `NAMES`. Un test vérifie qu'ils
+    /// correspondent exactement aux champs sérialisés : l'aide contextuelle s'appuie dessus.
+    pub const PARAMS: [(&'static str, &'static [&'static str]); 10] = [
+        ("exposure", &["ev"]), ("contrast", &["amount"]), ("white_balance", &["r", "g", "b"]), ("highlights", &["amount"]),
+        ("shadows", &["amount"]), ("saturation", &["factor"]), ("denoise", &["strength"]), ("sharpen", &["amount"]),
+        ("rotate", &["degrees"]), ("crop", &["x", "y", "w", "h"]),
+    ];
     /// Tous les identifiants d'opérations du moteur.
     pub const NAMES: [&'static str; 10] = [
         "exposure", "contrast", "white_balance", "highlights", "shadows",
@@ -275,6 +282,20 @@ mod tests {
     fn crop_dimensions() {
         let o = Op::Crop { x: 0.25, y: 0.0, w: 0.5, h: 1.0 }.apply(&Image::new(40, 20));
         assert_eq!((o.width, o.height), (20, 20));
+    }
+    #[test]
+    fn declared_params_match_serialised_fields() {
+        let ops = [Op::Exposure { ev: 1.0 }, Op::Contrast { amount: 0.1 }, Op::WhiteBalance { r: 1.0, g: 1.0, b: 1.0 }, Op::Highlights { amount: 0.1 },
+            Op::Shadows { amount: 0.1 }, Op::Saturation { factor: 1.0 }, Op::Denoise { strength: 0.1 }, Op::Sharpen { amount: 0.1 }, Op::Rotate { degrees: 1.0 },
+            Op::Crop { x: 0.0, y: 0.0, w: 1.0, h: 1.0 }];
+        for (op, (name, params)) in ops.iter().zip(Op::PARAMS) {
+            assert_eq!(op.name(), name);
+            let v = serde_json::to_value(op).unwrap();
+            let mut keys: Vec<&str> = v.as_object().unwrap().keys().map(String::as_str).filter(|k| *k != "op").collect();
+            let mut want = params.to_vec();
+            keys.sort(); want.sort();
+            assert_eq!(keys, want, "{name}");
+        }
     }
     #[test]
     fn names_cover_all_variants_and_serde_roundtrips() {

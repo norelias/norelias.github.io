@@ -4,6 +4,7 @@
 
 pub mod assist;
 pub mod exercises;
+pub mod help;
 pub mod lessons;
 pub mod progress;
 pub mod search;

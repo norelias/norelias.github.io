@@ -1,0 +1,12 @@
+[package]
+name = "norelias-assistant"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+norelias-core.workspace = true
+norelias-advisor.workspace = true
+norelias-onboarding.workspace = true
+norelias-academy.workspace = true

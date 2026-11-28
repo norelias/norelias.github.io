@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/core", "crates/advisor", "crates/onboarding", "crates/academy", "crates/cli"]
+members = ["crates/core", "crates/advisor", "crates/onboarding", "crates/academy", "crates/i18n", "crates/account", "crates/studio", "crates/assistant", "crates/cli"]
 
 [workspace.package]
 version = "0.1.0"
@@ -15,6 +15,10 @@ norelias-core = { path = "crates/core" }
 norelias-advisor = { path = "crates/advisor" }
 norelias-onboarding = { path = "crates/onboarding" }
 norelias-academy = { path = "crates/academy" }
+norelias-i18n = { path = "crates/i18n" }
+norelias-account = { path = "crates/account" }
+norelias-studio = { path = "crates/studio" }
+norelias-assistant = { path = "crates/assistant" }
 
 [profile.release]
 opt-level = 3

@@ -27,6 +27,9 @@ const USAGE: &str = "norelias <commande>
   profile  show|init|skip|erase            (--dir <dossier> pour changer l'emplacement)
   workspace beginner|intermediate|expert [specialite]
   academy  search <mots> | path | exercise <id> | training <id> <sortie.png>
+  export <image> <dossier> [--format png|jpg] [--quality 90] [--wm] [--wm-text '© {year} {holder}'] [--brand Nom] [--dual] [--copyright '© …'] [--max-side 2048]
+  help show <outil> [--lang fr|en] | help export <dossier>
+  assistant '<message>' [image] [--allow-photo] [--lang fr|en]
   privacy                                   (affiche les consentements accordés)
   tools                                     (outils réels et outils prévus)";
 
@@ -58,6 +61,9 @@ fn run(args: &[String]) -> R {
         Some("workspace") => workspace(args, &store),
         Some("academy") => academy(args, &store),
         Some("privacy") => privacy(&store),
+        Some("export") => export(args, &store),
+        Some("help") => help_cmd(args, &store),
+        Some("assistant") => assistant_cmd(args, &store),
         Some("tools") => {
             for t in norelias_onboarding::tools::TOOLS {
                 println!("{:<18} {:<10} {:?}", t.id, t.panel, t.status);
@@ -202,11 +208,59 @@ fn academy(args: &[String], store: &Store) -> R {
 
 fn privacy(store: &Store) -> R {
     let l = store.load_ledger()?;
-    for p in [Purpose::CloudAi, Purpose::ModelDownload, Purpose::GalleryHosting, Purpose::Telemetry, Purpose::CrashReports] {
+    for p in Purpose::ALL {
         match l.require(p) {
             Ok(c) => println!("{p:?}: ACCORDÉ à « {} »{}", c.provider, if c.paid { " (payant)" } else { "" }),
             Err(_) => println!("{p:?}: refusé (par défaut)"),
         }
     }
+    Ok(())
+}
+
+fn export(args: &[String], store: &Store) -> R {
+    use norelias_studio::{export::{export_one, CopyrightMeta, ExportSettings, Format}, watermark::*};
+    let input = args.get(1).ok_or("image manquante")?;
+    let dir = PathBuf::from(args.get(2).ok_or("dossier de sortie manquant")?);
+    let img = load_image(input)?;
+    let stem = Path::new(input).file_stem().and_then(|s| s.to_str()).unwrap_or("export").to_string();
+    let _ = store; // le profil « Mon Studio » sera lu ici par l'interface graphique
+    let brand_name = flag(args, "--brand").unwrap_or_default();
+    let now = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH)?.as_secs();
+    let brand = Brand { studio_name: brand_name.clone(), photographer_name: brand_name.clone(), holder: brand_name, year: norelias_i18n::format::year_from_unix(now), logo: None };
+    let wm_text = flag(args, "--wm-text");
+    let watermark = Watermark { content: Content::Text { source: wm_text.map_or(TextSource::StudioName, TextSource::Custom), font: FontStyle::ElegantSerifItalic, color: [255, 255, 255] }, ..Default::default() };
+    let format = match flag(args, "--format").as_deref() { Some("jpg") | Some("jpeg") => Format::Jpeg { quality: flag(args, "--quality").and_then(|q| q.parse().ok()).unwrap_or(90) }, _ => Format::Png };
+    let settings = ExportSettings { format, add_watermark: has(args, "--wm"), also_without_watermark: has(args, "--dual"), watermark: Some(watermark),
+        copyright: flag(args, "--copyright").map(|notice| CopyrightMeta { notice, url: None }), max_side: flag(args, "--max-side").and_then(|v| v.parse().ok()) };
+    for f in export_one(&img, &stem, &dir, &settings, &brand)? { println!("Écrit : {} (l'original est intact)", f.display()); }
+    Ok(())
+}
+
+fn help_cmd(args: &[String], store: &Store) -> R {
+    let lang = lang_of(args, store);
+    match args.get(1).map(String::as_str) {
+        Some("show") => {
+            let tool = args.get(2).ok_or("outil manquant")?;
+            print!("{}", norelias_academy::help::render_markdown(tool, lang).ok_or("aucune aide pour cet outil (outil inconnu ou pas encore intégré)")?);
+        }
+        Some("export") => {
+            let n = norelias_academy::help::export_docs(Path::new(args.get(2).ok_or("dossier manquant")?), lang)?;
+            println!("{n} pages d'aide écrites");
+        }
+        _ => return Err("help show <outil> | help export <dossier>".into()),
+    }
+    Ok(())
+}
+
+fn assistant_cmd(args: &[String], store: &Store) -> R {
+    use norelias_assistant::{Assistant, Document};
+    let lang = lang_of(args, store);
+    let msg = args.get(1).ok_or("message manquant")?;
+    let mut a = Assistant::new(lang);
+    a.share_photo = has(args, "--allow-photo");
+    let doc = match args.get(2).filter(|p| !p.starts_with("--")) { Some(p) => Some(Document::new(load_image(p)?)), None => None };
+    let r = a.ask(msg, doc.as_ref());
+    println!("{}", r.text);
+    for p in &r.proposals { println!("\nProposition {} : {} → {:?}  (non appliquée : confirmation requise)", p.id, p.title, p.ops); }
     Ok(())
 }

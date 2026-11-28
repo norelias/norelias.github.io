@@ -1,21 +1,26 @@
 # Plan de tests
 
 Pyramide : unitaires → scénarios sur images → bout en bout (binaire réel) → visuels/matériels (prévus).
-Lancer : `cargo test --workspace` (≈ 15 s) ; mesures : `cargo test --release -p norelias-advisor --test perf -- --ignored --nocapture`.
+Lancer : `cargo test --workspace` (≈ 30 s, dont Argon2 à coût réduit) ; mesures : `cargo test --release -p norelias-advisor --test perf -- --ignored --nocapture`.
 
 ## 1. Résultats actuels (Linux x86-64, Rust 1.97, 4 cœurs)
 
-111 tests, 0 échec ; 1 test de performance (ignoré par défaut).
+**229 tests, 0 échec** ; 2 tests de performance (ignorés par défaut).
 
 | Suite | Tests | Ce qui est vérifié |
 |---|---|---|
-| `norelias-core` | 16 | Aller-retour sRGB exact sur 256 valeurs ; chaque opération (identité, valeurs connues) ; source jamais modifiée ; sérialisation ; débruitage préserve les contours |
+| `norelias-core` | 18 | Aller-retour sRGB exact sur 256 valeurs ; chaque opération (identité, valeurs connues) ; source jamais modifiée ; sérialisation ; débruitage préserve les contours |
 | `norelias-advisor` (scénarios) | 13 | 9 défauts injectés (sous/sur-exposition + écrêtage, dominante chaude, teinte verte, bruit, flou, bougé, horizon incliné −4°/2°/5°, sujet centré) détectés **puis corrigés** et ré-analysés ; aucun faux positif sur la scène de référence ; aucune correction inventée pour le bougé ; corrections créatives jamais automatiques ; textes FR/EN |
 | `norelias-onboarding` | 48 | Profil, migrations, corruption, version future, écriture atomique, effacement ; consentements ; registre d'outils ; **aucun outil supprimé** (3 modes × 14 spécialités × aides on/off) ; raccourcis sans conflit ; import XMP ; questionnaire (réponses complètes, passer, entrées invalides, fermeture, révocation) |
-| `norelias-academy` | 26 | Leçons FR/EN complètes et liées aux outils réels ; exercices (inactivité = échec, correction du conseiller = réussite, mauvaises réponses = échec) ; recherche ; infobulles ; suivi facultatif ; aide contextuelle ; aides désactivées |
-| `norelias-cli` (e2e) | 8 | Binaire réel sur vrais PNG : analyse, correction automatique/choisie, **original intact**, refus d'écraser, questionnaire par stdin, profil local, workspaces, recherche, garde anti-réseau |
+| `norelias-academy` | 37 | Leçons FR/EN complètes et liées aux outils réels ; exercices (inactivité = échec, correction du conseiller = réussite, mauvaises réponses = échec) ; recherche ; infobulles ; suivi facultatif ; aide contextuelle ; aides désactivées |
+| `norelias-cli` (e2e) | 11 | Binaire réel sur vrais PNG : analyse, correction automatique/choisie, **original intact**, refus d'écraser, questionnaire par stdin, profil local, workspaces, recherche, garde anti-réseau |
 
-Mesures réelles (24 Mpx, mono-thread) : voir ARCHITECTURE.md §5.
+| `norelias-i18n` | 16 | Parité FR/EN des clés et des paramètres, repli de langue, nombres/monnaies/dates par langue, années bissextiles, fuseaux, unités, taxes (composées, TTC→HT) |
+| `norelias-account` | 50 | Argon2id et chiffrement (altération détectée), **vecteurs RFC 6238**, limitation, sessions, mots de passe, courriels/URL, **téléphones E.164**, codes postaux de 15 pays, porte de consentement des adresses, inscription par étapes, compte (connexion, 2FA, récupération, export sans secret, permissions 0600, suppression) |
+| `norelias-studio` | 27 | Filigrane : rendu réel de texte Unicode et de logo transparent, positions, marges, opacité 0 = invisible, rotation, ombre/contour/répétition, portrait/paysage, aperçu fidèle ; export : **case décochée = octet pour octet identique**, double version, refus d'écraser sans écriture partielle, copyright séparé, JPEG + XMP, noms hostiles, lot |
+| `norelias-assistant` | 9 | Intentions FR/EN, outils réels seulement, **aucune lecture de la photo sans permission**, aperçu, confirmation, application, annulation/rétablissement, no-op signalé, demande contredite par la mesure |
+
+Mesures réelles (24 Mpx, mono-thread) : voir ARCHITECTURE.md §5 et §8.
 
 ## 2. Limites des tests actuels (à lire avant de se fier aux résultats)
 
@@ -24,6 +29,15 @@ Mesures réelles (24 Mpx, mono-thread) : voir ARCHITECTURE.md §5.
 * **Linux uniquement.** Aucun test Windows/macOS.
 * **Aucune interface graphique** donc aucun test visuel ni d'accessibilité.
 * L'e2e utilise un dossier de données temporaire ; aucun test d'installation.
+
+## 2 bis. Limites propres à l'extension
+
+* **Aucun fournisseur d'adresses réel** : l'autocomplétion est testée avec un fournisseur simulé défini **dans les tests** ; aucun test ne prouve la qualité de suggestions réelles.
+* **Aucun service en ligne** : vérification du courriel, récupération par courriel, synchronisation, révocation distante : non testables.
+* Argon2 est exécuté à coût réduit dans les tests ; le coût de production (19 Mio) n'est pas chronométré sur machine cible.
+* Les textes des fiches et leçons ne sont **pas relus** par des photographes ; l'assistant n'a pas été évalué avec de vrais utilisateurs.
+* Rendu des polices : testé par mesure de pixels (position, présence), pas par comparaison visuelle ; Inter et Liberation Serif uniquement.
+* Conformité juridique (Loi 25, LPRPDE, RGPD) : non testée, revue juridique requise.
 
 ## 3. Tests obligatoires du brief — statut
 
@@ -55,6 +69,22 @@ Mesures réelles (24 Mpx, mono-thread) : voir ARCHITECTURE.md §5.
 | M-13…M-22 | `academy::*::tests` (26), e2e `academy_search…` |
 | M-23…M-26 | `shortcuts::tests::*`, `compat::tests::*` |
 | M-27…M-31 | `privacy::tests::*`, e2e `first_run…`, `no_networking…` |
+
+## 4 bis. Plan de l'extension (couverture)
+
+| Exigence | Tests |
+|---|---|
+| N-A01…N-A07 | `signup::tests`, `address::tests` |
+| N-A09, N-A10 | `phone::tests`, `validate::tests` |
+| N-A11…N-A15 | `record::tests`, `totp::tests`, `limiter::tests`, `session::tests`, `crypto::tests` |
+| N-B01, N-C01…N-C12 | `help::tests` (11), `workspace::tests` |
+| N-D01…N-D05 | `lessons::tests`, `search::tests`, `exercises::tests` |
+| N-E01…N-E06 | `norelias-assistant` (9), e2e `assistant_needs_permission_and_never_applies` |
+| N-F01…N-F14 | `watermark::tests` (14), `export::tests` (9), `templates::tests`, e2e `export_watermark_checkbox_and_dual_versions` |
+| N-G01…N-G10 | `norelias-i18n` (16) |
+| N-H01…N-H07 | `privacy::tests`, `record::tests::export_contains_no_secrets`, `help::tests::state_persists…` |
+
+**À ajouter (extension)** : tests de bout en bout de l'interface d'inscription (clavier, lecteur d'écran, texte long, droite-à-gauche) ; test d'intrusion de la couche d'authentification ; test d'intégration avec le fournisseur d'adresses choisi (y compris hors connexion et quotas) ; test de charge du service en ligne ; audit d'accessibilité WCAG des 9 écrans ; revue juridique.
 
 ## 5. À ajouter
 

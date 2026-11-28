@@ -84,7 +84,7 @@ fn first_run_is_local_private_and_skippable() {
     let (ok, out, _) = run(bin(&d).args(["profile", "show"]));
     assert!(ok && out.contains("\"status\": \"pending\"") && out.contains("\"track_progress\": false"), "{out}");
     let (_, out, _) = run(bin(&d).arg("privacy"));
-    assert_eq!(out.matches("refusé (par défaut)").count(), 5, "{out}");
+    assert_eq!(out.matches("refusé (par défaut)").count(), 8, "{out}");
     run(bin(&d).args(["profile", "skip"]));
     let (_, out, _) = run(bin(&d).args(["profile", "show"]));
     assert!(out.contains("\"status\": \"skipped\""));
@@ -138,4 +138,57 @@ fn no_networking_crate_in_dependency_graph() {
         let name = line.trim_start_matches("name = ").trim_matches('"');
         assert!(!banned.contains(&name), "dépendance réseau non autorisée : {name}");
     }
+}
+
+#[test]
+fn export_watermark_checkbox_and_dual_versions() {
+    let d = tmpdir("export");
+    let photo = d.join("séance.png");
+    run(bin(&d).args(["academy", "training", "ex_exposure", photo.to_str().unwrap()]));
+    let original = sha(&photo);
+    let out = d.join("sortie");
+    // case décochée : aucun filigrane, fichier identique à la source ré-encodée
+    let (ok, o, e) = run(bin(&d).args(["export", photo.to_str().unwrap(), out.to_str().unwrap(), "--brand", "Norélias Photography"]));
+    assert!(ok, "{e}");
+    assert!(o.contains("séance.png"));
+    let clean = image::open(out.join("séance.png")).unwrap().to_rgb8();
+    assert_eq!(clean.as_raw(), image::open(&photo).unwrap().to_rgb8().as_raw());
+    // case cochée + version sans filigrane
+    let out2 = d.join("sortie2");
+    let (ok, _, e) = run(bin(&d).args(["export", photo.to_str().unwrap(), out2.to_str().unwrap(), "--wm", "--dual", "--brand", "Norélias Photography", "--copyright", "© 2026 Norélias"]));
+    assert!(ok, "{e}");
+    let marked = image::open(out2.join("séance_filigrane.png")).unwrap().to_rgb8();
+    let unmarked = image::open(out2.join("séance_sans-filigrane.png")).unwrap().to_rgb8();
+    assert_ne!(marked.as_raw(), unmarked.as_raw());
+    assert_eq!(unmarked.as_raw(), clean.as_raw());
+    assert_eq!(sha(&photo), original, "original intact");
+    // refus d'écraser
+    let (ok, _, e) = run(bin(&d).args(["export", photo.to_str().unwrap(), out2.to_str().unwrap(), "--wm", "--dual", "--brand", "X"]));
+    assert!(!ok && e.contains("existe déjà"), "{e}");
+}
+
+#[test]
+fn help_pages_and_honest_unknown_tools() {
+    let d = tmpdir("help");
+    let (ok, out, _) = run(bin(&d).args(["help", "show", "exposure", "--lang", "fr"]));
+    assert!(ok && out.contains("## Erreurs fréquentes") && out.contains("Aucun tutoriel vidéo disponible"), "{out}");
+    let (ok, _, err) = run(bin(&d).args(["help", "show", "tone_curve"]));
+    assert!(!ok && err.contains("pas encore intégré"), "pas de fausse aide pour un outil prévu : {err}");
+    let dir = d.join("docs");
+    let (ok, out, _) = run(bin(&d).args(["help", "export", dir.to_str().unwrap(), "--lang", "en"]));
+    assert!(ok && out.starts_with("12 "), "{out}");
+    assert!(dir.join("help/crop.md").exists());
+}
+
+#[test]
+fn assistant_needs_permission_and_never_applies() {
+    let d = tmpdir("assistant");
+    let photo = d.join("a.png");
+    run(bin(&d).args(["academy", "training", "ex_exposure", photo.to_str().unwrap()]));
+    let (_, out, _) = run(bin(&d).args(["assistant", "ma photo est trop sombre", photo.to_str().unwrap(), "--lang", "fr"]));
+    assert!(out.contains("permission") && !out.contains("Proposition"), "{out}");
+    let (_, out, _) = run(bin(&d).args(["assistant", "ma photo est trop sombre", photo.to_str().unwrap(), "--allow-photo", "--lang", "fr"]));
+    assert!(out.contains("Proposition") && out.contains("non appliquée"), "{out}");
+    let (_, out, _) = run(bin(&d).args(["assistant", "supprime l'objet avec l'IA", "--lang", "fr"]));
+    assert!(out.contains("prévue mais pas encore disponible"), "{out}");
 }
